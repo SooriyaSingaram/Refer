@@ -1,0 +1,173 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Receive/Supply Goods and Inventory Update
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href=""> Receive/Supply Goods and Inventory Update</a></li>
+         <li class="active">Menu Supplied Report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && msdc.filterByMenuDetails(msdc.suppliedDetail);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Menu Supplied Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="msdc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="msdc.downloadPdf('Supplied Menu Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">SuppliedBy</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control" ng-model="msdc.suppliedDetail.supplierdId"  name="suppliedByName" required="required">
+                        <option value="">Select SuppliedBy</option>
+                        <option ng-repeat="employee in msdc.employees | orderBy:'employeeName'" value={{employee.employeeId}} >{{employee.employeeName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.suppliedByName.$error.required" style="padding-left:1%;color: red;">Supplied Name is Required</span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="msdc.suppliedDetail.fromDate" name="fromDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  msdc.suppliedDetail.fromDate == null ? 'Select Date' : msdc.suppliedDetail.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="msdc.suppliedDetail.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="msdc.startDateOnSetTime()" data-before-render="msdc.startDateBeforeRender(msdc.suppliedDetail.toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromDate.$error.required" style="padding-left:1%;color: red;">  From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="msdc.suppliedDetail.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  msdc.suppliedDetail.toDate == null ? 'Select Date' : msdc.suppliedDetail.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="msdc.suppliedDetail.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="msdc.endDateOnSetTime()"  data-before-render="msdc.endDateBeforeRender(msdc.suppliedDetail.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="msdc.menuReset(msdc.suppliedDetail)">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =msdc.availableLimits[0]" ng-options="limit for limit in msdc.availableLimits" ng-class="{'active':msdc.isActiveValue(limit)}" data-ng-change="msdc.setValue(limit)" size="1">
+                  </select>                       
+                  <br>
+                  <div id="print-div">
+                     <h3>Menu Supplied Report details</h3>
+                     <table class="grid_tbl" id="pdfgrid">
+                        <thead>
+                           <tr>
+                              <th>  
+                                 <a class="hand-icon" ng-click="sortType = '_id.purchaseOrderId'; sortReverse = !sortReverse">
+                                 PO Number
+                                 <span ng-show="sortType == '_id.purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == '_id.purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                                <th>  
+                                 <a class="hand-icon" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                             Outlet Name
+                                 <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>  
+                                 <a class="hand-icon" ng-click="sortType = 'menu.itemName'; sortReverse = !sortReverse">
+                                 MenuName
+                                 <span ng-show="sortType == 'menu.itemName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'menu.itemName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th> 
+                                 <a class="hand-icon" ng-click="sortType = '_id.suppliedDetails.suppliedDate'; sortReverse = !sortReverse">
+                                 Supplied Date
+                                 <span ng-show="sortType == '_id.suppliedDetails.suppliedDate' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == '_id.suppliedDetails.suppliedDate' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th> 
+                                 <a class="hand-icon" ng-click="sortType = 'employee.employeeName'; sortReverse = !sortReverse">
+                                 SuppliedBy
+                                 <span ng-show="sortType == 'employee.employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'employee.employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th> 
+                                 <a class="hand-icon" ng-click="sortType = '_id.suppliedDetails.suppliedQty'; sortReverse = !sortReverse">
+                                 SuppliedQty
+                                 <span ng-show="sortType == '_id.suppliedDetails.suppliedQty' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == '_id.suppliedDetails.suppliedQty' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr dir-paginate="suppliedDetail in msdc.menuSuppliedDetails|orderBy:sortType:sortReverse|orderBy:'-[_id.suppliedDetails.suppliedDate]'|itemsPerPage:limit " 
+                              >
+                              <td>
+                                 <span>{{suppliedDetail._id.purchaseOrderId}}</span>
+                              </td>
+                                <td>
+                                 <span>{{suppliedDetail.branchName}}</span>
+                              </td>
+                              <td>
+                                 <span>{{suppliedDetail.menu.itemName}}</span>
+                              </td>
+                              <td>
+                                 <span>{{suppliedDetail._id.suppliedDetails.suppliedDate | date:'yyyy-MM-dd'}}</span>
+                              </td>
+                              <td >
+                                 <span>{{suppliedDetail.employee.employeeName}}</span>
+                              </td>
+                              <td >
+                                 <span>{{suppliedDetail._id.suppliedDetails.suppliedQty}}</span>
+                                   <span>{{suppliedDetail.units.unitName}}</span>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

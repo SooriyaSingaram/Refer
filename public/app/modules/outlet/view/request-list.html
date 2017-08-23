@@ -1,0 +1,135 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Request  List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Outlet Management</a></li>
+         <li class="active">Request  List</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="panel panel-info"  style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>      
+                  <select data-ng-model="limit" ng-init="limit =rlc.availableLimits[0]" ng-options="limit for limit in rlc.availableLimits" ng-class="{'active':rlc.isActiveValue(limit)}" data-ng-change="rlc.setValue(limit)" size="1">
+                  </select>                         
+                  <div class="dropdown" style="float:right;padding-left:2%">
+                     <button ng-if="rlc.authorizeData.indexOf('canAdd') >= 0" type="submit" ui-sref="root.request" class="btn btn-primary " ng-hide = "rlc.hideAddRequest">Add Request </button>
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.outlet_name" value="somevalue" />Outlet Name</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.franchise_name" value="somevalue" />Franchise Name</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.raised_By" value="somevalue" />Raised By</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.raised_date" value="somevalue" />Raised Date</li>
+                     </ul>
+                  </div>
+                  <br>
+                  <table class=" grid_tbl">
+                     <thead>
+                        <tr>
+                           <th >  
+                              <a href="" ng-click="sortType = 'employeeId'; sortReverse = !sortReverse">
+                              Outlet Id
+                              <span ng-show="sortType == 'employeeId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="rlc.fChooser_request.outlet_name">  
+                              <a href="" ng-click="sortType = 'employeeName'; sortReverse = !sortReverse">
+                              Outlet Name
+                              <span ng-show="sortType == 'employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="rlc.fChooser_request.franchise_name"> 
+                              <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                              Franchise Name
+                              <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="rlc.fChooser_request.raised_by"> 
+                              <a href="" ng-click="sortType = 'userName'; sortReverse = !sortReverse">
+                              Raised By
+                              <span ng-show="sortType == 'userName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'userName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="rlc.fChooser_request.raised_date"> 
+                              <a href="" ng-click="sortType = 'raisedDate'; sortReverse = !sortReverse">
+                              Raised Date
+                              <span ng-show="sortType == 'raisedDate' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'raisedDate' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>  
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td >
+                              <input class="form-control" 
+                                 ng-model="search.outletId" placeholder="Search By Outlet Id"  style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="rlc.fChooser_request.outlet_name">
+                              <input class="form-control" 
+                                 ng-model="search.outlet_collection.branchName"   placeholder="Search By Outlet Name">
+                           </td>
+                           <td ng-show="rlc.fChooser_request.franchise_name">
+                              <input class="form-control" 
+                                 ng-model="search.franchise_collection.branchName" placeholder="Search By Franchise Name" >
+                           </td>
+                           <td ng-show="rlc.fChooser_request.raised_by">
+                              <input class="form-control" 
+                                 ng-model="search.employees_collection.employeeName"  placeholder="Search By Report By">
+                           </td>
+                           <td ng-show="rlc.fChooser_request.raised_date">
+                              <input class="form-control" 
+                                 ng-model="search.raisedDate"  placeholder="Search By Raised Date ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="request in rlc.requests|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " data-ng-class="{danger:!request.active}">
+                           <td>
+                              {{request.outletId}}
+                           </td>
+                           <td ng-show="rlc.fChooser_request.outlet_name">
+                              {{request.outlet_collection.branchName}}
+                           </td>
+                           <td ng-show="rlc.fChooser_request.franchise_name">
+                              {{request.branchName}}
+                           </td>
+                           <td ng-show="rlc.fChooser_request.raised_by">
+                              {{request.employees_collection.employeeName}}
+                           </td>
+                           <td ng-show="rlc.fChooser_request.raised_date">
+                              {{request.raisedDate | date:'yyyy-MM-dd'}}
+                           </td>
+                           <td>
+                              <button ng-if="rlc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.request({id:request._id})" title="View&Edit" class="b" data-ng-hide="editMode"><i class="glyphicon glyphicon-pencil"></i></button>
+                              <button ng-if="rlc.authorizeData.indexOf('canDelete') >= 0" href="" class="a" title="Delete" ng-click="rlc.deleteRequest(request._id,request.dailyOccurrenceId)" data-ng-hide="editMode"><i class="glyphicon glyphicon-trash" 
+                                 ></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

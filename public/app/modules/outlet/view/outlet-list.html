@@ -1,0 +1,244 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Outlet List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Outlet Managemant</a></li>
+         <li class="active">Outlet List</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div>
+         <ul class="nav nav-pills">
+            <li ng-class="{active:olc.isSet(1)}"><a href ng-click="olc.setTab(1)">Active List</a></li>
+            <li ng-class="{active:olc.isSet(2)}"><a href ng-click="olc.setTab(2)">Deactive List</a></li>
+         </ul>
+      </div>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt">
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =olc.availableLimits[0]" ng-options="limit for limit in olc.availableLimits" ng-class="{'active':olc.isActiveValue(limit)}" data-ng-change="olc.setValue(limit)" size="1">
+                  </select>
+                  <select class="sort_out" ng-model="search.outletType.outletType">
+                     <option value=""> Sort by</option>
+                     <option value="Outlet">Outlet</option>
+                     <option value="Ware House">Ware House</option>
+                     <option value="Centralized Kitchen">Centralized Kitchen</option>
+                     <option value="Franchise">Franchise</option>
+                  </select>
+                  <div class="dropdown" style="float:right;padding-left:2%">
+                     <button ng-if="olc.authorizeData.indexOf('canAdd') >= 0" type="submit" ui-sref="root.outlet" class="btn btn-primary ">Add Outlet</button>
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li><input type="checkbox" style="margin:9px;" ng-model="olc.fChooser_outlet.Branch_Name" value="somevalue" />Branch Name</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="olc.fChooser_outlet.status" value="somevalue" />Status</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="olc.fChooser_outlet.Mobile_No" value="somevalue" />Phone No</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="olc.fChooser_outlet.Outlet_Type" value="somevalue" />Outlet Type</li>
+                     </ul>
+                  </div>
+                  <br>
+                  <div ng-show="olc.isSet(1)">
+                     <table class="grid_tbl">
+                        <thead>
+                           <tr>
+                              <th>
+                                 <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                                 Outlet Id
+                                 <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.Branch_Name">
+                                 <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                                 Outlet Name
+                                 <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.Outlet_Type">
+                                 <a href="" ng-click="sortType = 'outletType'; sortReverse = !sortReverse">
+                                 Outlet Type
+                                 <span ng-show="sortType == 'outletType' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'outletType' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.Mobile_No">
+                                 <a href="" ng-click="sortType = 'mobileNo'; sortReverse = !sortReverse">
+                                 Phone No
+                                 <span ng-show="sortType == 'mobileNo' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'mobileNo' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.status">
+                                 <a href="" ng-click="sortType = 'outletStatus'; sortReverse = !sortReverse">
+                                 Status
+                                 <span ng-show="sortType == 'outletStatus' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'outletStatus' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>
+                                 <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                 Action
+                                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                           </tr>
+                           <tr>
+                              <td>
+                                 <input class="form-control" ng-model="search.branchId" placeholder="Search By Outlet Id" style="padding-right: 5px;">
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Branch_Name">
+                                 <input class="form-control" ng-model="search.branchName" placeholder="Search By Outlet Name">
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Outlet_Type">
+                                 <input class="form-control" ng-model="search.outletType.outletType" placeholder="Search By Outlet Type" name="OutletType">
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Mobile_No">
+                                 <input class="form-control" ng-model="search.mobileNo" placeholder="Search By Phone No" >
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.status">
+                                 <input class="form-control" ng-model="search.outletStatus" placeholder="Search By Status">
+                              </td>
+                              <td></td>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr dir-paginate="outlet in olc.activeOutlet|orderBy:sortType:sortReverse |filter:search|itemsPerPage:limit " pagination-id="active">
+                              <td>
+                                 {{outlet.branchId}}
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Branch_Name">
+                                 {{outlet.branchName}}
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Outlet_Type">
+                                 <span> {{outlet.outletType.outletType}}</span>
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Mobile_No">
+                              {{outlet.code}} - {{outlet.mobileNo}}
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.status">
+                                 {{outlet.outletStatus}}
+                              </td>
+                              <td>
+                                 <button ng-if="olc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.outlet({id:outlet._id})" title="View&Edit" class="b" data-ng-hide="editMode"><i class="glyphicon glyphicon-pencil" 
+                                    ></i></button>
+                                 <button ng-if="olc.authorizeData.indexOf('canDelete') >= 0" href="" class="a" title="Delete" ng-disabled="(outlet.outletType.outletType === 'Ware House'||outlet.outletType.outletType === 'Centralized Kitchen')" ng-click="olc.deleteOutlet(outlet._id,outlet.branchId)"><i class="glyphicon glyphicon-trash" 
+                                    ></i></button>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <dir-pagination-controls  pagination-id="active"
+                        max-size="5"
+                        direction-links="true"
+                        boundary-links="true" >
+                     </dir-pagination-controls>
+                  </div>
+                  <div ng-show="olc.isSet(2)">
+                     <table class="grid_tbl">
+                        <thead>
+                           <tr>
+                              <th>
+                                 <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                                 Outlet Id
+                                 <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.Branch_Name">
+                                 <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                                 Outlet Name
+                                 <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.Outlet_Type">
+                                 <a href="" ng-click="sortType = 'outletType'; sortReverse = !sortReverse">
+                                 Outlet Type
+                                 <span ng-show="sortType == 'outletType' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'outletType' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.Mobile_No">
+                                 <a href="" ng-click="sortType = 'mobileNo'; sortReverse = !sortReverse">
+                                 Phone No
+                                 <span ng-show="sortType == 'mobileNo' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'mobileNo' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="olc.fChooser_outlet.status">
+                                 <a href="" ng-click="sortType = 'outletStatus'; sortReverse = !sortReverse">
+                                 Status
+                                 <span ng-show="sortType == 'outletStatus' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'outletStatus' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>
+                                 <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                 Action
+                                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                           </tr>
+                           <tr>
+                              <td>
+                                 <input class="form-control" ng-model="search.branchId" placeholder="Search By Outlet Id" style="padding-right: 5px;">
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Branch_Name">
+                                 <input class="form-control" ng-model="search.branchName" placeholder="Search By Outlet Name">
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Outlet_Type">
+                                 <input class="form-control" ng-model="search.outletType.outletType" placeholder="Search By Outlet Type" name="OutletType">
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Mobile_No">
+                                 <input class="form-control" ng-model="search.mobileNo" placeholder="Search By Phone No" >
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.status">
+                                 <input class="form-control" ng-model="search.outletStatus" placeholder="Search By Status">
+                              </td>
+                              <td></td>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr dir-paginate="outlet in olc.outlets|orderBy:sortType:sortReverse | filter:{outletStatus:'Inactive'}|filter:search|itemsPerPage:limit " data-ng-class="{danger:!outlet.active}" pagination-id="inactive">
+                              <td>
+                                 {{outlet.branchId}}
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Branch_Name">
+                                 {{outlet.branchName}}
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Outlet_Type">
+                                 <span> {{outlet.outletType.outletType}}</span>
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.Mobile_No">
+                                    {{outlet.code}} - {{outlet.mobileNo}}
+                              </td>
+                              <td ng-show="olc.fChooser_outlet.status">
+                                 {{outlet.outletStatus}}
+                              </td>
+                              <td>
+                                 <button  href="" class="b" data-ng-hide="editMode" ng-click="olc.updateOutlet(outlet)"><i class="glyphicon glyphicon-transfer" aria-hidden="true" title="Changestatus"></i></button>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <dir-pagination-controls  pagination-id="inactive"
+                     max-size="5"
+                     direction-links="true"
+                     boundary-links="true" >
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

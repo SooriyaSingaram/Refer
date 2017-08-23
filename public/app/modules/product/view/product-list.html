@@ -1,0 +1,313 @@
+<div class="content-wrapper">
+   <!-- Content Header (Page header) -->
+   <section class="content-header">
+      <h1>
+         Product List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a  href="">Inventory Management</a></li>
+         <li class="active">Product List</li>
+      </ol>
+   </section>
+   <!-- Main content -->
+   <section class="content" >
+      <div>
+         <ul class="nav nav-pills">
+            <li ng-class="{active:plc.isSet(1)}"><a href ng-click="plc.setTab(1)">Active List</a></li>
+            <li ng-class="{active:plc.isSet(2)}"><a href ng-click="plc.setTab(2)">Deactive List</a></li>
+         </ul>
+      </div>
+      <div ng-show="plc.isSet(1)">
+         <div class="panel panel-info" style="overflow:auto;">
+            <div class="allow_cnt" >
+               <form name="Form">
+                  <div class="box-body">
+                     <label style="padding: 9px;">Show Entries</label>      
+                     <select data-ng-model="limit" ng-init="limit = plc.availableLimits[0]" ng-options="limit for limit in  plc.availableLimits" ng-class="{'active':isActiveLimit(limit)}" data-ng-change="setLimit(limit)" size="1">
+                     </select>                         
+                     <div class="dropdown" style="float:right;padding-left:2%">
+                        <button ng-if="plc.authorizeData.indexOf('canAdd') >= 0" type="submit" class="btn btn-primary" ng-click="plc.checkBranchValidation()">Add Product</button>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Product_Name" value="somevalue" />Product Name</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Category" value="somevalue" /> Category</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.SubCategory" value="somevalue" /> SubCategory</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Monthly_Average" value="somevalue" />Monthly Average Price</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Default_Suppplier" value="somevalue" />Default Suppplier</li>
+                        </ul>
+                     </div>
+                     <br>
+                     <!--<div >-->
+                     <table class="grid_tbl">
+                        <thead>
+                           <tr>
+                              <th>  
+                                 <a href="" ng-click="sortType = 'productId'; sortReverse = !sortReverse">
+                                 Product Id 
+                                 <span ng-show="sortType == 'productId' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productId' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>  
+                                 <a href="" ng-click="sortType = 'productCode'; sortReverse = !sortReverse">
+                                 Product Code
+                                 <span ng-show="sortType == 'productCode' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productCode' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Product_Name">  
+                                 <a href="" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                 Product Name
+                                 <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Category"> 
+                                 <a href="" ng-click="sortType = 'category.categoryName'; sortReverse = !sortReverse">
+                                 Category
+                                 <span ng-show="sortType == 'category.categoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'category.categoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.SubCategory"> 
+                                 <a href="" ng-click="sortType = 'subCategory.subCategoryName'; sortReverse = !sortReverse">
+                                 SubCategory
+                                 <span ng-show="sortType == 'subCategory.subCategoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'subCategory.subCategoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Monthly_Average">  
+                                 <a href="" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                 Monthly Average Price
+                                 <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Default_Suppplier">  
+                                 <a href="" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                 Default Supplier
+                                 <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th style="width:100px">  
+                                 <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                 Action
+                                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                           </tr>
+                           <tr>
+                              <td>
+                                 <input class="form-control" 
+                                    ng-model="search.productId"   placeholder="Search By Product Id" >
+                              </td>
+                              <td>
+                                 <input class="form-control" 
+                                    ng-model="search.productCode"   placeholder="Search By Product Code" >
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Product_Name">
+                                 <input class="form-control" 
+                                    ng-model="search.productName" placeholder="Search By Product Name"  style="padding-right: 5px;">
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Category">
+                                 <input class="form-control" 
+                                    ng-model="search.category.categoryName"  placeholder="Search By Category" >
+                              </td>
+                              <td ng-show="plc.fChooser_Product.SubCategory">
+                                 <input class="form-control" 
+                                    ng-model="search.subCategory.subCategoryName"  placeholder="Search By SubCategory"  >
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Monthly_Average">
+                                 <input class="form-control" 
+                                    ng-model="search.averagePrice" placeholder="Search By Monthly Price"  style="padding-right: 5px;">
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Default_Suppplier">
+                                 <input class="form-control" 
+                                    ng-model="search.defaultSupplierDetails.supplierName" placeholder="Search By Suppplier"  style="padding-right: 5px;">
+                              </td>
+                              <td></td>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr dir-paginate="addproduct in plc.activeProducts |orderBy:sortType:sortReverse|filter:search|itemsPerPage:limit"  pagination-id="active">
+                              <td>
+                                 <span>{{addproduct.productId}}</span>
+                              </td>
+                              <td>{{addproduct.productCode}}</td>
+                              <td ng-show="plc.fChooser_Product.Product_Name">
+                                 <span>{{addproduct.productName}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Category">
+                                 <span >{{addproduct.category.categoryName}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.SubCategory">
+                                 <span>{{addproduct.subCategory.subCategoryName}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Monthly_Average">
+                                 <span>{{addproduct.averagePrice | number : 2}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Default_Suppplier">
+                                 <span>{{addproduct.defaultSupplierDetails.supplierName}}</span>
+                              </td>
+                              <td>
+                                 <button ng-if="plc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.product({id:addproduct._id})"   title="View&Edit" class="b"  data-ng-hide="editMode"><i class="glyphicon glyphicon-pencil">
+                                 </i></button>
+                                 <button ng-if="plc.authorizeData.indexOf('canDelete') >= 0" href="" title="Delete" class="a" data-ng-hide="editMode" ng-click="plc.deleteProduct(addproduct._id,addproduct.productId)"><i class="glyphicon glyphicon-trash"></i></button>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <dir-pagination-controls  pagination-id="active"
+                        max-size="5"
+                        direction-links="true"
+                        boundary-links="true" >
+                     </dir-pagination-controls>
+                  </div>
+               </form>
+            </div>
+         </div>
+      </div>
+      <div ng-show="plc.isSet(2)">
+         <div class="panel panel-info" style="overflow:auto;">
+            <div class="allow_cnt" >
+               <form name="myForm">
+                  <div class="box-body">
+                     <label style="padding: 9px;">Show Entries</label>      
+                     <select data-ng-model="limitValue" ng-init="limitValue=plc.availableLimits[0]" ng-options="limitValue for limitValue in  plc.availableLimits" ng-class="{'active':isActiveLimit(limitValue)}" data-ng-change="setLimit(limitValue)" size="1">
+                     </select>                         
+                     <div class="dropdown" style="float:right;padding-left:2%">
+                        <button ng-if="plc.authorizeData.indexOf('canAdd') >= 0" type="submit" class="btn btn-primary" ng-click="plc.checkBranchValidation()">Add Product</button>
+                        <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Product_Name" value="somevalue" />Product Name</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Category" value="somevalue" /> Category</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.SubCategory" value="somevalue" /> SubCategory</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Monthly_Average" value="somevalue" />Monthly Average Price</li>
+                           <li><input type="checkbox" style="margin:9px;" ng-model="plc.fChooser_Product.Default_Suppplier" value="somevalue" />Default Suppplier</li>
+                        </ul>
+                     </div>
+                     <br>
+                     <table class="grid_tbl">
+                        <thead>
+                           <tr>
+                              <th>  
+                                 <a href="" ng-click="sortType = 'productId'; sortReverse = !sortReverse">
+                                 Product Id 
+                                 <span ng-show="sortType == 'productId' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productId' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Product_Name">  
+                                 <a href="" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                 Product Name
+                                 <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Category"> 
+                                 <a href="" ng-click="sortType = 'category.categoryName'; sortReverse = !sortReverse">
+                                 Category
+                                 <span ng-show="sortType == 'category.categoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'category.categoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.SubCategory"> 
+                                 <a href="" ng-click="sortType = 'subCategory.subCategoryName'; sortReverse = !sortReverse">
+                                 SubCategory
+                                 <span ng-show="sortType == 'subCategory.subCategoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'subCategory.subCategoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Monthly_Average">  
+                                 <a href="" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                 Monthly Average Price
+                                 <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th ng-show="plc.fChooser_Product.Default_Suppplier">  
+                                 <a href="" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                 Default Supplier
+                                 <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>  
+                                 <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                 Action
+                                 <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                           </tr>
+                           <tr>
+                              <td>
+                                 <input class="form-control" 
+                                    ng-model="search.productId"   placeholder="Search By Product Id" >
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Product_Name">
+                                 <input class="form-control" 
+                                    ng-model="search.productName" placeholder="Search By Product Name"  style="padding-right: 5px;">
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Category">
+                                 <input class="form-control" 
+                                    ng-model="search.category.categoryName"  placeholder="Search By Category" >
+                              </td>
+                              <td ng-show="plc.fChooser_Product.SubCategory">
+                                 <input class="form-control" 
+                                    ng-model="search.subCategory.subCategoryName"  placeholder="Search By SubCategory"  >
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Monthly_Average">
+                                 <input class="form-control" 
+                                    ng-model="search.averagePrice" placeholder="Search By Monthly Price"  style="padding-right: 5px;">
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Default_Suppplier">
+                                 <input class="form-control" 
+                                    ng-model="search.defaultSupplierDetails.supplierName" placeholder="Search By Suppplier"  style="padding-right: 5px;">
+                              </td>
+                              <td></td>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr dir-paginate="addproduct in plc.products |filter:{status:'Inactive'} |orderBy:sortType:sortReverse|filter:search|itemsPerPage:limitValue"  pagination-id="inactive">
+                              <td>
+                                 <span>{{addproduct.productId}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Product_Name">
+                                 <span>{{addproduct.productName}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Category">
+                                 <span >{{addproduct.category.categoryName}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.SubCategory">
+                                 <span>{{addproduct.subCategory.subCategoryName}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Monthly_Average">
+                                 <span>{{addproduct.averagePrice | number : 2}}</span>
+                              </td>
+                              <td ng-show="plc.fChooser_Product.Default_Suppplier">
+                                 <span>{{addproduct.defaultSupplierDetails.supplierName}}</span>
+                              </td>
+                              <td>
+                                 <button  ng-if="plc.authorizeData.indexOf('canEdit') >= 0" href="" class="b" data-ng-hide="editMode" ng-click="plc.updateProduct(addproduct)"><i class="glyphicon glyphicon-transfer" aria-hidden="true" title="Changestatus"></i></button>
+                                 <button ng-if="plc.authorizeData.indexOf('canDelete') >= 0" href="" title="Delete" class="a" data-ng-hide="editMode" ng-click="plc.deleteProduct(addproduct._id,addproduct.productId)"><i class="glyphicon glyphicon-trash"></i></button>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+                  <dir-pagination-controls pagination-id="inactive"
+                     max-size="5"
+                     direction-links="true"
+                     boundary-links="true" >
+               </form>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>

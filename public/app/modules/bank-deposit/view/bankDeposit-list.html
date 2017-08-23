@@ -1,0 +1,176 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+   Account Management
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href=""> Account Management</a></li>
+         <li class="active">Bank deposit details</li>
+      </ol>
+   </section>
+   <section class="content"  >
+      <form name="Form" id="Form"  ng-submit="Form.$valid && bdlc.getdates(bdlc.depositInfo);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Outlet Name </label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control" name="outletId"  ng-model="bdlc.depositInfo.branchId" required="required" ng-disabled="!((bdlc.role === 'KS_RS001')||(bdlc.role === 'KS_RS002')||(bdlc.role === 'KS_RS006')||(bdlc.role === 'KS_RS003'))"/>
+                        <option value="">Select Outlet</option>
+                        <option ng-repeat="outlet in bdlc.branchDetails | orderBy:'branchName'" value="{{outlet.branchId}}" ng-if="(bdlc.role === 'KS_RS001')||(bdlc.role === 'KS_RS002')||(bdlc.role === 'KS_RS003')||(bdlc.role === 'KS_RS007')">{{outlet.branchName}}</option>
+                         <option ng-repeat="outlet in bdlc.franchiseInformation | orderBy:'branchName'" value="{{outlet.branchId}}" ng-if="((bdlc.role === 'KS_RS006')||(bdlc.role === 'KS_RS008')||(bdlc.role === 'KS_RS009'))">{{outlet.branchName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.outletId.$error.required"  style="padding-left:1%;color: red;">Outlet Name is Required</span>                     
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"  id="fromDate"  ng-model="bdlc.depositInfo.fromDate" name="formDate" required="required" ng-click="bdlc.changeView($view,$dates,$event)"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  bdlc.depositInfo.fromDate == null ? 'Select Date' : bdlc.depositInfo.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="bdlc.depositInfo.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="bdlc.startDateOnSetTime()" data-before-render="bdlc.startDateBeforeRender(bdlc.depositInfo.toDate,$dates,$view,$event)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.formDate.$error.required" style="padding-left:1%;color: red;">From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  id="toDate"  ng-model="bdlc.depositInfo.toDate" name="toDate" required="required" ng-click="bdlc.changeView($view,$dates,$event)"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  bdlc.depositInfo.toDate == null ? 'Select Date' : bdlc.depositInfo.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="bdlc.depositInfo.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="bdlc.endDateOnSetTime()"  data-before-render="bdlc.endDateBeforeRender(bdlc.depositInfo.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)" />
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span> 
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="button"  class="btn btn-warning"  ng-click="bdlc.reset()">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =bdlc.availableLimits[0]" ng-options="limit for limit in bdlc.availableLimits" ng-class="{'active':bdlc.isActiveValue(limit)}" data-ng-change="bdlc.setValue(limit)" size="1">      
+                  </select>                         
+                  <div class="dropdown" style="float:right;padding-left:2%">
+                     <button type="submit" ui-sref="root.bankDeposit" class="btn btn-primary" ng-if="((bdlc.role === 'KS_RS009')||(bdlc.role === 'KS_RS007') || (bdlc.role === 'KS_RS008'))">Add Bank deposit details</button>
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu">
+                        <li><input type="checkbox"  ng-model="bdlc.fChooser_bankDeposit.deposit_Date" style="margin:9px" value="somevalue" />Deposit Date</li>
+                        <li><input type="checkbox" ng-model="bdlc.fChooser_bankDeposit.bank_Name" style="margin:9px" value="somevalue" />Bank Name</li>
+                     </ul>
+                  </div>
+                  <br>
+                  <table class="grid_tbl">
+                     <thead>
+                        <tr>
+                           <th>  
+                              <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                              Outlet Id 
+                              <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>  
+                              <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                              Outlet Name
+                              <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="bdlc.fChooser_bankDeposit.deposit_Date"> 
+                              <a href="" ng-click="sortType = 'depositDate'; sortReverse = !sortReverse">
+                              Deposit Date
+                              <span ng-show="sortType == 'depositDate' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'depositDate' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th> 
+                              <a href="" ng-click="sortType = 'depositAmount'; sortReverse = !sortReverse">
+                              Deposit Amount
+                              <span ng-show="sortType == 'depositAmount' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'depositAmount' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="bdlc.fChooser_bankDeposit.bank_Name"> 
+                              <a href="" ng-click="sortType = 'bankName'; sortReverse = !sortReverse">
+                              Bank Name
+                              <span ng-show="sortType == 'bankName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'bankName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>  
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="depositDetail in bdlc.depositDetails|orderBy:sortType:sortReverse |filter:{isActive: true}|itemsPerPage:limit " 
+                           >
+                           <td>
+                              <span>{{depositDetail.branchId}}</span>
+                           </td>
+                           <td>
+                              <span>{{depositDetail.branchName}}</span>
+                           </td>
+                           <td ng-show="bdlc.fChooser_bankDeposit.deposit_Date">
+                              <span>{{depositDetail.depositDate | date:'yyyy-MM-dd'}}</span>
+                           </td>
+                           <td >
+                              <span>{{depositDetail.depositAmount}}</span>
+                           </td>
+                           <td ng-show="bdlc.fChooser_bankDeposit.bank_Name">
+                              <span>{{depositDetail.bankName}}</span>
+                           </td>
+                           <td>
+                              <button ng-if="bdlc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.bankDeposit({id:depositDetail._id})"   title="View" class="b"  data-ng-hide="editMode"><i class="glyphicon glyphicon-eye-open"></i></button>
+                              <button ng-if="bdlc.authorizeData.indexOf('canDelete') >= 0" href="" title="Delete" class="a" data-ng-hide="editMode" ng-click="bdlc.deleteDepositDetails(depositDetail._id)"><i class="glyphicon glyphicon-trash"></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls
+                     max-size="5"
+                     direction-links="true"
+                     boundary-links="true" >
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

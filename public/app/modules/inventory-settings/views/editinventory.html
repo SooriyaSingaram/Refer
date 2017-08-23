@@ -1,0 +1,151 @@
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Edit Branch Inventory Detail
+        </h1>
+        <ol class="breadcrumb">
+            <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+            <li><a ui-sref="root.inventorylist">Inventory List</a></li>
+            <li class="active">Edit Branch Inventory Detail</li>
+        </ol>
+    </section>
+    <section class="content">
+        <!-- SELECT2 EXAMPLE -->
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Edit Branch Inventory Detail</h3>
+            </div>
+            <div class="box-body">
+                <form name="myForm" ng-submit="myForm.$valid && update();submitted=true" novalidate autocomplete="off">
+
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">BranchName
+                     </label>
+                                <select class="form-control" name="branch" id="branch" ng-model="inventorys.BranchId" disabled="disabled">
+                           <option value="">Select Branch</option>
+                           <option ng-repeat="addOutlet in configOutlet" value="{{addOutlet.BranchId}}">{{addOutlet.BranchName}}</option>
+                           <option ng-repeat="addFranchise in configFranchise" value="{{addFranchise.BranchId}}">{{addFranchise.BranchName}}
+                           </option>
+                           <option ng-repeat="addFranchisebranch in configbranch" value="{{addFranchisebranch.BranchId}}">{{addFranchisebranch.BranchName}}
+                           </option>
+                        </select>
+                                <span class="help-inline" ng-show="submitted && myForm.branch.$error.required" style="padding-left:1%;color: red;">BranchName is Required
+                     </span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">BranchID
+                     </label>
+                                <input type="text" class="form-control" placeholder="BranchId" ng-model="inventorys.BranchId" name="BranchId" required="required" disabled="disabled">
+                                <span class="help-inline" ng-show="submitted && myForm.BranchId.$error.required" style="padding-left:1%;color: red;">BranchID is Required
+                     </span>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <button type="button" class="btn btn-primary" ng-click="getdetail(inventorys.availableproducts);Addrow = !Addrow">Add Product</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12" ng-show="Addrow">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Product
+                     </label>
+                                <select multiple="multiple" class="form-control select2" ng-model="availableproducts" name="products" ng-disabled="inactive">
+                     <option ng-repeat="addproduct in products" value="{{addproduct.Pname}}">{{addproduct.Pname}}</option>
+                      <span class="help-inline" ng-show="submitted && myForm.products.$error.required" style="padding-left:1%;color: red;">product is Required
+                        </select>
+
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <button type="button" class="btn btn-primary" ng-click="updateproduct(availableproducts)">Add Product</button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <h3>Product Details </h3>
+
+                            <table class="table table-bordered table-hover table-condensed grid_tbl">
+                                <tr style="font-weight: bold">
+                                    <td>Product Id</td>
+                                    <td>Product Name</td>
+                                    <td>Available Qty</td>
+
+                                    <td ng-hide="Role =='Purchase Manager'">Action</td>
+
+                                </tr>
+                                <tr ng-repeat="products in inventorys.availableproducts">
+
+                                    <td>{{products.pid}}</td>
+                                    <td>{{products.Pname}}</td>
+
+                                    <td><span data-ng-hide="editMode">{{products.availableqty}}</span>
+                                        <span data-ng-show="editMode"><input type="text"   placeholder="Available Qty" name="availableqty" ng-model="products.availableqty" vaild-number required="required"></span>
+
+                                        <span data-ng-hide="editMode"> {{products.unitname}}</span>
+                                        <span data-ng-show="editMode">  <select type="text" ng-model="products.unitname">
+                                 <option ng-repeat="unit in UnitNames" value="{{unit.UnitName}}">{{unit.UnitName}}</option>
+                              </select></span>
+                                    </td>
+                                    <td ng-hide="Role =='Purchase Manager'">
+                                        <a class="b" data-ng-show="editMode" data-ng-click="editMode = false; save()"><i class="glyphicon glyphicon-floppy-save"
+                               ></i></a>
+
+                                        <a class="b" data-ng-hide="editMode" data-ng-click="editMode =true;"><i class="glyphicon glyphicon-pencil" 
+                                ></i></a>
+
+                                        <a class="a" data-ng-click="removeProduct($index)"><i class="glyphicon glyphicon-trash" 
+                                ></i></a>
+
+
+
+
+
+                                    </td>
+                                </tr>
+
+                            </table>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="text-center">
+                            <button type="button" ng-click="inactive = !inactive" ng-show="inactive" class="btn btn-success " ng-disabled="Role =='Purchase Manager'">edit</button>
+                            <button ng-hide="inactive" type="submit" name="submit" class="btn btn-success " ng-disabled="Role =='Purchase Manager'">Submit</button>
+                            <button ng-hide="inactive" ui-sref="root.inventorylist" class="btn btn-danger " ng-disabled="Role =='Purchase Manager'">Cancel</button>
+
+                        </div>
+                    </div>
+            </div>
+
+            </form>
+        </div>
+</div>
+
+</div>
+
+</section>
+</div>
+
+
+<script>
+    $(function() {
+        $(".select2").select2();
+    });
+</script>

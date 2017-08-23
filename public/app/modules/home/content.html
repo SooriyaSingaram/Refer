@@ -1,0 +1,67 @@
+       
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Dashboard
+      </h1>
+      <ol class="breadcrumb">
+         <li><a href=""><i class="fa fa-dashboard"></i></a></li>
+         <li class="active">Dashboard</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="row">
+        <div class="col-md-3 col-sm-6 col-xs-12" ng-if="hc.authorizeData.indexOf('HRM Management') >= 0">
+            <a ui-sref="root.employee">
+               <div class="info-box">
+                  <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
+                  <div class="info-box-content">
+                     <span class="info-box-text">HRM</span>
+                  </div>
+               </div>
+            </a>
+         </div>
+          <div class="col-md-3 col-sm-6 col-xs-12" ng-if="hc.authorizeData.indexOf('Outlet Management') >= 0">
+            <a ui-sref="root.outlet-dashboard">
+               <div class="info-box">
+                  <span class="info-box-icon bg-green"><i class="fa fa-random"></i></span>
+                  <div class="info-box-content">
+                     <span class="info-box-text">Outlet Management</span>
+                  </div>
+               </div>
+            </a>
+         </div>
+         <div class="col-md-3 col-sm-6 col-xs-12" ng-if="hc.authorizeData.indexOf('Inventory') >= 0">
+            <a ui-sref="root.product-dashboard">
+               <div class="info-box">
+                  <span class="info-box-icon bg-blue"><i class="fa fa-cubes"></i></span>
+                  <div class="info-box-content">
+                     <span class="info-box-text">Product Management</span>
+                  </div>
+               </div>
+            </a>
+         </div>
+         <div class="col-md-3 col-sm-6 col-xs-12" ng-if="hc.authorizeData.indexOf('Menu Engineering') >= 0">
+            <a ui-sref="root.menu">
+               <div class="info-box">
+                  <span class="info-box-icon bg-red"><i class="fa fa-map-o"></i></span>
+                  <div class="info-box-content">
+                     <span class="info-box-text">Menu</span>
+                  </div>
+               </div>
+            </a>
+         </div>
+         <div class="col-md-3 col-sm-6 col-xs-12">
+            <a ui-sref="root.bankDeposit-dashboard">
+               <div class="info-box">
+                  <span class="info-box-icon bg-orange"><i class="fa fa-university"></i></span>
+                  <div class="info-box-content">
+                     <span class="info-box-text">Account Management</span>
+                  </div>
+               </div>
+            </a>
+         </div>
+      </div>
+   </section>
+</div>
+

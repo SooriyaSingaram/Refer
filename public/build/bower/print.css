@@ -1,0 +1,8 @@
+.grid_tbl{width:100%;border:2px solid #eee;margin:20px 0;}
+.grid_tbl tr{border-bottom:2px solid #eee}
+.grid_tbl th{padding:10px 10px}
+.grid_tbl td{padding:5px 10px}
+.grid_tbl th:last-child,.grid_tbl td:last-child{text-align:center;}
+.grid_tbl td a{display:inline-block;padding:5px 10px;margin:5px 10px;}
+.head{color:red;text-align:center}
+.grid_tbl>tbody>tr>td,.grid_tbl>tbody>tr>th,.grid_tbl>tfoot>tr>td,.grid_tbl>tfoot>tr>th,.grid_tbl>thead>tr>td,.grid_tbl>thead>tr>th{border:2px solid #eee;}

@@ -1,0 +1,136 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Emergency Contact  List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Outlet Management</a></li>
+         <li class="active">Emergency Contact List</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="panel panel-info"  style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>      
+                  <select data-ng-model="limit" ng-init="limit =olc.availableLimits[0]" ng-options="limit for limit in olc.availableLimits" ng-class="{'active':olc.isActiveValue(limit)}" data-ng-change="olc.setValue(limit)" size="1">
+                  </select>                         
+                  <!--<div class="dropdown" style="float:right;padding-left:2%">
+                     <button type="submit" ui-sref="root.request" class="btn btn-primary " ng-disabled="rlc.disableAddButton">Add Request </button>
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.outlet_name" value="somevalue" />Outlet Name</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.franchise_name" value="somevalue" />Franchise Name</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.raised_By" value="somevalue" />Raised By</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="rlc.fChooser_request.raised_date" value="somevalue" />Raised Date</li>
+                     </ul>
+                     </div>-->
+                  <br>
+                  <table class=" grid_tbl">
+                     <thead>
+                        <tr>
+                           <th >  
+                              <a href="" ng-click="sortType = 'employeeId'; sortReverse = !sortReverse">
+                              Outlet Id
+                              <span ng-show="sortType == 'employeeId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th >  
+                              <a href="" ng-click="sortType = 'employeeName'; sortReverse = !sortReverse">
+                              Outlet Name
+                              <span ng-show="sortType == 'employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th > 
+                              <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                              Emergency Contact Name
+                              <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th > 
+                              <a href="" ng-click="sortType = 'userName'; sortReverse = !sortReverse">
+                              Emergency Contact Number
+                              <span ng-show="sortType == 'userName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'userName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>  
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td >
+                              <input class="form-control" 
+                                 ng-model="search.branchId" placeholder="Search By Outlet Id"  style="padding-right: 5px;">
+                           </td>
+                           <td >
+                              <input class="form-control" 
+                                 ng-model="search.branchName"   placeholder="Search By Outlet Name">
+                           </td>
+                           <td >
+                              <input class="form-control" 
+                                 ng-model="search.emergencyContactName" placeholder="Search By Emergency Contact Name" >
+                           </td>
+                           <td>
+                              <input class="form-control" 
+                                 ng-model="search.emergencyMobileNo"  placeholder="Search By Emergency Contact Number">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="emergency in olc.emergencyDetails|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " data-ng-class="{danger:!request.active}">
+                           <td>
+                              {{emergency.branchId}}
+                           </td>
+                           <td>
+                              {{emergency.branchName}}
+                           </td>
+                           <td >
+                              <span data-ng-hide="editMode"> {{emergency.emergencyContactName}}</span>
+                              <input class="form-control" ng-model="emergency.emergencyContactName" ng-show="editMode"name="emergencyContactName" ng-pattern="/^[a-zA-Z\s]*$/" required />
+                           </td>
+                           <td >
+                                   <span data-ng-hide="editMode"> {{emergency.emergencyCode}}</span> - 
+                              <span data-ng-hide="editMode"> {{emergency.emergencyMobileNo}}</span>
+                                 
+                              <div class="row">
+                                 <div class="col-sm-4">
+                                    <input class="form-control" ng-model="emergency.emergencyCode"   disabled ng-show="editMode"name="emergencyCode" ng-pattern="/^[a-zA-Z\s]*$/" required />
+                                 </div>
+                                 <div class="col-sm-8">
+                                    <input type="Number" class="form-control" placeholder="Phone No"  ng-show="editMode" name="PhNo" ng-minlength="3"
+                                       ng-maxlength="15" ng-model="emergency.emergencyMobileNo" ng-keypress="olc.onlyNumbers($event)"   ng-min="0" 
+                                       min=0   required 
+                                       />
+                                 </div>
+                              </div>
+                           </td>
+                           <td ng-if="olc.authorizeData.indexOf('canDelete') >= 0">
+                              <button href="" class="b" title="Edit"  data-ng-hide="editMode" data-ng-click="editMode = true;olc.editOutlet(emergency)"><i class="glyphicon glyphicon-pencil" 
+                                 ></i></button>
+                              <button href="" class="c" ng-show="editMode" title="Update" ng-click="olc.updateEmergencyContact(emergency)"><i class="glyphicon glyphicon-floppy-save"></i></button>
+                              <button href=""  class="d" ng-show="editMode" title="Remove" data-ng-click="olc.reset(emergency);editMode = false;"> <i class="glyphicon glyphicon-remove"  ></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

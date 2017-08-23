@@ -1,0 +1,128 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Menu Report
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Menu Engineering</a></li>
+         <li class="active">Menu Report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="panel panel-info">
+         <form name="Form" id="Form"  ng-submit="Form.$valid && mrc.filterByMenu(mrc.menuData.menuId);submitted=true" autocomplete="off"  novalidate >
+            <div class="box-header with-border">
+               <h3 class="box-title">Menu Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="mrc.print('print-div')">Print</button> 
+                  <button   type="button" ng-click="mrc.downloadPdf('Menu Profit Report')" class="btn btn-primary "> PDF</button> 
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row">
+                  <div class="form-group">
+                     <div class="col-sm-3 d-right">
+                        <label style="padding-top: 8px;" class="">Menu Name</label>
+                     </div>
+                     <div class="col-sm-6 ">
+                        <select class="form-control" name="menuId"  ng-model="mrc.menuData.menuId" required="required">
+                           <option value="">Select Menu</option>
+                           <option ng-repeat="menu in mrc.menuDetails | orderBy:'itemName' " value="{{menu.menuId}}">{{menu.itemName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && Form.menuId.$error.required" style="padding-left:1%;color: red;">
+                           Menu Name is required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="mrc.reset()">Reset</button>
+               </div>
+            </div>
+         </form>
+      </div>
+      <div class="panel panel-info"  style="overflow:auto;">
+         <form name="myForm">
+            <div class="box-body">
+               <label style="padding: 9px;">Show Entries</label>      
+               <select data-ng-model="limit" ng-init="limit =mrc.availableLimits[0]" ng-options="limit for limit in mrc.availableLimits" ng-class="{'active':mrc.isActiveValue(limit)}" data-ng-change="mrc.setValue(limit)" size="1">
+               </select>                                      
+               <br>
+               <div id="print-div">
+                  <h3>Menu details Report</h3>
+                  <table class="grid_tbl" id="pdfgrid">
+                     <thead>
+                        <tr>
+                           <th>  
+                              <a class="hand-icon" ng-click="sortType = 'MenuId'; sortReverse = !sortReverse">
+                              MenuId
+                              <span ng-show="sortType == 'MenuId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'MenuId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th> 
+                              <a class="hand-icon" ng-click="sortType = 'ItemName'; sortReverse = !sortReverse">
+                              Item Name
+                              <span ng-show="sortType == 'ItemName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'ItemName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th >  
+                              <a class="hand-icon" ng-click="sortType = 'ItemType'; sortReverse = !sortReverse">
+                              Item Type
+                              <span ng-show="sortType == 'ItemType' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'ItemType' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th >  
+                              <a class="hand-icon" ng-click="sortType = 'cost'; sortReverse = !sortReverse">
+                              Cost Price
+                              <span ng-show="sortType == 'cost' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'cost' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th > 
+                              <a class="hand-icon" ng-click="sortType = 'price'; sortReverse = !sortReverse">
+                              Profit
+                              <span ng-show="sortType == 'price' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'price' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr  dir-paginate="addMenu in mrc.menuReport|orderBy:sortType:sortReverse |filter:search|itemsPerPage:limit " 
+                           data-ng-class="{danger:!addMenu.active}">
+                           <td >
+                              <span>{{addMenu.menuId}}</span>
+                           </td>
+                           <td >
+                              <span>{{addMenu.itemName}}</span>
+                           </td>
+                           <td >
+                              <span>{{addMenu.menucategories_collection.categoryName}}</span>
+                           </td>
+                           <td>
+                              <span>{{addMenu.costPrice}}</span>
+                           </td>
+                           <td >
+                              <span>{{addMenu.outletPrice - addMenu.costPrice}}</span>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </div>
+         </form>
+      </div>
+   </section>
+</div>

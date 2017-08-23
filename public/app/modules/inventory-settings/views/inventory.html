@@ -1,0 +1,105 @@
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Inventory
+        </h1>
+        <ol class="breadcrumb">
+            <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+            <li><a ui-sref="root.inventorylist">Inventory List</a></li>
+            <li class="active"> Inventory Detail</li>
+        </ol>
+    </section>
+    <div name="myForm" ng-submit="myForm.$valid;submitted=true" autocomplete="off" novalidate>
+        <section class="content">
+            <!-- SELECT2 EXAMPLE -->
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> Inventory Detail</h3>
+                </div>
+                <form name="myForm" ng-submit="submitted=true" novalidate autocomplete="off">
+                    <div class="box-body">
+                        <!--{{invtryCtrl.inventoryDetails._id}}-->
+
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group" id="outletType" ng-if="invtryCtrl.inventoryDetails._id==null">
+                                    <label for="exampleInputEmail1">Outlet Type</label>
+                                    <select type="text" class="form-control" required="required" name="OutletType" ng-disabled="invtryCtrl.isEditmode" ng-model="invtryCtrl.inventoryDetails.outletType" ng-change="invtryCtrl.seperateProducts(invtryCtrl.inventoryDetails.outletType)">
+                              <option value="">Select Type</option>
+                              <option value="Ware House">Ware House</option>
+                           </select>
+                                    <span class="help-inline" ng-show="submitted && myForm.OutletType.$error.required" style="padding-left:1%;color: red;">Outlet Type is Required</span>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6" ng-if="invtryCtrl.inventoryDetails.outletType!=null">
+                                <div class="form-group" ng-if="invtryCtrl.inventoryDetails._id==null">
+                                    <label for="exampleInputEmail1">Product
+                  </label>
+                                    <ui-select multiple ng-model="invtryCtrl.availableProducts" theme="bootstrap" name="customproduct" id="customproduct" ng-disabled="invtryCtrl.isEditmode" close-on-select="false" title="select" remove-selected="true">
+                                        <ui-select-match placeholder="Select Product...">{{$item.productName}}</ui-select-match>
+                                        <ui-select-choices repeat="addproduct in invtryCtrl.filtered">
+                                            <!--<div ng-bind-html="addproduct.productName | highlight: $select.search"></div>-->
+                                            <!--<div ng-modal="addproduct.PId" value=addproduct._id>-->
+                                            {{addproduct.productName | highlight: $select.search}}
+                                        </ui-select-choices>
+
+                                    </ui-select>
+                                </div>
+                            </div>
+                            <div class="col-md-3" ng-if="invtryCtrl.inventoryDetails.outletType!=null">
+                                <label></label>
+                                <div class="form-group"  ng-if="invtryCtrl.inventoryDetails._id==null">
+                                    <button class="btn btn-success" type="button" ng-click="invtryCtrl.addProducts(invtryCtrl.availableProducts,invtryCtrl.inventoryDetails.listOfProducts)">Add Product</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-md-12">
+                            <table class="table table-bordered table-hover table-condensed grid_tbl">
+                                <tr style="font-weight: bold">
+                                    <td>Product Id</td>
+                                    <td>Product Name</td>
+                                    <td>Available Qty</td>
+                                    <td>Action</td>
+                                </tr>
+                                <tr ng-repeat="listOfProducts in invtryCtrl.inventoryDetails.listOfProducts">
+                                    <td ng-disabled="invtryCtrl.isEditmode"><span name="productId" id="productId">{{listOfProducts.productId}}</span></td>
+                                    <td> <span name="productName" id="productName" ng-disabled="invtryCtrl.isEditmode">{{listOfProducts.productName}}</span>
+                                    </td>
+                                    <td ng-disabled="invtryCtrl.isEditmode">
+                                        <span><input type="number" placeholder="Available Qty" ng-disabled="invtryCtrl.isEditmode" name="avilableQuantity" id="avilableQuantity" ng-model="listOfProducts.avilableQuantity" ng-blur="invtryCtrl.validateQuantity(listOfProducts.avilableQuantity,listOfProducts.productId)"vaild-number required="required"></span>
+                                        <span> {{listOfProducts.unitName}}</span>
+                                    </td>
+                                    <td>
+                                        <button class="a" ng-disabled="invtryCtrl.isEditmode" data-ng-click="invtryCtrl.removeProduct(invtryCtrl.inventoryDetails.listOfProducts,$index)"><i class="glyphicon glyphicon-trash" 
+                      style="cursor:pointer" ></i></button>
+
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box-footer fix_Sub">
+                        <div class="col-sm-offset-5" ng-show="invtryCtrl.isEditmode===false">
+                            <button class="btn btn-success" type="submit" ng-hide="invtryCtrl.submitbut===false" ng-click="myForm.$valid && invtryCtrl.addInventory(invtryCtrl.inventoryDetails,invtryCtrl.inventoryDetails.listOfProducts);enablesub()" id='getButtonValue'>Submit</button>
+                            <button class="btn btn-success" ng-if="invtryCtrl.submitbut===false" type="submit" ng-click="myForm.$valid && invtryCtrl.updateInventory(invtryCtrl.inventoryDetails,invtryCtrl.inventoryDetails.listOfProducts);enablesub()" id='getButtonValues'>Update</button>
+                            <button ui-sref="root.inventorylist" name="submit" class="btn btn-danger ">Cancel</button>
+                            <input type="button" class="btn btn-warning" ng-click="invtryCtrl.reset()" value="Reset">
+                        </div>
+                        <div class="col-sm-offset-5" ng-if="invtryCtrl.isEditmode===true">
+                            <button type="button" ng-click="invtryCtrl.isEditmode = !invtryCtrl.isEditmode;invtryCtrl.disablesubmit()" class="btn btn-success ">Edit</button>
+                        </div>
+                    </div>
+            </div>
+            </form>
+        </section>
+    </div>
+</div>
+<script>
+    $(function() {
+        $(".select2").select2();
+    });
+</script>

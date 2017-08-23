@@ -1,0 +1,257 @@
+[{
+
+   
+   "Roles": [
+      
+    "KS_RS001-Director",
+    "KS_RS002-Admin",
+    "KS_RS003-Accoutant",
+    "KS_RS004-Warehouse Manager",
+    "KS_RS005-Centralized kitchen Manager",
+    "KS_RS006-Franchise admin",
+    "KS_RS007-Outlet Manger",
+    "KS_RS008-Franchise Branch Manager",
+    "KS_RS009-Franchise Manager"
+   ]
+  },
+    {
+
+   "name": "Director",
+   "role": "KS_RS001",
+   "access": [
+      
+    "Product Management",
+    "Product List",
+    "Expiry Report",
+    "Monthly PO product Report",
+    "Top sold product report",
+    "Supplier Management",
+    "Supplier List",
+    "Supplier Report",
+    "Outlet Management",
+    "Request List",
+    "Daily occurrences List",
+    "Outlet List",
+    "Franchise Branch List",
+    "Emergency Contact List",      
+    "Daily occurrences Report",
+    "Inventory",
+    "Inventory Settings",
+    "Supplied Report",
+    "product Supplied Report",
+    "Menu Supplied Report",
+    "Received Report",
+    "product Received Report",
+    "Menu Received Report",
+    "Purchase Order List",
+    "User Management",
+    "Employee List",
+    "Invoice",
+    "Invoice List",
+    "Menu Engineering",
+    "Menu List",
+    "Menu Profit Report",
+    "Monthly PO Menu Report",
+    "Top sold Menu Report",
+    "Bank Deposit Details Management",
+    "BankDeposit list",
+    "BankDeposit Report",
+    "Configuration Settings",
+    "canEdit",
+    "canDelete",
+    "canAdd"
+   ]
+  }, {
+   "name": "Outlet Manager",
+   "role": "KS_RS007",
+   "access": [
+    "Bank Deposit Details Management",
+    "Purchase Order List",
+    "Inventory",
+    "BankDeposit list",
+    "Outlet Management",
+    "Request List",
+    "Daily occurrences List",
+    "Invoice",
+    "Invoice List",
+    "canEdit",
+    "canDelete",
+    "canAdd"
+   ]
+  },
+
+  {
+   "name": "Centralized Kitchen Manager",
+   "role": "KS_RS005",
+   "access": [   
+     "Menu Engineering",
+     "Menu List",
+     "Purchase Order List",
+     "Inventory",
+     "Invoice",
+     "Invoice List",
+     "Outlet Management",
+     "Daily occurrences List",
+     "canEdit",
+     "canDelete",
+     "canAdd"  
+   ]
+  }, {
+
+   "name": "Admin",
+   "role": "KS_RS002",
+   "access": [
+    "Product Management",
+    "Product List",
+    "Expiry Report",
+    "Monthly PO product Report",
+    "Top sold product report",
+    "Supplier Management",
+    "Supplier List",
+    "Supplier Report",
+    "Outlet Management",
+    "Request List",
+    "Daily occurrences List",
+    "Outlet List",
+    "Franchise Branch List",
+    "Emergency Contact List",      
+    "Daily occurrences Report",
+    "Inventory",
+    "Inventory Settings",
+    "Supplied Report",
+    "product Supplied Report",
+    "Menu Supplied Report",
+    "Received Report",
+    "product Received Report",
+    "Menu Received Report",
+    "Purchase Order List",
+    "User Management",
+    "Employee List",
+    "Invoice",
+    "Invoice List",
+    "Menu Engineering",
+    "Menu List",
+    "Menu Profit Report",
+    "Monthly PO Menu Report",
+    "Top sold Menu Report",
+    "Bank Deposit Details Management",
+    "BankDeposit list",
+    "BankDeposit Report",
+    "Configuration Settings",
+    "canEdit",
+    "canDelete"
+   
+   ]
+  }, {
+
+   "name": "Accoutant",
+   "role": "KS_RS003",
+   "access": [
+    "Product Management",
+    "Top sold product report",
+    "Supplier Management",
+    "Supplier Report",
+    "Outlet Management",
+     "Request List",
+     "Inventory",
+     "PO Payment Report",
+     "Selling Report",
+     "User Management",
+    "Employee List",
+     "Invoice",
+    "Invoice List",
+    "Menu Engineering",
+    "Menu Profit Report",
+    "canEdit",
+    "Bank Deposit Details Management",
+    "BankDeposit list",
+    "BankDeposit Report"
+   ]
+  }, {
+
+   "name": "Warehouse Manager",
+   "role": "KS_RS004",
+   "access": [
+     "Product Management",
+     "Inventory",
+     "Invoice",
+     "Invoice List",
+     "Inventory Settings",
+     "Purchase Order List",
+     "Outlet Management",
+     "Daily occurrences List",
+     "Product List",
+     "canEdit",
+     "canDelete",
+     "canAdd"  
+   ]
+  }, {
+
+   "name": "Franchise Admin",
+   "role": "KS_RS006",
+   "access": [
+    "Bank Deposit Details Management",
+    "Outlet Management",
+    "Purchase Order List",
+    "Outlet Management",
+    "Request List",
+    "Daily occurrences List",   
+    "BankDeposit list",
+    "Inventory",
+    "Invoice",
+    "Invoice List",
+    "canEdit",
+    "canDelete",
+    "canAdd"
+     
+    
+   ]
+
+  },
+   {
+
+   "name": "Franchise Manager",
+   "role": "KS_RS009",
+   "access": [
+    "Bank Deposit Details Management",
+    "Purchase Order List",
+    "Invoice",
+    "Invoice List",
+    "Outlet Management",
+    "Request List",
+    "Daily occurrences List",
+    "Request List", 
+    "BankDeposit list",
+    "Inventory",
+    "canEdit",
+    "canDelete",
+    "canAdd"
+     
+    
+   ]
+
+  },
+     {
+
+   "name": "Franchise Branch Manager",
+   "role": "KS_RS008",
+   "access": [
+    "Bank Deposit Details Management",
+    "Purchase Order List",
+    "Outlet Management",
+    "Request List",
+    "Daily occurrences List",
+    "Request List", 
+    "BankDeposit list",
+    "Invoice",
+    "Invoice List",
+    "Inventory",
+    "canEdit",
+    "canDelete",
+    "canAdd"
+     
+    
+   ]
+
+  }
+ ]

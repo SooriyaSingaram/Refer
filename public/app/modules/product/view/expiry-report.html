@@ -1,0 +1,160 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Expiry Product Report
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Product Management</a></li>
+         <li class="active">Expiry Product Report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && erc.filterByDate(erc.product.fromDate,erc.product.toDate);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Expiry Product Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="erc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="erc.downloadPdf('Expiry Product Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="erc.product.fromDate" name="formDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  erc.product.fromDate == null ? 'Select Date' : erc.product.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="erc.product.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="erc.startDateOnSetTime()" data-before-render="erc.startDateBeforeRender(erc.product.toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromdate.$error.required" style="padding-left:1%;color: red;">  From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="erc.product.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  erc.product.toDate == null ? 'Select Date' : erc.product.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="erc.product.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="erc.endDateOnSetTime()"  data-before-render="erc.endDateBeforeRender(erc.product.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.todate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="erc.reset()">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =erc.availableLimits[0]" ng-options="limit for limit in erc.availableLimits" ng-class="{'active':erc.isActiveValue(limit)}" data-ng-change="erc.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>Expiry Product  details</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a  class="hand-icon" ng-click="sortType = 'productId'; sortReverse = !sortReverse">
+                                    Product Id 
+                                    <span ng-show="sortType == 'productId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'productId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'productName'; sortReverse = !sortReverse">
+                                    Product Name
+                                    <span ng-show="sortType == 'productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'productName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'category.categoryName'; sortReverse = !sortReverse">
+                                    Category
+                                    <span ng-show="sortType == 'category.categoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'category.categoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'depositAmount'; sortReverse = !sortReverse">
+                                    Subcategory
+                                    <span ng-show="sortType == 'depositAmount' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'depositAmount' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'bankName'; sortReverse = !sortReverse">
+                                    Expiry Date
+                                    <span ng-show="sortType == 'bankName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'bankName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <!--<th> 
+                                    <a ng-click="sortType = 'bankName'; sortReverse = !sortReverse">
+                                    Status
+                                    <span ng-show="sortType == 'bankName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'bankName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                    </th>-->
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="product in erc.productReport|orderBy:sortType:sortReverse |itemsPerPage:limit " 
+                                 >
+                                 <td>
+                                    <span>{{product.productId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{product.productName}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{product.category.categoryName}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{product.subCategory.subCategoryName}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{product.expiryDate | date:'yyyy-MM-dd'}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

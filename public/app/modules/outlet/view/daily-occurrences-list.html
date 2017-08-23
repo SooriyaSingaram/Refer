@@ -1,0 +1,143 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Daily occurrences List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Outlet Management</a></li>
+         <li class="active">Daily occurrences List</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="panel panel-info" >
+         <div class="allow_cnt">
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =dlc.availableLimits[0]" ng-options="limit for limit in dlc.availableLimits" ng-class="{'active':dlc.isActiveValue(limit)}" data-ng-change="dlc.setValue(limit)" size="1">
+                  </select>
+                  <select class="sort_out" ng-model="search.priorityLevel">
+                     <option value=""> Sort by</option>
+                     <option value="High Level">High Level</option>
+                     <option value="Medium Level">Medium Level</option>
+                     <option value="Low Level">Low Level</option>
+                  </select>
+                  <div class="dropdown" style="float:right;padding-left:2%">
+                     <button ng-if="dlc.authorizeData.indexOf('canAdd') >= 0" type="submit" ui-sref="root.daily-occurrences" class="btn btn-primary " ng-disabled="dlc.disableAddButton">Add Daily occurrences </button>
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li><input type="checkbox" style="margin:9px;" ng-model="dlc.fChooser_dailyOccurrence.outlet_name" value="somevalue" />Outlet Name</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="dlc.fChooser_dailyOccurrence.reported_date" value="somevalue" />Reported Date</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="dlc.fChooser_dailyOccurrence.complaints" value="somevalue" />Type Of Complaints</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="dlc.fChooser_dailyOccurrence.reported_by" value="somevalue" />Reported By</li>
+                     </ul>
+                  </div>
+                  <br>
+                  <table class=" grid_tbl">
+                     <thead>
+                        <tr>
+                           <th>
+                              <a href="" ng-click="sortType = 'employeeId'; sortReverse = !sortReverse">
+                              Outlet Id
+                              <span ng-show="sortType == 'employeeId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="dlc.fChooser_dailyOccurrence.outlet_name">
+                              <a href="" ng-click="sortType = 'employeeName'; sortReverse = !sortReverse">
+                              Outlet Name
+                              <span ng-show="sortType == 'employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="dlc.fChooser_dailyOccurrence.reported_date">
+                              <a href="" ng-click="sortType = 'userName'; sortReverse = !sortReverse">
+                              Reported Date
+                              <span ng-show="sortType == 'userName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'userName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="dlc.fChooser_dailyOccurrence.complaints">
+                              <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                              Type Of Complaints
+                              <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="dlc.fChooser_dailyOccurrence.reported_by">
+                              <a href="" ng-click="sortType = 'role'; sortReverse = !sortReverse">
+                              Reported By 
+                              <span ng-show="sortType == 'role' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'role' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.outletId" placeholder="Search By Outlet Id" style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.outlet_name">
+                              <input class="form-control" ng-model="search.outlet_collection.branchName" placeholder="Search By Outlet Name">
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.reported_date">
+                              <div class="dropdown">
+                                 <button class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                                 {{ reportDate == null ? 'Select Date' : reportDate  | date:'yyyy-MM-dd' }} <span class="caret"></span></button>
+                                 <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                    <datetimepicker data-ng-model="reportDate" ng-change="dlc.getUtcDate(reportDate)" data-datetimepicker-config="{ dropdownSelector: '#dropdown2',  startView:'day', minView:'day'  }" />
+                                 </ul>
+                                 <input type="hidden" ng-model="dlc.reportDate" />
+                              </div>
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.complaints">
+                              <input class="form-control" ng-model="search.complaint_collection.complaintName" placeholder="Search By Complaint Type ">
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.reported_by">
+                              <input class="form-control" ng-model="search.employees_collection.employeeName" placeholder="Search By Reported By ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="dailyOccurrence in dlc.dailyOccurrences|orderBy:sortType:sortReverse | filter:dlc.reportDate|filter:search|filter:{isActive: true}|itemsPerPage:limit " data-ng-class="{danger:!employee.active}">
+                           <td>
+                              {{dailyOccurrence.outletId}}
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.outlet_name">
+                              {{dailyOccurrence.branchName}}
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.reported_date">
+                              {{dailyOccurrence.reportDate | date:'yyyy-MM-dd'}}
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.complaints">
+                              {{dailyOccurrence.complaint_collection.complaintName}}
+                           </td>
+                           <td ng-show="dlc.fChooser_dailyOccurrence.reported_by">
+                              {{dailyOccurrence.employees_collection.employeeName}}
+                           </td>
+                           <td>
+                              <button ng-if="dlc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.daily-occurrences({id:dailyOccurrence._id})" title="View&Edit" class="b" data-ng-hide="editMode"><i class="glyphicon glyphicon-pencil"></i></button>
+                              <button ng-if="dlc.authorizeData.indexOf('canDelete') >= 0" href="" class="a" title="Delete" ng-click="dlc.deleteDailyOccurrence(dailyOccurrence._id,dailyOccurrence.dailyOccurrenceId)" data-ng-hide="editMode"><i class="glyphicon glyphicon-trash" 
+                                 ></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

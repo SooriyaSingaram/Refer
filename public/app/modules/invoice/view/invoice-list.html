@@ -1,0 +1,153 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Invoice List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Accounting</a></li>
+         <li class="active">Invoice List</li>
+      </ol>
+   </section>
+   <section class="content"  >
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =ilc.availableLimits[0]" ng-options="limit for limit in ilc.availableLimits" ng-class="{'active':ilc.isActiveValue(limit)}" data-ng-change="ilc.setValue(limit)" size="1">      
+                  </select>                         
+                  <div class="dropdown" style="float:right;padding-left:2%">
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li><input type="checkbox"  ng-model="ilc.fChooser_invoice.PO_Number" style="margin:9px" value="somevalue" />PO Number</li>
+                        <li><input type="checkbox" ng-model="ilc.fChooser_invoice.Invoice_No" style="margin:9px" value="somevalue" />Invoice No</li>
+                        <li><input type="checkbox" ng-model="ilc.fChooser_invoice.Amount" style="margin:9px" value="somevalue" />Amount</li>
+                        <li><input type="checkbox" ng-model="ilc.fChooser_invoice.Branch" style="margin:9px" value="somevalue" />Branch</li>
+                        <li><input type="checkbox" ng-model="ilc.fChooser_invoice.Status" style="margin:9px" value="somevalue" />Status</li>
+                     </ul>
+                  </div>
+                  <br>
+                  <table class=" grid_tbl">
+                     <thead>
+                        <tr>
+                           <th>  
+                              <a href="" ng-click="sortType = 'createdDateTime'; sortReverse = !sortReverse">
+                              Date 
+                              <span ng-show="sortType == 'createdDateTime' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdDateTime' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="ilc.fChooser_invoice.PO_Number">  
+                              <a href="" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                              PO Number
+                              <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="ilc.fChooser_invoice.Invoice_No"> 
+                              <a href="" ng-click="sortType = 'invoiceNo'; sortReverse = !sortReverse">
+                              Invoice No
+                              <span ng-show="sortType == 'invoiceNo' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'invoiceNo' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="ilc.fChooser_invoice.Amount"> 
+                              <a href="" ng-click="sortType = 'subTotal'; sortReverse = !sortReverse">
+                              Amount
+                              <span ng-show="sortType == 'subTotal' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'subTotal' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="ilc.fChooser_invoice.Branch"> 
+                              <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                              Branch
+                              <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="ilc.fChooser_invoice.Status"> 
+                              <a href="" ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                              Status
+                              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>  
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" 
+                                 ng-model="search.createdDateTime"   placeholder="Search By Date">
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.PO_Number">
+                              <input class="form-control" 
+                                 ng-model="search.purchaseOrderId" placeholder="Search By PurchaseOrderId"  style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Invoice_No">
+                              <input  class="form-control" 
+                                 ng-model="search.invoiceNo" placeholder="Search By Invoice No" >
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Amount">
+                              <input class="form-control" 
+                                 ng-model="search.subTotal" placeholder="Search By Amount"  >
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Branch">
+                              <input class="form-control" 
+                                 ng-model="search.branchId" placeholder="Search By Branch"  >
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Status">
+                              <input class="form-control" 
+                                 ng-model="search.status" placeholder="Search By Status"  >
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="invoice in ilc.invoices|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " 
+                           data-ng-class="{danger:!invoice.active}">
+                           <td>
+                              <span>{{invoice.createdDateTime | date:"dd/MM/yyyy"}}</span>
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.PO_Number">
+                              <span>{{invoice.invoiceNo}}</span>
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Invoice_No">
+                              <span>{{invoice.invoiceId}}</span>
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Amount">
+                              <span>{{invoice.subTotal}}</span>
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Branch">
+                              <span>{{invoice.branchName}}</span>
+                           </td>
+                           <td ng-show="ilc.fChooser_invoice.Status">
+                              <span>{{invoice.status}}</span>
+                           </td>
+                           <td>
+                              <button ng-if="ilc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.invoice({id:invoice._id})" ng-hide="invoice.status == 'Paid'" title="View&Edit" class="b"  data-ng-hide="editMode"><i class="glyphicon glyphicon-pencil"></i></button>
+                              <button ng-if="ilc.authorizeData.indexOf('canDelete') >= 0" href="" title="Delete" class="a" data-ng-hide="editMode" ng-click="ilc.deleteInvoice(invoice._id,invoice.invoiceId)"><i class="glyphicon glyphicon-trash"></i></button>
+                              <button ng-if="ilc.authorizeData.indexOf('canEdit') >= 0" ui-sref="root.printInvoice({id:invoice._id})" ng-show="invoice.status == 'Paid'" ng-hide="invoice.status == 'Partially Paid'"  title="Print Invoice" class="c"  data-ng-hide="editMode"><i class="glyphicon glyphicon-print"></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls
+                     max-size="5"
+                     direction-links="true"
+                     boundary-links="true" >
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

@@ -1,0 +1,210 @@
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         Franchise Branch Setup
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.franchise-branch-list">Franchise Branch List</a></li>
+         <li class="active">Franchise Branch Setup</li>
+      </ol>
+   </section>
+   <form name="myForm"  ng-submit="submitted=true"  autocomplete="off" novalidate >
+      <section class="content">
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Franchise Branch Setup</h3>
+            </div>
+            <div class="box-body">
+               <div class="row">
+                  <div class="col-md-6" id="FranchiseName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Franchise Name <span class="Mandatory_Field">*</span></label>
+                        <select class="form-control" ng-model="fbdc.franchiseBranch.franchiseId"  name="FranchiseName" ng-disabled="fbdc.isEditmode" required="required">
+                           <option value="">Select Franchise Name</option>
+                           <option ng-repeat="addfranchise in fbdc.franchises | orderBy:'branchName'" value={{addfranchise.branchId}} >{{addfranchise.branchName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.FranchiseName.$error.required" style="padding-left:1%;color: red;">Franchise Name is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="Franchise1">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Outlet Name<span class="Mandatory_Field">*</span></label>
+                        <input type="text" class="form-control" placeholder="Outlet Name" name="Franchise1" ng-model="fbdc.franchiseBranch.branchName" required ng-disabled="fbdc.isEditmode" />
+                        <span class="help-inline" ng-show="submitted && myForm.Franchise1.$error.required" style="padding-left:1%;color: red;">Franchise Branch Name is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" ng-if="fbdc.isEditmode===true||fbdc.submitbut===false">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Outlet Id</label>
+                        <input type="text" class="form-control" placeholder="OutletID" name="branchID" disabled="" value="{{fbdc.franchiseBranch.branchId}}"/>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class='col-sm-12'>
+                     <label class='control-label account' id="Address">Address <span class="Mandatory_Field">*</span>
+                     </label>
+                     <textarea class="form-control" placeholder="Enter Address" ng-model="fbdc.franchiseBranch.address" name="Address" required="" ng-disabled="fbdc.isEditmode">
+                     </textarea>
+                     <span class="help-inline" ng-show="submitted && myForm.Address.$error.required" style="padding-left:1%;color: red;">Address is Required</span>
+                  </div>
+                  <div class="col-md-12" style="padding-top:12px;">
+                     <div class="row" ng-repeat="storageDetail in fbdc.franchisebranch.storageDetails">
+                        <div class="col-sm-10 col-xs-9">
+                           <div class="form-group">
+                              <label>Storage Area  </label>
+                              <input type='text' class="form-control" ng-model="storageDetail.storageArea" placeholder="Enter Storage Area" ng-disabled="fbdc.isEditmode">
+                           </div>
+                        </div>
+                        <div class="col-sm-2 col-xs-3" style="padding-top: 24px;">
+                           <div class="row">
+                              <div class="form-group">
+                                 <input type="button" title="Remove" ng-if="$index > 0" ng-click="fbdc.removeStorageArea(fbdc.franchisebranch.storageDetails,$index)" value="-" class="btn btn-danger" ng-disabled="fbdc.isEditmode">
+                                 <input type="button" title="Add" ng-click="fbdc.addStorageArea(fbdc.franchisebranch.storageDetails)" value="+" class="btn btn-primary" ng-disabled="fbdc.isEditmode">
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" >
+                     <div class="form-group" id="contactNo">
+                        <label style="float: left;width: 100%;">Phone No <span class="Mandatory_Field">*</span></label>
+                        <div class="row">
+                           <div class="col-md-3" id="code">
+                              <ui-select ng-model="fbdc.franchiseBranch.code" ng-disabled="fbdc.isEditmode" itle="select" required="required" name="code">
+                                 <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                                 <ui-select-choices repeat="country in fbdc.countryCodes.Country | filter: $select.search">
+                                    <span>{{country}}</span>
+                                 </ui-select-choices>
+                              </ui-select>
+                              <span class="help-inline" ng-show="submitted && myForm.code.$error.required"
+                                 style="padding-left:1%;color: red;">Country code is Required</span>
+                           </div>
+                           <div class="col-md-9" >
+                              <input type="number" class="form-control" placeholder="contactNo"   id="Mobile" name="PhNo" ng-model="fbdc.franchiseBranch.mobileNo"   ng-keypress="fbdc.onlyNumbers($event)"   ng-min="0" required ng-disabled="fbdc.isEditmode"  ng-minlength="3" ng-maxlength="15"  >
+                                    <span class="help-inline" ng-show="submitted && myForm.PhNo.$error.required"
+                              style="padding-left:1%;color: red;">Phone Number is Required</span>
+                              <span ng-show="myForm.PhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                              <span ng-show="myForm.PhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="bank">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Bank Name<span class="Mandatory_Field">*</span></label>
+                        <input type="text" class="form-control" placeholder="Bank Name" ng-model="fbdc.franchiseBranch.bankName"  name="bank" ng-disabled="fbdc.isEditmode" required="required">
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="account">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Bank Account Number<span class="Mandatory_Field">*</span></label>
+                        <input type="text" class="form-control" placeholder="Bank Account Number" ng-model="fbdc.franchiseBranch.bankAc"  ng-keypress="fbdc.onlyNumbers($event)"   ng-min="0"  name="account" ng-disabled="fbdc.isEditmode" required="required">
+                     </div>
+                  </div>
+               </div>
+               <div class="row" id="franchiseBranchStatus">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">  Outlet Status<span class="Mandatory_Field">*</span></label>
+                        <select class="form-control" class="form-control"  ng-model="fbdc.franchiseBranch.status" name="franchiseBranchStatus"
+                           ng-disabled="fbdc.isEditmode"  required="required">
+                           <option value="">Select Outlet Status</option>
+                           <option value="Active">Active</option>
+                           <option value="Inactive">Inactive</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.franchiseBranchStatus.$error.required"
+                           style="padding-left:1%;color: red;">Outlet Status is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row" id="contactName">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Emergency Contact Name <span class="Mandatory_Field">*</span></label>
+                        <input type="text" class="form-control" placeholder="Emergency Contact Name" ng-model="fbdc.franchiseBranch.emergencyContactName"
+                           name="contactName" ng-disabled="fbdc.isEditmode" required="required">
+                        <span class="help-inline" ng-show="submitted && myForm.franchiseBranch.$error.required"
+                           style="padding-left:1%;color: red;">contactName is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" >
+                     <div class="form-group" id="ePhNo">
+                        <label style="float: left;width: 100%;">Emergency Contact No <span class="Mandatory_Field">*</span></label>
+                        <div class="row">
+                           <div class="col-md-3" id="code">
+                              <ui-select ng-model="fbdc.franchiseBranch.emergencyCode" ng-disabled="fbdc.isEditmode" itle="select" required="required" name="ecode">
+                                 <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                                 <ui-select-choices repeat="country in fbdc.countryCodes.Country | filter: $select.search">
+                                    <span>{{country}}</span>
+                                 </ui-select-choices>
+                              </ui-select>
+                              <span class="help-inline" ng-show="submitted && myForm.ecode.$error.required"
+                                 style="padding-left:1%;color: red;">Country code is Required</span>
+                           </div>
+                           <div class="col-md-9" >
+                                    <input type="number" class="form-control" placeholder="Phone No" name="ePhNo" min="0"  ng-minlength="3"
+                                 ng-maxlength="15" ng-model="fbdc.franchiseBranch.emergencyMobileNo"   ng-keypress="fbdc.onlyNumbers($event)"   ng-min="0"
+                                 ng-disabled="fbdc.isEditmode"   required="required" 
+                                 >
+                              <span class="help-inline" ng-show="submitted && myForm.ePhNo.$error.required" style="padding-left:1%;color: red;">Phone No is Required</span>
+                              <span ng-show="myForm.ePhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                              <span ng-show="myForm.ePhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+                        <div class="row">
+                        <div class="col-md-6" id="outletType">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Lanlord Name<span class="Mandatory_Field">*</span></label>
+                               <input type="text" class="form-control" placeholder="Lanlord Name" name="lName" ng-model="fbdc.franchiseBranch.lanlordName" ng-disabled="fbdc.isEditmode" required="required">
+                                <span class="help-inline" ng-show="submitted && myForm.lName.$error.required" style="padding-left:1%;color: red;">lanlordName is Required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="PhNo">
+                            <div class="form-group">
+                                <label style="float: left;width: 100%;">Lanlord Phone No <span class="Mandatory_Field">*</span></label>
+                                <div class="col-md-3 mobi-padding" id="lanlordcode">
+                                    <ui-select ng-model="fbdc.franchiseBranch.lanlordCode" ng-disabled="fbdc.isEditmode" name="code" title="select" required="required">
+                                        <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="country in fbdc.countryCodes.Country | filter: $select.search">
+                                            <span>{{country}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="help-inline" ng-show="submitted && myForm.lanlordcode.$error.required" style="padding-left:1%;color: red;">Country code is Required</span>
+
+                                </div>
+                                <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;" id="lanPhNo">
+                                    <input type="number" class="form-control" placeholder="Phone No" name="lanPhNo" ng-minlength="3" ng-maxlength="15" ng-model="fbdc.franchiseBranch.lanlordMobileNo" min="0" ng-keypress="fbdc.onlyNumbers($event)" ng-min="0" ng-disabled="fbdc.isEditmode" required="required">
+                                    <span class="help-inline" ng-show="submitted && myForm.lanPhNo.$error.required" style="padding-left:1%;color: red;">Phone Number is Required</span>
+                                    <span ng-show="myForm.PhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                                    <span ng-show="myForm.PhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+         </div>
+         <div class="box-footer fix_Sub">
+            <div class="col-sm-offset-5" ng-show="fbdc.isEditmode===false">
+               <button class="btn btn-success" type="submit" ng-hide="fbdc.submitbut===false" ng-click="fbdc.formValidation(myForm.$error.required[0].$name) && fbdc.addFranchiseBranchDetail(fbdc.franchiseBranch)" id='getButtonValue'>Submit</button>  
+               <button class="btn btn-success"  ng-if="fbdc.submitbut===false" type="submit" ng-click="fbdc.formValidation(myForm.$error.required[0].$name) && fbdc.updateFranchiseBranchDetail(fbdc.franchiseBranch)" id='getButtonValue'>Update</button>  
+               <button ui-sref="root.franchise-branch-list" name="submit"  class="btn btn-danger ">Cancel</button>
+               <input type="button"  class="btn btn-warning" ng-click="fbdc.reset()" value="Reset">
+            </div>
+            <div class="col-sm-offset-5" ng-if="fbdc.isEditmode===true">
+               <button ng-if="fbdc.authorizeData.indexOf('canView') >= 0" type="button" ng-click="fbdc.isEditmode = !fbdc.isEditmode;fbdc.disableSubmit()"  class="btn btn-success ">Edit</button>
+            </div>
+         </div>
+      </section>
+   </form>
+</div>

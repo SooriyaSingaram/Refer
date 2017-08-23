@@ -1,0 +1,280 @@
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         User Profile Creation
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i> </a></li>
+         <li><a ui-sref="root.employee-list">User List</a></li>
+         <li class="active">User Profile Creation</li>
+      </ol>
+   </section>
+   <hr style="border-top: 1px solid rgba(224, 212, 212, 0.52);margin-bottom: 0px;">
+   <form name="myForm" ng-submit="submitted=true" novalidate  autocomplete="off">
+      <section class="content">
+         <div class="row">
+            <div  ng-if="edc.isEditmode===true||edc.submitbut===false" style="float:right;padding-right:2%">
+               <button class="btn btn-primary"  ng-disabled="edc.isEditmode" ng-click="edc.passwordModal(edc.employee)">Change Password</button>
+            </div>
+         </div>
+         <div>
+            <div class="box box-default">
+               <div class="box-body">
+                  <div class="row">
+                     <div class="col-md-6" id="employeeName">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">User Name<span class="Mandatory_Field">*</span></label>
+                           <input type="text" class="form-control"  placeholder="Enter Name" ng-pattern="/^[a-zA-Z\s]*$/" name="employeeName" ng-model="edc.employee.employeeName"  ng-disabled="edc.isEditmode" required="required"  >
+                           <span class="help-inline" ng-show="submitted && myForm.employeeName.$error.required" style="padding-left:1%;color: red;">Employee Name is Required</span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="role">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">System Role<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.role"  name="role" ng-disabled="edc.isEditmode" ng-change="edc.filterRole(edc.employee.role,edc.employee.branchId);formChanged=true" required="">
+                             <option value="">Select Role</option>
+
+                              <option ng-repeat="roles in edc.role" value="{{roles.roleId}}">{{roles.roleName}}</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6" id="branch" ng-show="edc.allOutlet">
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option ng-repeat="outlet in edc.allOutlets" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                    <div class="col-md-6" id="branch" ng-show="edc.allBranch">
+
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option value="All Branches">All Branches</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="branch" ng-show="edc.outletBranch">
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option ng-repeat="outlet in edc.outletTypes" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="branch"ng-show="edc.franchiseBranchType" >
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option ng-repeat="outlet in edc.franchise" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="branch" ng-show="edc.franchiseType">
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option ng-repeat="outlet in edc.franchiseTypes" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="branch" ng-show="edc.ckType">
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option ng-repeat="outlet in edc.ckBranch" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="branch" ng-show="edc.whType">
+                        <div class="form-group">
+                           <label>Branch<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control" name="branchId"  ng-model="edc.employee.branchId"  ng-change="edc.filterBranch(edc.employee.branchId,edc.employee.role)" ng-disabled="!formChanged" required="">
+                              <option value="">Select Branch</option>
+                              <option ng-repeat="outlet in edc.whBranch" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Branch is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="userName">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Email ID<span class="Mandatory_Field">*</span>
+                           </label>
+                           <input type="email" class="form-control"  id="userName" name="userName" ng-model="edc.employee.userName" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/"  placeholder="Email Id" ng-disabled="edc.isEditmode" required style="padding-right: 5px;"  >
+                           <span class="help-inline" ng-show="submitted && myForm.userName.$error.required" style="padding-left:1%;color: red;">Email is Required
+                           </span>
+                           <span ng-show="!myForm.userName.$error.required && myForm.userName.$error.userName && myForm.userName.$dirty" style="color: red;padding-left: 1%;">Invalid email
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row" ng-if="!edc.employee._id">
+                     <div class="col-md-6" id="password">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Password <span class="Mandatory_Field">*</span></label>
+                           <input type="password" class="form-control" placeholder="Password" name="password" ng-model="edc.employee.password" required  ng-minlength="8" ng-maxlength="20" ng-pattern="/(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z])/"  ng-disabled="edc.isEditmode"  />
+                           <span class="help-inline" ng-show="submitted && myForm.password.$error.required" style="padding-left:1%;color: red;">Password is Required
+                           </span>
+                           <span ng-show="!myForm.password.$error.required && (myForm.password.$error.minlength || myForm.password.$error.maxlength) && myForm.password.$dirty" style="padding-left:1%;color: red;">Passwords must be between 8 and 20 characters.</span>
+                           <span ng-show="!myForm.password.$error.required && !myForm.password.$error.minlength && !myForm.password.$error.maxlength && myForm.password.$error.pattern && myForm.password.$dirty" style="padding-left:1%;color: red;">Must contain one lower &amp; uppercase letter, and one non-alpha character (a number or a symbol.)</span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="cPassword">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Confirm Password<span class="Mandatory_Field">*</span>
+                           </label>
+                           <input type="password" class="form-control"  name="cPassword" ng-model="edc.employee.cPassword" ng-pattern="edc.employee.password" required placeholder="Confirm Password" ng-disabled="edc.isEditmode"   />
+                           <span class="help-inline" ng-show="submitted && myForm.cPassword.$error.required" style="padding-left:1%;color: red;">Confirm Your Password 
+                           </span>
+                           <span class="help-block" style="color:red;padding-left: 1%;" ng-show="myForm.cPassword.$dirty && myForm.cPassword.$invalid">Passwords did not match
+                           <br>
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>NRIC FIN Type</label>
+                           <select type="text"  class="form-control" ng-model="edc.employee.nricType" ng-disabled="edc.isEditmode" name="nricType">
+                              <option value=''>Select  NRIC/FIN Type </option>
+                              <option value="NRIC Pink">NRIC Pink</option>
+                              <option value="NRIC Blue">NRIC Blue</option>
+                              <option value="FIN">FIN</option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">NRIC/FIN NO</label>
+                           <input type="text" class="form-control"  ng-model="edc.employee.nricNo" name="nricNo" ng-disabled="edc.isEditmode" placeholder="NRIC/FIN NO"  >
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Nationality</label>
+                           <select class="form-control" ng-model="edc.employee.nationality" ng-disabled="edc.isEditmode"  name="nationality">
+                              <option value="">Select Nationality</option>
+                              <option ng-repeat="nationality in edc.configuration.nationalities" value="{{nationality.nationalityName}}">{{nationality.nationalityName}}
+                              </option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label>Gender</label>
+                           <select class="form-control" ng-model="edc.employee.gender" ng-disabled="edc.isEditmode" name="gender">
+                              <option value=''>Select Gender Type </option>
+                              <option value="Male">Male</option>
+                              <option value="Female">Female</option>
+                              <option value="Others">Others</option>
+                           </select>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Residential Status </label>
+                           <select class="form-control" ng-model="edc.employee.residentailStatus" ng-disabled="edc.isEditmode" name="residentailStatus">
+                              <option value="">Select Residential Status </option>
+                              <option ng-repeat="residential in edc.configuration.residentials" value="{{residential.residentialName}}">{{residential.residentialName}}
+                              </option>
+                           </select>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Residential Telephone No
+                           </label>
+                           <input type="number" class="form-control" min="0" ng-maxlength="15" placeholder="Residential Telephone No" ng-model="edc.employee.residentialNo" ng-disabled="edc.isEditmode" name="residentialNo" >
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6" id="code">
+                        <div class="form-group">
+                           <label style="float: left;width: 100%;">Phone No<span class="Mandatory_Field">*</span></label>
+                           <div class="row">
+                              <div class="col-md-3">
+                                 <ui-select  ng-model="edc.employee.code" ng-disabled="edc.isEditmode" name="code" title="select"  required="">
+                                    <ui-select-match  placeholder="Select"   >{{$select.selected}}</ui-select-match>
+                                    <ui-select-choices repeat="country in edc.countryCodes.Country | filter: $select.search">
+                                       <span>{{country}}</span>
+                                    </ui-select-choices>
+                                 </ui-select>
+                                 <span class="help-inline" ng-show="submitted && myForm.code.$error.required" style="padding-left:1%;color: red;">Country Code is Required</span>
+                              </div>
+                              <div class="col-md-9" id="phoneNo">
+                                 <input type="number" class="form-control" placeholder="Phone No" min-"0" ng-minlength="3" ng-maxlength="15"  id="Mobile" name="phoneNo" ng-model="edc.employee.phoneNo"    ng-keypress="edc.onlyNumbers($event)"   ng-min="0" ng-disabled="edc.isEditmode" required />
+                                 <span class="help-inline" ng-show="submitted && myForm.phoneNo.$error.required" style="padding-left:1%;color: red;">Phone No is Required</span>
+                                 <span ng-show="myForm.phoneNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                                 <span ng-show="myForm.phoneNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Status<span class="Mandatory_Field">*</span>
+                           </label>
+                           <select class="form-control" ng-model="edc.employee.status" ng-disabled="edc.isEditmode" name="status" required>
+                              <option value="">Select Status </option>
+                              <option value="Active" >Active</option>
+                              <option value="Inactive" >Inactive</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.status.$error.required" style="padding-left:1%;color: red;">Status No is Required</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label>Address</label>
+                           <textarea class="form-control" rows="3" placeholder="Enter the Address" name="address" ng-model="edc.employee.address" ng-disabled="edc.isEditmode"></textarea>
+                           <span class="help-inline" ng-show="submitted && myForm.address.$error.required" style="padding-left:1%;color: red;">Address is Required</span>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <div class="box-footer fix_Sub">
+            <div class="col-sm-offset-5" ng-show="edc.isEditmode===false">
+               <button class="btn btn-success" type="submit" ng-hide="edc.submitbut===false" ng-click="edc.formValidation(myForm.$error.required[0].$name) && edc.addEmployee(edc.employee);" id='getButtonValue'>Submit</button>
+               <button class="btn btn-success" ng-if="edc.submitbut===false" type="submit" ng-click="edc.formValidation(myForm.$error.required[0].$name) && edc.updateEmployee(edc.employee)" id='getButtonValue'>Update</button>
+               <button ui-sref="root.employee-list" name="submit" class="btn btn-danger ">Cancel</button>
+               <input type="button" class="btn btn-warning" ng-click="edc.reset()" value="Reset">
+            </div>
+            <div class="col-sm-offset-5" ng-if="edc.isEditmode===true">
+               <button  type="button" ng-click="edc.isEditmode = !edc.isEditmode;edc.disableSubmit()"  class="btn btn-success ">Edit</button>
+            </div>
+         </div>
+</div>
+</section>
+</form>
+</div>

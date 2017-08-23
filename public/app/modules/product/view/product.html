@@ -1,0 +1,347 @@
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         Product Creation
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashbord"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.product-list">Product List</a></li>
+         <li class="active">Add Product</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="box box-default">
+         <form name="myForm"    novalidate   ng-submit="submitted=true" autocomplete="off">
+            <div class="box-body">
+               <div class="row">
+                  <div class="col-md-6" id="productName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Product Name <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control"  placeholder="Product Name" name="productName"  ng-model="pdc.product.productName" required="required" ng-disabled="pdc.isEditmode">
+                        <span class="help-inline" ng-show="submitted && myForm.productName.$error.required" style="padding-left:1%;color: red;">Product Name is Required
+                        </span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" ng-if="pdc.isEditmode===true||pdc.submitbut===false">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Product Id <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control"  placeholder="Product ID" name="id" ng-model="pdc.product.productId"  disabled="disabled">
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="productCode">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Product Code<span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control"  placeholder="Product Code" name="productCode"  ng-model="pdc.product.productCode" required="required" ng-disabled="pdc.isEditmode">
+                        <span class="help-inline" ng-show="submitted && myForm.productCode.$error.required" style="padding-left:1%;color: red;">Product Code is Required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="categoryId">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Category Name <span class="Mandatory_Field">*</span>
+                        </label>
+                        <select class="form-control" ng-model="pdc.product.categoryId"  name="categoryId"    required="required" ng-disabled="pdc.isEditmode" 
+                           ng-disabled="pdc.isEditmode" ng-change="pdc.filterBysubCategory(pdc.product,pdc.product.subCategoryId);">
+                           <option value="">Select
+                           </option>
+                           <option ng-repeat="addcategory in pdc.category | orderBy:'categoryName'" value="{{addcategory.categoryId}}">{{addcategory.categoryName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.categoryId.$error.required" style="padding-left:1%;color: red;">Category Name is Required
+                        </span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="subCategoryId">
+                     <div class="form-group">
+                        <label>SubCategory Name</label> <span class="Mandatory_Field">*</span>
+                        <select class="form-control" ng-model="pdc.product.subCategoryId"  name="subCategoryId"  required="required" ng-change="pdc.filterBysubCategory(pdc.product);" ng-disabled="pdc.isEditmode">
+                           <option value="">Select
+                           </option>
+                           <option ng-repeat="addsubcategory in pdc.subCategory|filter:{categoryId:pdc.product.categoryId} | orderBy:'subCategoryName'" value="{{addsubcategory.subCategoryId}}">{{addsubcategory.subCategoryName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.subCategoryId.$error.required" style="padding-left:1%;color: red;">SubCategory Name is Required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12" id="productDescription">
+                     <div class="form-group">
+                        <label>Product Description <span class="Mandatory_Field">*</span>
+                        </label>
+                        <textarea class="form-control" rows="3" placeholder="Enter the Product Description" name="productDescription" ng-model="pdc.product.productDescription" required ng-disabled="pdc.isEditmode">
+                        </textarea>
+                        <span class="help-inline" ng-show="submitted && myForm.productDescription.$error.required" style="padding-left:1%;color: red;">Product Description is Required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+               <!--<div class="row">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label id="yes" style="float: left;width: 100%;"  ng-class="{'radio_req' : myForm.optionsRad.$invalid, 'radio_valid' : myForm.optionsRad.$valid}">Centralized Kitchen Product  <span class="Mandatory_Field">*</span>
+                        </label>
+                        <div class="col-md-6" id="optionsRad"> 
+                           <div class="radio">
+                              <label>
+                              <input type="radio" ng-model="pdc.product.centralizedKitchen" name="optionsRad"  id="yes_radio" required   ng-value=true  ng-disabled="(pdc.isEditmode||(pdc.checkMode))">
+                              Yes
+                              </label>
+                           </div>
+                        </div>
+                        <div class="col-md-6" id="optionsRad"> 
+                           <div class="radio">
+                              <label>
+                              <input type="radio" name="optionsRad" ng-model="pdc.product.centralizedKitchen" id="yes_radio" required ng-value=false   ng-disabled="(pdc.isEditmode||(pdc.warehouseMode))">
+                              No
+                              </label>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="shelfLife">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Shelf Life <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control"  placeholder="Shelf Life" name="shelfLife"  ng-model="pdc.product.shelfLife"  ng-keypress="pdc.onlyNumbers($event)"   ng-min="0"  required="required" disabled="disabled">
+                        <span class="help-inline" ng-show="submitted && myForm.shelfLife.$error.required" style="padding-left:1%;color: red;">Shelf Life is Required
+                        </span>
+                     </div>
+                  </div>
+                  </div>
+                  <div class="row">
+                  <div class="col-md-6" id="expiryDate">
+                     <div class="form-group" >
+                        <label>Expiry Date <span class="Mandatory_Field">*</span></label>
+                        <input type="hidden" data-ng-model="pdc.product.expiryDate" required name="expiryDate">
+                        <div class="dropdown">
+                           <button id="single-button" type="button" class="btn btn-primary" id="dropdown1" role="button" data-toggle="dropdown" data-target="#" href="#"  ng-disabled="pdc.isEditmode" name="expiryDate" required="required" >
+                           {{  pdc.product.expiryDate == null ? 'Select Date' : pdc.product.expiryDate | date:'yyyy-MM-dd'}} <span class="caret"></span></button>
+                           <span class="help-inline" ng-show="submitted && myForm.expiryDate.$error.required" style="padding-left:1%;color: red;">Expiry Date is Required
+                           </span>
+                           <ul class="dropdown-menu" role="menu">
+                              <datetimepicker data-ng-model="pdc.product.expiryDate" data-before-render="pdc.beforeRender($dates)" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" data-ng-change="pdc.getShelfLife(pdc.product.expiryDate);"/>
+                           </ul>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="batchNumber">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Batch Number <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control"  placeholder="Batch Number" name="batchNumber"  ng-model="pdc.product.batchNumber" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" required="required" ng-disabled="pdc.isEditmode">
+                        <span class="help-inline" ng-show="submitted && myForm.batchNumber.$error.required" style="padding-left:1%;color: red;">Batch Number is Required
+                        </span>
+                     </div>
+                  </div>
+                  </div>-->
+               <div class="row">
+                  <div class="col-md-6" id="unitId">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Default Unit <span class="Mandatory_Field">*</span> </label>
+                        <select class="form-control" ng-model="pdc.product.unitId" required="required" name="unitId"  ng-disabled="pdc.isEditmode"  ng-change="pdc.getUnitName(pdc.product);">
+                           <option value="">Select Default Unit</option>
+                           <option ng-repeat="addunit in pdc.units" value={{addunit.unitId}}>{{addunit.unitName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.unitId.$error.required" style="padding-left:1%;color: red;">Default Unit is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="outletPrice">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Outlet Price <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="number" class="form-control"  placeholder="Outlet Price" name="outletPrice"  ng-model="pdc.product.outletPrice" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" required="required" ng-disabled="pdc.isEditmode">
+                        <span class="help-inline" ng-show="submitted && myForm.outletPrice.$error.required" style="padding-left:1%;color: red;">Outlet Price is Required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div>
+               <div class="box-body" id="unitvalue">
+                  <div class="box-header with-border">
+                     <h4 class="box-title" >Unit Conversion 
+                     </h4>
+                  </div>
+                  <div class="suptable">
+                     <div class=" col-sm-12" >
+                        <table class="table table-bordered table-hover table-condensed grid_tbl table-responsive" style="width:100%;">
+                           <tr style="font-weight: bold">
+                              <td>Qty
+                              </td>
+                              <td>Qty
+                              </td>
+                              <td>Actions
+                              </td>
+                           </tr>
+                           <tr ng-repeat="unit in pdc.product.unitConversion">
+                              <td>
+                                 <div class="row">
+                                    <span class="unittab col-sm-8" id="unitvalue"> 
+                                    <input type="number" required placeholder="Unit Values"  ng-model="unit.from" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" name="unitvalue"  ng-disabled="pdc.isEditmode" class="unitin form-control" min=0></span>
+                                    <span class="unittab col-sm-4" >
+                                       <select type="text" ng-model="pdc.product.unitId" class="unitin form-control" disabled="disabled">
+                                          <option value=""></option>
+                                          <option ng-repeat="unit in pdc.units" value="{{unit.unitId}}">{{unit.unitName}}</option>
+                                       </select>
+                                    </span>
+                                 </div>
+                              </td>
+                              <td>
+                                 <div class="row">
+                                    <span class="unittab  col-sm-8" id="unitvalue"> <input type="number"   required placeholder="Unit Values"  ng-model="unit.to" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" name="unitvalue"  class="unitin form-control" ng-disabled="pdc.isEditmode" min=0></span>
+                                    <span class="unittab  col-sm-4" id="tounit">
+                                       <select type="text" ng-model="unit.toUnit" class="unitin form-control" name="tounit"  required ng-disabled="pdc.isEditmode" ng-change="pdc.getUnitName(pdc.product);pdc.unitValidation(unit,pdc.product.unitId, pdc.product.unitConversion);">
+                                          <option value="">select</option>
+                                          <option ng-repeat="unit in pdc.units " value="{{unit.unitId}}" >{{unit.unitName}}</option>
+                                       </select>
+                                    </span>
+                                 </div>
+                              </td>
+                              <td>
+                                 <button class="glyphicon glyphicon-trash ng-scope"  style="padding: 7px; color:red"  ng-disabled="pdc.isEditmode" data-ng-click="pdc.removeUnits(pdc.product.unitConversion,$index)" >
+                                 </button>
+                              </td>
+                           </tr>
+                        </table>
+                        <input type="button" ng-click="pdc.addUnits(pdc.product.unitConversion)" class="btn btn-primary" value="Add row" ng-disabled="pdc.isEditmode">
+                     </div>
+                  </div>
+               </div>
+               <div class="box-body" >
+                  <div class="box-header with-border" >
+                     <h3 class="box-title">Suppliers</h3>
+                  </div>
+                  <div class="suptable">
+                     <div class="col-sm-12">
+                        <table class="table table-bordered table-responsive table-hover table-condensed grid_tbl" style="width:100%;">
+                           <tr style="font-weight: bold">
+                              <td>Supplier</td>
+                              <td>Default Supplier</td>
+                              <td>Price</td>
+                              <td>Actions</td>
+                           </tr>
+                           <tr ng-repeat="supplier in pdc.product.supplierDetails" id="supid">
+                              <td>
+                                 <span class="col-sm-8">
+                                    <select type="text" ng-model="supplier.id"  class="form-control" data-ng-change="pdc.supplierNameValidation(supplier,pdc.product.supplierDetails)"  name="supid" required="required" ng-disabled="pdc.isEditmode">
+                                       <option value="">Select Supplier</option>
+                                       <option ng-repeat="supplier in pdc.supplier | orderBy:'supplierName'" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
+                                    </select>
+                                 </span>
+                     </div>
+                     </td>
+                     <td id="defaultsupplier">
+                     <span class="col-sm-8">
+                     <select type="text" ng-model="supplier.defaultsupplier" class="form-control" data-ng-change="pdc.getDefaultSupplierId(supplier)" name="defaultsupplier" required="required" ng-disabled="pdc.isEditmode">
+                     <option value="">Select Default Supplier</option>
+                     <option value="Yes">Yes</option>
+                     <option value="No">No</option>
+                     </select>
+                     </span>
+                     </td>
+                     <td id="sprice">
+                     <span class="col-sm-4">
+                     <div class="input-group ">
+                     <input type="number"  placeholder="price" class="form-control" ng-model="supplier.price"  ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" name="sprice" required="required" ng-disabled="pdc.isEditmode"  min=0>
+                     <span class="input-group-addon" > per</span>   
+                     </div> 
+                     </span>
+                     <span class="col-sm-4">
+                     <select type="text" ng-model="pdc.product.unitId"  class="unitin form-control" disabled="disabled" style="-webkit-appearance: none;">
+                     <option value=""></option>
+                     <option ng-repeat="unit in pdc.units" value="{{unit.unitId}}">{{unit.unitName}}</option>
+                     </select>
+                     </b>
+                     </span>
+                     </td>
+                     <td>
+                     <button type="button" class="glyphicon glyphicon-trash ng-scope" ng-disabled="pdc.isEditmode" style="padding: 7px; color:red"   data-ng-click="pdc.removeSupplier(pdc.product.supplierDetails,$index)" >
+                     </button>
+                     </td>
+                     </tr>
+                     </table>
+                     <input type="button" class="btn btn-primary " value="Add row" ng-click="pdc.addSupplier(pdc.product.supplierDetails)" ng-disabled="pdc.isEditmode">
+                  </div>
+               </div>
+            </div>
+      </div>
+      <div class="box-body">
+      <div class="row" ng-if="pdc.product._id">
+      <div class="col-md-6">
+      <div class="form-group">
+      <label for="exampleInputEmail1">Monthly Average price <span class="Mandatory_Field">*</span>
+      </label>
+      <input type="number"  class="form-control" placeholder="Monthly Average price" name="averagePrice" ng-model="pdc.product.averagePrice" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" ng-disabled="pdc.isEditmode"  min=0 required="required">
+      <span class="help-inline" ng-show="submitted && myForm.averagePrice.$error.required" style="padding-left:1%;color: red;">Monthly Average price is Required
+      </span>
+      </div>
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-md-6" id="maxWarehouseQty">
+      <div class="form-group">
+      <label for="exampleInputEmail1">Max Qty in Warehouse Inventory <span class="Mandatory_Field">*</span>
+      </label>
+      <input type="number"  class="form-control" placeholder="Max Qty in Warehouse Inventory" name="maxWarehouseQty"  ng-model="pdc.product.maxWarehouseQty" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" ng-required="pdc.product.centralizedKitchen === false" ng-disabled="pdc.isEditmode"  min=0 
+         ng-change="pdc.checkInventoryQty(pdc.product.minWarehouseQty,pdc.product.maxWarehouseQty,pdc.product)">
+      <span class="help-inline" ng-show="submitted && myForm.maxWarehouseQty.$error.required" style="padding-left:1%;color: red;">Max Qty in Warehouse Inventory is Required
+      </span>
+      </div>
+      </div>
+      <div class="col-md-6" id="minWarehouseQty">
+      <div class="form-group">
+      <label for="exampleInputEmail1">Min Qty in Warehouse Inventory <span class="Mandatory_Field">*</span>
+      </label>
+      <input type="number"  class="form-control" placeholder="Min Qty in Warehouse Inventory"  ng-model="pdc.product.minWarehouseQty" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" name="minWarehouseQty" ng-required="pdc.product.centralizedKitchen === false" ng-disabled="pdc.isEditmode"  min=0   ng-change="pdc.checkInventoryQty(pdc.product.minWarehouseQty,pdc.product.maxWarehouseQty,pdc.product)">
+      <span class="help-inline" ng-show="submitted && myForm.minWarehouseQty.$error.required" style="padding-left:1%;color: red;">Min Qty in Warehouse Inventory is Required
+      </span>
+      </div>
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-md-6">
+      <div class="form-group">
+      <label for="exampleInputEmail1">Max Qty Per Order PO <span class="Mandatory_Field">*</span>
+      </label>
+      <input type="number"  class="form-control" placeholder="Max Qty Per Order PO" name="maxQtyPO" ng-model="pdc.product.maxQtyPO" ng-keypress="pdc.onlyNumbers($event)"   ng-min="0" ng-disabled="pdc.isEditmode"  min=0 required="required">
+      <span class="help-inline" ng-show="submitted && myForm.maxQtyPO.$error.required" style="padding-left:1%;color: red;">Max Qty Per Order PO is Required
+      </span>
+      </div>
+      </div>
+      <div class="col-md-6">
+      <div class="form-group">
+      <label for="exampleInputEmail1">Product Status <span class="Mandatory_Field">*</span>
+      </label>
+      <select class="form-control" ng-model="pdc.product.status" name="status"
+         ng-disabled="pdc.isEditmode"  required="required">
+      <option value="">Select Product Status</option>
+      <option value="Active">Active</option>
+      <option value="Inactive">Inactive</option>
+      </select>
+      <span class="help-inline" ng-show="submitted && myForm.status.$error.required" style="padding-left:1%;color: red;">Status is Required
+      </span>
+      </div>
+      </div>
+      </div>
+      </div>
+      <div class="box-footer fix_Sub">
+      <div class="col-sm-offset-5" ng-show="pdc.isEditmode===false">
+      <button class="btn btn-success" ng-hide="pdc.submitbut===false" ng-click="pdc.formValidation(myForm.$error.required[0].$name) && pdc.addProduct(pdc.product)"  id='getButtonValue'>Submit</button>
+      <button class="btn btn-success" ng-if="pdc.submitbut===false" type="submit" ng-click="pdc.formValidation(myForm.$error.required[0].$name) && pdc.updateProduct(pdc.product)" id='getButtonValue'>Update</button>
+      <button ui-sref="root.product-list" name="submit" class="btn btn-danger ">Cancel</button>
+      <input type="button"  class="btn btn-warning" ng-click="pdc.reset()" value="Reset">
+      </div>
+      <div class="col-sm-offset-5" ng-if="pdc.isEditmode===true">
+      <button type="button" ng-click="pdc.isEditmode = !pdc.isEditmode;pdc.disablesubmit()" class="btn btn-success ">Edit</button>
+      </div>
+      </div>
+      </form>
+</div>
+</section>

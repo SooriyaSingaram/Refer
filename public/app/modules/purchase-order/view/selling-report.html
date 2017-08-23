@@ -1,0 +1,191 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Selling report by product
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Product Management</a></li>
+         <li class="active"> Selling report by product</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && src.filterBySellingProduct(src.sellingDetail);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title"> Selling report by product</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="src.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="src.downloadPdf('Monthly PO Product Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+                         <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Product</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control" ng-model="src.sellingDetail.productId"  name="productName" required="required">
+                        <option value="">Select Product</option>
+                        <option ng-repeat="product in src.products| orderBy:'productName'" value={{product.productId}} >{{product.productName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.productName.$error.required" style="padding-left:1%;color: red;">productName is Required</span>
+                  </div>
+               </div>
+                        <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="src.sellingDetail.fromDate" name="fromDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  src.sellingDetail.fromDate == null ? 'Select Date' : src.sellingDetail.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="src.sellingDetail.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="src.startDateOnSetTime()" data-before-render="src.startDateBeforeRender(src.sellingDetail.toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromDate.$error.required" style="padding-left:1%;color: red;">  From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="src.sellingDetail.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  src.sellingDetail.toDate == null ? 'Select Date' : src.sellingDetail.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="src.sellingDetail.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="src.endDateOnSetTime()"  data-before-render="src.endDateBeforeRender(src.sellingDetail.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="src.reset(src.sellingDetail)">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =src.availableLimits[0]" ng-options="limit for limit in src.availableLimits" ng-class="{'active':src.isActiveValue(limit)}" data-ng-change="src.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>Selling report by product</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                          <th>  
+                                    <a class="hand-icon" ng-click="sortType = '_id.purchaseOrderId'; sortReverse = !sortReverse">
+                                    PurchaseOrder Id
+                                    <span ng-show="sortType == '_id.purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == '_id.purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                           <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                               Outlet Name
+                                    <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                          <th>  
+                                    <a class="hand-icon" ng-click="sortType = '_id.date'; sortReverse = !sortReverse">
+                                       Date
+                                    <span ng-show="sortType == '_id.date' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == '_id.date' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = '_id.productId'; sortReverse = !sortReverse">
+                                    Product Id 
+                                    <span ng-show="sortType == '_id.productId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == '_id.productId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'product.productName'; sortReverse = !sortReverse">
+                                    Product Name
+                                    <span ng-show="sortType == 'product.productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'product.productName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'category.categoryName'; sortReverse = !sortReverse">
+                                    Category
+                                    <span ng-show="sortType == 'category.categoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'category.categoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'subCategory.subCategoryName'; sortReverse = !sortReverse">
+                                    Subcategory
+                                    <span ng-show="sortType == 'subCategory.subCategoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'subCategory.subCategoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = '_id.sellingDetails.receivedQty'; sortReverse = !sortReverse">
+                                    Quantity
+                                    <span ng-show="sortType == '_id.sellingDetails.receivedQty' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == '_id.sellingDetails.receivedQty' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="product in src.reportDetails|orderBy:sortType:sortReverse|itemsPerPage:limit " 
+                                 >
+                                 <td>{{product._id.purchaseOrderId}}</td>
+                                 <td>{{product.branchName}}</td>
+
+                                     <td>{{product._id.date | date:'yyyy-MM-dd'}}</td>
+                                 <td>
+                                    <span>{{product._id.productId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{product.product.productName}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{product.category.categoryName}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{product.subCategory.subCategoryName}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{product._id.receivedDetails.receivedQty}}</span>
+                                     <span>{{product.units.unitName}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

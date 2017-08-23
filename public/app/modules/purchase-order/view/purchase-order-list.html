@@ -1,0 +1,556 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Purchase Orders List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Purchase Order</a></li>
+         <li class="active">Purchase Orders List</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="panel panel-info" >
+         <div class="allow_cnt">
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =pol.availableLimits[0]" ng-options="limit for limit in pol.availableLimits" ng-class="{'active':pol.isActiveValue(limit)}" data-ng-change="pol.setValue(limit)" size="1">
+                  </select>
+                  <div class="dropdown" style="float:right;padding-left:2%">
+                     <button  type="submit" ui-sref="root.purchase-order" class="btn btn-primary" ng-show="pol.addBranchPO">Create PO For Branch </button>
+                     <button  type="submit" ui-sref="root.purchase-order-warehouse" class="btn btn-primary" ng-show="pol.addProductPo">Create PO for CK/WH</button>
+                     <button class="btn btn-default dropdown-toggle" type="button" id="menu1" data-toggle="dropdown">Field Chooser
+                     <span class="caret"></span></button>
+                     <ul class="dropdown-menu" role="menu" aria-labelledby="menu1">
+                        <li><input type="checkbox" style="margin:9px;" ng-model="pol.fChooser_purchaseOrder.branch" value="somevalue" />Branch</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="pol.fChooser_purchaseOrder.date" value="somevalue" />Date</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="pol.fChooser_purchaseOrder.PO_created_by" value="somevalue" />PO Created By</li>
+                        <li><input type="checkbox" style="margin:9px;" ng-model="pol.fChooser_purchaseOrder.PO_status" value="somevalue" />PO Status</li>
+                     </ul>
+                  </div>
+                  <br>
+                  <div>
+                     <ul class="nav nav-pills" >
+                        <li ng-show="pol.menuTab" ng-class="{active:pol.isSet(1)}"><a href ng-click="pol.setTab(1)">
+                        <label >PO List for Menu</label ></a></li>
+                        <li ng-show="pol.productTab"  ng-class="{active:pol.isSet(2)}"><a href ng-click="pol.setTab(2)"><label >PO List for Product</label ></a></li>
+                        <li ng-show="pol.ckproductTab"  ng-class="{active:pol.isSet(3)}"><a href ng-click="pol.setTab(3)"><label >PO List for Product By CK</label ></a></li>
+                        <li ng-show="pol.supplierTab"  ng-class="{active:pol.isSet(4)}"><a href ng-click="pol.setTab(4)"><label >PO List for Product to Supplier </label ></a></li>
+                        <li ng-show="pol.adminview"  ng-class="{active:pol.isSet(5)}"><a href ng-click="pol.setTab(5)"><label >PO List for Product to Supplier </label ></a></li>                       
+                     </ul>
+                  </div>
+                  <div ng-show="pol.isSet(1)">
+                  <table class=" grid_tbl" ng-show="pol.menuTab" >
+                     <thead>
+                        <tr>
+                           <th>
+                              <a href="" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                              PO Number
+                              <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.branch">
+                              <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                              Branch
+                              <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.date" >
+                              <a href="" ng-click="sortType = 'createdDateTime'; sortReverse = !sortReverse">
+                              Date
+                              <span ng-show="sortType == 'createdDateTime' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdDateTime' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <a href="" ng-click="sortType = 'createdBy'; sortReverse = !sortReverse">
+                              PO Created By
+                              <span ng-show="sortType == 'createdBy' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <a href="" ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                              PO Status
+                              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.purchaseOrderId" placeholder="Search By PO Number" style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              <input class="form-control" ng-model="search.branchId" placeholder="Search By Branch">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              <input class="form-control" ng-model="search.createdDateTime" placeholder="Search By Date ">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <input class="form-control" ng-model="search.createdBy" placeholder="Search By  Created By">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <input class="form-control" ng-model="search.status" placeholder="Search By PO Status ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="purchaseOrder in pol.purchaseOrders|orderBy:sortType:sortReverse | filter:{menuItem:true}|filter:search|itemsPerPage:limit " data-ng-class="{danger:!employee.active}">
+                           <td>
+                              {{purchaseOrder.purchaseOrderId}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              {{purchaseOrder.branchName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              {{purchaseOrder.createdDateTime | date:'yyyy-MM-dd' }}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              {{purchaseOrder.employee_collection.employeeName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              {{purchaseOrder.status}}
+                           </td>
+                           <td ng-show="pol.showAll">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Ordered'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                              <button ui-sref="root.receiving-goods({id:purchaseOrder._id})"   title="View Order" class="b" ><i class="glyphicon glyphicon-share"></i></button>
+                           </td>
+                           <td ng-show="pol.showUpdatePO">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order-view({id:purchaseOrder._id})" title="View&Edit" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                           <td ng-show="pol.branchView">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Ordered'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                              <button ui-sref="root.receiving-goods({id:purchaseOrder._id})" ng-show="purchaseOrder.status !== 'Ordered'"  title="Receiving Goods" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  </div>
+                 <div ng-show="pol.isSet(2)">
+                  <table class=" grid_tbl" ng-show="pol.productTab" >
+                     <thead>
+                        <tr>
+                           <th>
+                              <a href="" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                              PO Number
+                              <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.branch">
+                              <a href="" ng-click="sortType = 'employeeName'; sortReverse = !sortReverse">
+                              Branch
+                              <span ng-show="sortType == 'employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.date" >
+                              <a href="" ng-click="sortType = 'userName'; sortReverse = !sortReverse">
+                              Date
+                              <span ng-show="sortType == 'userName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'userName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                              PO Created By
+                              <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <a href="" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                              PO Status
+                              <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.purchaseOrderId" placeholder="Search By PO Number" style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              <input class="form-control" ng-model="search.branchId" placeholder="Search By Branch">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              <input class="form-control" ng-model="search.createdDateTime" placeholder="Search By Date ">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <input class="form-control" ng-model="search.createdBy" placeholder="Search By  Created By">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <input class="form-control" ng-model="search.status" placeholder="Search By PO Status ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="purchaseOrder in pol.supplierPO|orderBy:sortType:sortReverse | filter:{menuItem:false}|filter:search|itemsPerPage:limit " data-ng-class="{danger:!employee.active}">
+                           <td>
+                              {{purchaseOrder.purchaseOrderId}}       
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              {{purchaseOrder.branchName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              {{purchaseOrder.createdDateTime | date:'yyyy-MM-dd' }}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              {{purchaseOrder.employee_collection.employeeName}} 
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              {{purchaseOrder.status}} 
+                           </td>
+                          <td ng-show="pol.showAll">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button>                              
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Ordered'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                              <button ui-sref="root.receiving-goods({id:purchaseOrder._id})"   title="Update PO" class="b" ><i class="glyphicon glyphicon-save"></i></a>
+                           </td>
+                           <td ng-show="pol.updateProductPO">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button>  
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order-view({id:purchaseOrder._id})" title="View&Edit" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                           <td ng-show="pol.branchProductView">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button>  
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Ordered'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                              <button ui-sref="root.receiving-goods({id:purchaseOrder._id})" ng-show="purchaseOrder.status !== 'Ordered'"  title="View&Edit" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  </div>
+                  <div ng-show="pol.isSet(3)">
+                  <table class=" grid_tbl" ng-show="pol.ckproductTab">
+                     <thead>
+                        <tr>
+                           <th>
+                              <a href="" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                              PO Number
+                              <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.branch">
+                              <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                              Branch
+                              <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.date" >
+                              <a href="" ng-click="sortType = 'createdDateTime'; sortReverse = !sortReverse">
+                              Date
+                              <span ng-show="sortType == 'createdDateTime' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdDateTime' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <a href="" ng-click="sortType = 'createdBy'; sortReverse = !sortReverse">
+                              PO Created By
+                              <span ng-show="sortType == 'createdBy' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <a href="" ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                              PO Status
+                              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.purchaseOrderId" placeholder="Search By PO Number" style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              <input class="form-control" ng-model="search.branchId" placeholder="Search By Branch">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              <input class="form-control" ng-model="search.createdDateTime" placeholder="Search By Date ">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <input class="form-control" ng-model="search.createdBy" placeholder="Search By  Created By">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <input class="form-control" ng-model="search.status" placeholder="Search By PO Status ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="purchaseOrder in pol.supplierPO|orderBy:sortType:sortReverse | filter:{requestProductTo:'Ware House' }|filter:search|itemsPerPage:limit" data-ng-class="{danger:!employee.active}">
+                           <td>
+                              {{purchaseOrder.purchaseOrderId}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              {{purchaseOrder.branchName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              {{purchaseOrder.createdDateTime | date:'yyyy-MM-dd' }}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              {{purchaseOrder.employee_collection.employeeName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              {{purchaseOrder.status}}
+                           </td>
+                           <td ng-show="pol.showAll">
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                                <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order-warehouse({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Ordered'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                              <button ui-sref="root.receiving-goods({id:purchaseOrder._id})"   title="Update PO" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                           <td ng-show="pol.updateProductPO">                               
+                                <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order-view({id:purchaseOrder._id})" title="View&Edit" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                           <td ng-show="pol.branchProductView">
+                                 <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                                <button ui-sref="root.invoice({id:purchaseOrder.purchaseOrderId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order-warehouse({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Ordered'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                              <button ui-sref="root.receiving-goods({id:purchaseOrder._id})" ng-show="purchaseOrder.status !== 'Ordered'"  title="View&Edit" class="b" ><i class="glyphicon glyphicon-save"></i></button>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  </div>
+                  <div ng-show="pol.isSet(4)">
+                  <table class=" grid_tbl" ng-show="pol.supplierTab">
+                     <thead>
+                        <tr>
+                           <th>
+                              <a href="" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                              PO Number
+                              <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.branch">
+                              <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                              Branch
+                              <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.date" >
+                              <a href="" ng-click="sortType = 'createdDateTime'; sortReverse = !sortReverse">
+                              Date
+                              <span ng-show="sortType == 'createdDateTime' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdDateTime' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <a href="" ng-click="sortType = 'createdBy'; sortReverse = !sortReverse">
+                              PO Created By
+                              <span ng-show="sortType == 'createdBy' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <a href="" ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                              PO Status
+                              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.purchaseOrderId" placeholder="Search By PO Number" style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              <input class="form-control" ng-model="search.branchId" placeholder="Search By Branch">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              <input class="form-control" ng-model="search.createdDateTime" placeholder="Search By Date ">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <input class="form-control" ng-model="search.createdBy" placeholder="Search By  Created By">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <input class="form-control" ng-model="search.status" placeholder="Search By PO Status ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="purchaseOrder in pol.purchaseOrders|orderBy:sortType:sortReverse | filter:{requestProductTo:'Supplier'}||filter:search|itemsPerPage:limit" data-ng-class="{danger:!employee.active}">
+                           <td>
+                              {{purchaseOrder.purchaseOrderId}}  
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              {{purchaseOrder.branchName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              {{purchaseOrder.createdDateTime | date:'yyyy-MM-dd' }}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              {{purchaseOrder.employee_collection.employeeName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              {{purchaseOrder.status}}
+                           </td>
+                           <td >
+                              <button  ng-if="purchaseOrder.displayNone" ng-click="pol.disableIcon(purchaseOrder.displayNone)"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.invoice({id:purchaseOrder.supplierId})" ng-if="!purchaseOrder.displayNone" ng-disabled="purchaseOrder.displayNone"  title="Invoice Payment" class="b" data-ng-show="purchaseOrder.status == 'Received'"><i class="glyphicon glyphicon-usd"></i></button> 
+                              <button ui-sref="root.purchase-order-copy({id:purchaseOrder._id})" title="View&Edit" class="e" data-ng-hide="editMode"><i class="glyphicon glyphicon-copy"></i></button>
+                              <button ui-sref="root.purchase-order-warehouse({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Requested'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+ <button ui-sref="root.receiving-goods({id:purchaseOrder._id})"  data-ng-show="(purchaseOrder.status !== 'Requested') && (purchaseOrder.status !== 'Cancelled')" title="Update PO" class="b" ><i class="glyphicon glyphicon-save"></i></button>                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  </div>
+                   <div ng-show="pol.isSet(5)">
+                  <table class=" grid_tbl" ng-show="pol.adminview">
+                     <thead>
+                        <tr>
+                           <th>
+                              <a href="" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                              PO Number
+                              <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.branch">
+                              <a href="" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                              Branch
+                              <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.date" >
+                              <a href="" ng-click="sortType = 'createdDateTime'; sortReverse = !sortReverse">
+                              Date
+                              <span ng-show="sortType == 'createdDateTime' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdDateTime' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <a href="" ng-click="sortType = 'createdBy'; sortReverse = !sortReverse">
+                              PO Created By
+                              <span ng-show="sortType == 'createdBy' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'createdBy' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <a href="" ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                              PO Status
+                              <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Action
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.purchaseOrderId" placeholder="Search By PO Number" style="padding-right: 5px;">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              <input class="form-control" ng-model="search.branchId" placeholder="Search By Branch">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              <input class="form-control" ng-model="search.createdDateTime" placeholder="Search By Date ">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              <input class="form-control" ng-model="search.createdBy" placeholder="Search By  Created By">
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              <input class="form-control" ng-model="search.status" placeholder="Search By PO Status ">
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="purchaseOrder in pol.purchaseOrders|orderBy:sortType:sortReverse | filter:{requestProductTo:'Supplier'}||filter:search|itemsPerPage:limit" data-ng-class="{danger:!employee.active}">
+                           <td>
+                              {{purchaseOrder.purchaseOrderId}}  
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.branch">
+                              {{purchaseOrder.branchName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.date">
+                              {{purchaseOrder.createdDateTime | date:'yyyy-MM-dd' }}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_created_by">
+                              {{purchaseOrder.employee_collection.employeeName}}
+                           </td>
+                           <td ng-show="pol.fChooser_purchaseOrder.PO_status">
+                              {{purchaseOrder.status}}
+                           </td>
+                           <td>
+                              <button  href="" class="b"  ng-disabled="purchaseOrder.status !== 'Requested'" ng-click="pol.updatepurchaseOrder(purchaseOrder)"><i class="glyphicon glyphicon-ok" aria-hidden="true" title="Approve Purchase orderBy"></i></button>
+                              <button  href="" class="d"   ng-show="purchaseOrder.status == 'Requested'" ng-click="pol.cancelPO(purchaseOrder)"><i class="glyphicon glyphicon-trash" aria-hidden="true" title="Cancel Purchase Order"></i></button>
+                              <button ui-sref="root.purchase-order-warehouse({id:purchaseOrder._id})" ng-show="purchaseOrder.status == 'Requested'" title="View&Edit" class="b" ><i class="glyphicon glyphicon-pencil"></i></button>                 
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  </div>
+                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

@@ -1,0 +1,29 @@
+<div class="hold-transition login-page">
+   <div class="login-box">
+      <div class="login-box-body">
+         <h3 class="login-box-msg"><img src="http://komalasrestaurants.com/wp-content/uploads/2015/01/logo2.png"  alt="User Image"></h3>
+         <form name="myForm" ng-submit="submitted=true" novalidate  autocomplete="off">
+            <div class="form-group has-feedback">
+               <input type="text" class="form-control" type="email" ng-model="lc.userName" placeholder="Username" name="email" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" autocomplete="off">
+               <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+               <span class="help-inline" ng-show="submitted && myForm.email.$error.required" style="padding-left:61%;color: red;">This Field is Required</span>
+               <span ng-show="!myForm.email.$error.required && myForm.email.$error.email && myForm.email.$dirty" style="color: red;padding-left: 61%;">Invalid email</span> 
+            </div>
+            <div class="form-group has-feedback">
+               <input type="password" class="form-control"  ng-model="lc.password" placeholder="Password" name="password" autocomplete="off">
+               <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+               <span class="help-inline" ng-show="submitted && myForm.password.$error.required" style="padding-left:61%;color: red;">This Field is Required</span> 
+            </div>
+            <div class="row">
+               <div>
+                  <button type="submit"  name="submit" ng-click="lc.login()" class="form_button">Sign In
+                  </button>
+               </div>
+            </div>
+         </form>
+         <br>
+      </div>
+   </div>
+</div>
+
+

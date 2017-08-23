@@ -1,0 +1,164 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Menu OverHead Price Creation
+      </h1>
+      <ol class="breadcrumb">
+         <li><a  ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a  ui-sref="root.configsetting">Configuration Settings</a></li>
+         <li><a  ui-sref="root.menuconfig">Menu  Configuration Settings</a></li>
+         <li class="active">Add OverHead Price</li>
+      </ol>
+   </section>
+   <form name="Form" id="Form" ng-submit="Form.$valid && OHPC.addOverHeadPrice(OHPC.overheadprice);submitted=true" autocomplete="off" novalidate>
+      <section class="content">
+         <div class="box box-default">
+            <div class="box-body">
+               <div class="row">
+                  <div class="col-md-12">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">No Of OverHeads</label>
+                           <input type="Number" class="form-control" placeholder="Enter No Of OverHeads" name="overhead" ng-model="OHPC.overheadprice.noofoverhead"  required/>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">No Of Working Day For The Month</label>
+                           <input type="Number" class="form-control" placeholder="Enter No Of Working Day For The Month" max="31" name="workingDay" ng-model="OHPC.overheadprice.workingDays"  required/>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-12">
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">No Of Working hours Per Day</label>
+                           <input type="Number" class="form-control" placeholder="Enter No Of Working hours Per Day" max="24" name="workingHours" ng-model="OHPC.overheadprice.workingHours"  required/>
+                        </div>
+                     </div>
+                     <div class="col-md-6">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Total OverHead Price</label>
+                           <input type="Number" class="form-control" placeholder="Enter Total OverHead Price" name="OverHeadPrice" ng-model="OHPC.overheadprice.totaloverheadPrice"  required/>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit" type="submit">Save&Submit</button>
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine">Reset</button>
+               </div>
+            </div>
+         </div>
+      </section>
+   </form>
+   <section class="content">
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="box-header with-border">
+            <h3 class="box-title">Labour Cost List</h3>
+         </div>
+         <div class="allow_cnt">
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit = OHPC.availableLimits[0]" ng-options="limit for limit in OHPC.availableLimits" ng-class="{'active':OHPC.isActiveValue(limit)}" data-ng-change="OHPC.setValue(limit)" size="1">
+                  </select>
+                  <br>
+                  <table class=" grid_tbl">
+                     <thead>
+                        <tr>
+                     
+                           <th>
+                              <a href="" ng-click="sortType = 'noofoverhead'; sortReverse = !sortReverse">
+                             No of OverHeads 
+                              <span ng-show="sortType == 'noofoverhead' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'noofoverhead' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                                 <th>
+                              <a href="" ng-click="sortType = 'workingDays'; sortReverse = !sortReverse">
+                              No Of Working Day For The Month
+                              <span ng-show="sortType == 'workingDays' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'workingDays' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'workingHours'; sortReverse = !sortReverse">
+                              No Of Working hours Per Day
+                              <span ng-show="sortType == 'workingHours' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'workingHours' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'totaloverheadPrice'; sortReverse = !sortReverse">
+                              Total Labour Cost
+                              <span ng-show="sortType == 'totalLabourCost' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'totalLabourCost' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Actions
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                           <td>
+                              <input class="form-control" ng-model="search.noofoverhead" placeholder="Search By No Of OverHeads" >
+                           </td>
+                           <td>
+                              <input class="form-control" ng-model="search.workingDays" placeholder="Search By Working Day For The Month" >
+                           </td>
+                            <td>
+                              <input class="form-control" ng-model="search.workingHours" placeholder="Search By Working hours Per Day" >
+                           </td>
+                           <td>
+                              <input class="form-control" ng-model="search.totaloverheadPrice" placeholder="Search By Total OverHead Price" >
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr dir-paginate="overheadsdetail in OHPC.overheadsdetails|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " data-ng-class="{danger:!overheadprice.isActive}">
+                         
+                            <td>
+                              <span data-ng-hide="editMode">{{overheadsdetail.noofoverhead}}</span>
+                              <input class="form-control" ng-model="overheadsdetail.noofoverhead" ng-show="editMode"  required />
+                           </td>
+                          <td>
+                              <span data-ng-hide="editMode">{{overheadsdetail.workingDays}}</span>
+                              <input class="form-control" ng-model="overheadsdetail.workingDays"  ng-show="editMode"  required />
+                           </td>
+                           <td>
+                              <span data-ng-hide="editMode">{{overheadsdetail.workingHours}}</span>
+                              <input class="form-control" ng-model="overheadsdetail.workingHours" ng-show="editMode"  required />
+                           </td>
+                           <td>
+                              <span data-ng-hide="editMode">{{overheadsdetail.totaloverheadPrice}}</span>
+                              <input class="form-control" ng-model="overheadsdetail.totaloverheadPrice" ng-show="editMode"  required />
+                           </td>
+                        
+                           <td>
+                              <a href="" class="a" data-ng-hide="editMode" title="Remove"><i class="glyphicon glyphicon-trash" 
+                                 ng-click="OHPC.deleteOverHeadPrice(overheadsdetail._id,overheadsdetail.overHeadPriceId)"></i></a>
+                              <a href="" class="b" data-ng-hide="editMode" title="Edit"><i class="glyphicon glyphicon-pencil" 
+                                 data-ng-click="editMode = true;OHPC.editOverHeadPrice(overheadsdetail)"></i></a>
+                              <a href="" class="c" data-ng-show="editMode" title="Update"><i class="glyphicon glyphicon-floppy-save"  ng-click="OHPC.updateOverHeadPrice(overheadsdetail)"></i></a>
+                              <a href="" class="d" data-ng-show="editMode" title="Remove"> <i class="glyphicon glyphicon-remove" data-ng-click="editMode = false;OHPC.reset(overheadsdetail)"></i></a>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

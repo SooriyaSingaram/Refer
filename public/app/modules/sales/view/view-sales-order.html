@@ -1,0 +1,162 @@
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Sales Order 
+
+        </h1>
+        <ol class="breadcrumb">
+            <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+            <li><a > Sales Order </a></li>
+            <li class="active">Add  Sales Order </li>
+        </ol>
+    </section>
+    <form name="Form" id="Form" ng-submit="Form.$valid && so.addSalesOrder(sales);submitted=true" autocomplete="off" novalidate>
+        <section class="content">
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Order Id</label>
+                                    <input type="text" class="form-control" placeholder="Enter SubCategory Name" name="subcategory" ng-model="so.sales.orderId" required/>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Branch Name</label>
+                                    <select class="form-control select2"  name="categoryName" ng-model="so.sales.branchId" required/>
+                                        <option value="">Select Branch</option>
+                                        <option ng-repeat="outlet in outlets" value="{{outlet.branchId}}">{{outlet.branhName}}</option>
+                                    </select>
+                                  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box-footer">
+                    <div class="col-sm-offset-5">
+                        <button class="btn btn-success" name="submit" type="submit">Save&Submit</button>
+                           <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine">Reset</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </form>
+    <section class="content">
+        <div class="panel panel-info" style="overflow:auto;">
+            <div class="box-header with-border">
+                <h3 class="box-title"> Sales Order 
+ List</h3>
+            </div>
+            <div class="allow_cnt">
+                <form name="myForm">
+                    <div class="box-body">
+                        <label style="padding: 9px;">Show Entries</label>
+                        <select data-ng-model="limit" ng-init="limit =subCategoryLC.availableLimits[0]" ng-options="limit for limit in subCategoryLC.availableLimits" ng-class="{'active':subCategoryLC.isActiveValue(limit)}" data-ng-change="subCategoryLC.setValue(limit)" size="1">
+                        </select>
+                        <br>
+                        <table class=" grid_tbl">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <a href="" ng-click="sortType = 'subCategoryId'; sortReverse = !sortReverse">
+                                        Menu Item Id
+                                        <span ng-show="sortType == 'SubCategoryId' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'SubCategoryId' && sortReverse" class="fa fa-caret-up"></span>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="" ng-click="sortType = 'categoryId'; sortReverse = !sortReverse">
+                                        Menu Item Name
+                                        <span ng-show="sortType == 'categoryId' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'categoryId' && sortReverse" class="fa fa-caret-up"></span>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="" ng-click="sortType = 'subCategoryName'; sortReverse = !sortReverse">
+                                        Qty
+                                        <span ng-show="sortType == 'SubCategoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'SubCategoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="" ng-click="sortType = 'subCategoryName'; sortReverse = !sortReverse">
+                                        Unit Price
+                                        <span ng-show="sortType == 'SubCategoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'SubCategoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="" ng-click="sortType = 'subCategoryName'; sortReverse = !sortReverse">
+                                        Total Price
+                                        <span ng-show="sortType == 'SubCategoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'SubCategoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                        </a>
+                                    </th>
+                                    <th>
+                                        <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                        Action
+                                        <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                        <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                        </a>
+                                    </th>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <input class="form-control" ng-model="search.subCategoryId" placeholder="Search By Outlet Id" style="padding-right: 5px;">
+                                    </td>
+                                    <td>
+                                        <input class="form-control" ng-model="search.categories_collection.categoryName" placeholder="Search By Date" >
+                                    </td>
+                                    <td>
+                                        <input class="form-control" ng-model="search.subCategoryName" placeholder="Search By Total" >
+                                    </td>
+                                    <td>
+                                        <input class="form-control" ng-model="search.categories_collection.categoryName" placeholder="Search By Branch" >
+                                    </td>
+                                    <td>
+                                        <input class="form-control" ng-model="search.subCategoryName" placeholder="Search By Quantity" >
+                                    </td>
+                                    <td></td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr dir-paginate="subcategory in subCategoryLC.subCategories|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " data-ng-class="{danger:!subcategory.isActive}">
+                                    <td>
+                                        <span data-ng-hide="editMode">{{subcategory.subCategoryId}}</span>
+                                        <input class="form-control" data-ng-model="subcategory.subCategoryId" disabled="" data-ng-show="editMode" data-ng-required />
+                                    </td>
+                                    <td>
+                                        <span data-ng-hide="editMode">{{subcategory.categories_collection.categoryName}}</span>
+                                        <select class="form-control" data-ng-model="subcategory.categoryId" data-ng-show="editMode" data-ng-required>
+                                            <option value="">select Category</option>
+                                            <option ng-repeat="category in subCategoryLC.categories" value="{{category.categoryId}}">{{category.categoryName}}</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <span data-ng-hide="editMode">{{subcategory.subCategoryName}}</span>
+                                        <input class="form-control" ng-model="subcategory.subCategoryName" ng-show="editMode" ng-pattern="/^[a-zA-Z\s]*$/" required />
+                                    </td>
+                                    <td>
+                                        <a href="" class="a" data-ng-hide="editMode"><i class="glyphicon glyphicon-trash" 
+                                            ng-click="subCategoryLC.deleteSubCategory(subcategory._id,subcategory.subCategoryId)"></i></a>
+                                        <a href="" class="b" data-ng-hide="editMode"><i class="glyphicon glyphicon-pencil" 
+                                            data-ng-click="editMode = true;subCategoryLC.editSubCategory(subcategory)"></i></a>
+                                        <a href="" class="c" data-ng-show="editMode"><i class="glyphicon glyphicon-floppy-save"  ng-click="subCategoryLC.updateSubCategory(subcategory)"></i></a>
+                                        <a href="" class="d" data-ng-show="editMode"> <i class="glyphicon glyphicon-remove" data-ng-click="editMode = false;subCategoryLC.reset(subcategory)"></i></a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <dir-pagination-controls max-size="5" direction-links="true" boundary-links="true">
+                        </dir-pagination-controls>
+                    </div>
+                </form>
+            </div>
+        </div>
+</div>
+</section>
+</div>

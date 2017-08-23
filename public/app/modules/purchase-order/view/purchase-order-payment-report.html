@@ -1,0 +1,167 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Purchase Order Payment Report
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Purchase Order Management</a></li>
+         <li class="active">Purchase Order Payment Report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && poprc.getFilterPayementDetails(poprc.purchaseOrderDetail);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Purchase Order Payment Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="poprc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="poprc.downloadPdf('Payment Report')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="poprc.purchaseOrderDetail.fromDate" name="fromDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  poprc.purchaseOrderDetail .fromDate == null ? 'Select Date' : poprc.purchaseOrderDetail .fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="poprc.purchaseOrderDetail .fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="poprc.startDateOnSetTime()" data-before-render="poprc.startDateBeforeRender(poprc.purchaseOrderDetail .toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromDate.$error.required" style="padding-left:1%;color: red;">  From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="poprc.purchaseOrderDetail.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  poprc.purchaseOrderDetail .toDate == null ? 'Select Date' : poprc.purchaseOrderDetail .toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="poprc.purchaseOrderDetail .toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="poprc.endDateOnSetTime()"  data-before-render="poprc.endDateBeforeRender(poprc.purchaseOrderDetail .fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+               <!--<div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">PO Status</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control" name="status"  ng-model="poprc.purchaseOrderDetail.status" required="required"    style="width: 38%;">
+                        <option value="">Select PO Status</option>
+                        <option value="Received">Received</option>
+                         <option value="Partially Received">Partially Received</option>
+                         <option value="Cancelled">Cancelled</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.status.$error.required"></span>
+                  </div>
+                  </div>-->
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="poprc.reset(poprc.purchaseOrderDetail)">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =poprc.availableLimits[0]" ng-options="limit for limit in poprc.availableLimits" ng-class="{'active':poprc.isActiveValue(limit)}" data-ng-change="poprc.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>Purchase Order Payment Report</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                                    Branch Id 
+                                    <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'outlet_collection.branchName'; sortReverse = !sortReverse">
+                                    Branch Name
+                                    <span ng-show="sortType == 'outlet_collection.branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'outlet_collection.branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                                    PO Number
+                                    <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'createdDateTime'; sortReverse = !sortReverse">
+                                    Payment Date
+                                    <span ng-show="sortType == 'createdDateTime' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'createdDateTime' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'status'; sortReverse = !sortReverse">
+                                    Payment Amount
+                                    <span ng-show="sortType == 'status' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'status' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="purchaseOrderDetail in poprc.reportDetails|orderBy:sortType:sortReverse|itemsPerPage:limit " 
+                                 data-ng-class="{danger:!addSupplier.active}">
+                                 <td>
+                                    <span>{{purchaseOrderDetail.branchId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{purchaseOrderDetail.branchName}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{purchaseOrderDetail._id.purchaseOrderId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{purchaseOrderDetail._id.paymentDetails.date | date:'yyyy-MM-dd'}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{purchaseOrderDetail._id.paymentDetails.paidAmount}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

@@ -1,0 +1,130 @@
+<div class="content-wrapper"  ng-init="select()">
+   <section class="content-header">
+      <h1>
+        Account Management
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.bankDeposit-list">Bank deposit details List</a></li>
+         <li class="active">Add  Account details</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="myForm"  ng-submit="submitted=true"   novalidate autocomplete="off" >
+         <div class="box box-default">
+            <div class="box-body">
+               <div class="row" >
+                  <div class="col-md-6" id="outletName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">OutletName <span class="Mandatory_Field">*</span>
+                        </label>
+                        <select class="form-control" name="outletId"  ng-model="bdc.depositDetails.branchId"  disabled="disabled" required="required">
+                           <option value="">Select Outlet</option>
+                           <option ng-repeat="outlet in bdc.branchDetails" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.branchId.$error.required" style="padding-left:1%;color: red;">Outlet is Required
+                        </span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="date">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1"> Date <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="hidden" required  ng-model="bdc.depositDetails.Date" name="Date" > 
+                        <div class="dropdown">
+                           <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#"  disabled="disabled">
+                           {{  bdc.depositDetails.Date == null ? 'Select Date' : bdc.depositDetails.Date | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                           <ul class="dropdown-menu" role="menu">
+                              <datetimepicker data-ng-required data-ng-model="bdc.depositDetails.Date" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" />
+                           </ul>
+                        </div>
+                        <span class="help-inline" ng-show="submitted && myForm.date.$error.required" style="padding-left:1%;color: red;"> Date is Required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="outletName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Deposit Amount <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="Number" class="form-control " placeholder="Deposit Amount" name="depositAmount" ng-model="bdc.depositDetails.depositAmount" ng-disabled="bdc.isEditmode" required />
+                        <span class="help-inline" ng-show="submitted && myForm.depositAmount.$error.required" style="padding-left:1%;color: red;">Deposit Amount is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="depositDate">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1"> Date Of Deposit <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="hidden" required  ng-model="bdc.depositDetails.depositDate" name="depositDate" > 
+                        <div class="dropdown">
+                           <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" name="date" required="required" ng-disabled="bdc.isEditmode" >
+                           {{  bdc.depositDetails.depositDate == null ? 'Select Date' : bdc.depositDetails.depositDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                           <ul class="dropdown-menu" role="menu">
+                              <datetimepicker data-ng-required data-ng-model="bdc.depositDetails.depositDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" data-before-render="bdc.beforeRender($dates)" data-ng-change="bdc.checkDate(bdc.depositDetails.Date,bdc.depositDetails.depositDate);"/>
+                           </ul>
+                        </div>
+                        <span class="help-inline" ng-show="submitted && myForm.depositDate.$error.required" style="padding-left:1%;color: red;"> Date is Required
+                        </span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="bankName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1"> Bank Name <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control " placeholder="Bank Name" name="bankName" ng-model="bdc.depositDetails.bankName" disabled="disabled" required />
+                        <span class="help-inline" ng-show="submitted && myForm.bankName.$error.required" style="padding-left:1%;color: red;">Bank Name is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="bankAccountNo">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1"> Bank Account Number <span class="Mandatory_Field">*</span>
+                        </label>
+                        <input type="text" class="form-control " placeholder="Bank Account Number" name="bankAccountNo" ng-model="bdc.depositDetails.bankAc"  disabled="disabled" required />
+                        <span class="help-inline" ng-show="submitted && myForm.bankAccountNo.$error.required" style="padding-left:1%;color: red;">Bank AccountNo is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row" ng-if="bdc.reason===true">
+                  <div class="col-md-6" id="Reason">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Reason <span class="Mandatory_Field">*</span>
+                        </label>
+                        <textarea class="form-control" placeholder="Enter the Address" name="reason" ng-model="bdc.depositDetails.reason"
+                           ng-disabled="bdc.isEditmode" ng-required="bdc.reason"></textarea>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="fileupload">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Upload Receipt <span class="Mandatory_Field">*</span>
+                        </label>
+                        <!--<input type="file"  ngf-select="bdc.posfileupload($event)"  ng-model="bdc.depositDetails.receipt" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" id="file" name="fileupload" multiple required/>-->
+                        <input type='file' ng-disabled="bdc.isEditmode" name="fileupload"   ng-model-instant id="receipt" multiple />
+                        <span class="help-inline" ng-show="submitted && myForm.fileupload.$error.required" style="padding-left:1%;color: red;">Please select the Files</span>                  
+                        <ul style="list-style: none;">
+                           <li style="display: inline;" class="image_list" ng-repeat="step in bdc.depositDetails.receipt">
+                              <img class="thumb" ng-src="{{step}}" width="300" height="150" />
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="box-footer fix_Sub">
+                  <div class="col-sm-offset-5" ng-show="bdc.isEditmode===false">
+                     <button class="btn btn-success" type="submit" ng-hide="bdc.submitbut===false" ng-click="bdc.formValidation(myForm.$error.required[0].$name) &&  bdc.addBankDepositDetails(bdc.depositDetails);" >Submit</button>  
+                     <button ui-sref="root.bankDeposit-list" name="submit"  class="btn btn-danger ">Cancel</button>
+                     <input type="button"   ng-click="bdc.reset(bdc.depositDetails)" class="btn btn-warning"  value=" Reset ">
+                  </div>
+                  <div class="col-sm-offset-5" ng-if="BDC.isEditmode===true">
+                     <button type="button" ng-click="bdc.isEditmode = !bdc.isEditmode;bdc.disableSubmit()"  class="btn btn-success ">Edit</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </form>
+   </section>
+</div>

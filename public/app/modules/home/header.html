@@ -1,0 +1,48 @@
+<header class="main-header">
+    <a ui-sref="root.dashboard" class="logo">
+        <span class="logo-mini"><img src="build/images/minilogo.png" height="45px" alt="User Image"></span>
+        <span class="logo-lg"><img src="build/images/logo2.png" height="45px" alt="User Image">
+      </span>
+   </a>
+   <nav class="navbar navbar-static-top">
+      <a href="" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+      <span class="sr-only">Toggle navigation</span>
+      </a>
+      <div class="navbar-custom-menu">
+         <ul class="nav navbar-nav">
+            <!--<li class="dropdown messages-menu">
+               <a href="" class="dropdown-toggle" data-toggle="dropdown">
+               <i class="fa fa-envelope-o"></i>
+               </a>
+            </li>
+            
+            <li class="dropdown notifications-menu">
+               <a href="" class="dropdown-toggle" data-toggle="dropdown">
+               <i class="fa fa-bell-o"></i>
+               </a>
+            </li>
+            <li class="dropdown tasks-menu">
+               <a href="" class="dropdown-toggle" data-toggle="dropdown">
+               <i class="fa fa-flag-o"></i>
+               </a>
+            </li>-->
+            <li class="dropdown user user-menu">
+               <a href="" class="dropdown-toggle" data-toggle="dropdown">
+              <span>{{hc.userToken.employeeName}}</span>
+               </a>
+               <ul class="dropdown-menu">
+                  <li class="user-footer">
+                     <div class="pull-left">
+                        <a ui-sref="root.employee-list" class="btn btn-default btn-flat">Profile</a>
+                     </div>
+                     <div class="pull-right">
+                        <a href="" ng-click="hc.logout()" class="btn btn-default btn-flat">Sign out</a>
+                     </div>
+                  </li>
+               </ul>
+            </li>
+         </ul>
+      </div>
+   </nav>
+</header>
+

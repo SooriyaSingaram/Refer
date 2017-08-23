@@ -1,0 +1,80 @@
+
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         Request
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i> </a></li>
+         <li><a ui-sref="root.request-list">Request List</a></li>
+         <li class="active">Request </li>
+      </ol>
+   </section>
+   <hr style="border-top: 1px solid rgba(224, 212, 212, 0.52);margin-bottom: 0px;">
+   <form name="myForm" ng-submit="submitted=true" novalidate  autocomplete="off">
+      <section class="content">
+         <div>
+            <div class="box box-default">
+               <div class="box-body">
+                  <div class="row">
+                     <div class="col-md-6" id="outletName">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Outlet Name</label>
+                           <select class="form-control"   ng-model="rc.request.outletId"  name="outletName"ng-disabled="rc.isEditmode"  required="">
+                              <option value="">Select Outlet</option>
+                              <option ng-repeat="outlet in rc.franchiseOutlets" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.outletName.$error.required" style="padding-left:1%;color: red;">Outlet Name is Required</span>
+                        </div>
+                     </div>
+                      <div class="col-md-6" id="FranchiseName" ng-if="rc.auth.role ==='KS_RS001' || rc.auth.role ==='KS_RS006'">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Franchise / Franchise Branch Name</label>
+                           <select class="form-control"   ng-model="rc.request.franchiseId"  name="FranchiseName"   required="">
+                              <option value="">Select Outlet</option>
+                              <option ng-repeat="outlet in rc.franchise" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                              <option ng-repeat="outlet in rc.franchiseBranchType" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                        </select>
+                           <span class="help-inline" ng-show="submitted && myForm.FranchiseName.$error.required" style="padding-left:1%;color: red;">Franchise Name is Required</span>
+                        </div> 
+
+                     </div>
+                     <div class="col-md-6" id="requestType">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Request Type</label>
+                           <select class="form-control"  ng-model="rc.request.requestTypeId"  name="requestType" ng-disabled="rc.isEditmode"  required="">
+                              <option value="">Select Request</option>
+                              <option ng-repeat="requestType in rc.requests.requestType" value="{{requestType.requestId}}">{{requestType.requestName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.requestType.$error.required" style="padding-left:1%;color: red;">Request Type is Required
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-12" id="description">
+                        <div class="form-group">
+                           <label>Description</label>
+                           <textarea class="form-control" rows="3" placeholder="Enter the Description" name="description" required ng-model="rc.request.description" ng-disabled="rc.isEditmode"></textarea>
+                           <span class="help-inline" ng-show="submitted && myForm.description.$error.required" style="padding-left:1%;color: red;">Description is Required</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="box-footer ">
+                     <div class="col-sm-offset-5" ng-show="rc.isEditmode===false">
+                        <button class="btn btn-success" type="submit" ng-hide="rc.submitbut===false" ng-click="rc.formValidation(myForm.$error.required[0].$name) && rc.addRequest(rc.request)" >Submit</button>
+                        <button class="btn btn-success" ng-if="rc.submitbut===false" type="submit" ng-click="rc.formValidation(myForm.$error.required[0].$name) && rc.updateRequest(rc.request)" id='getButtonValue'>Update</button>
+                        <button ui-sref="root.request-list" name="submit" class="btn btn-danger ">Cancel</button>
+                        <input type="button" class="btn btn-warning" ng-click="rc.reset()" value="Reset">
+                     </div>
+                     <div class="col-sm-offset-5" ng-if="rc.isEditmode===true">
+                        <button  type="button" ng-click="rc.isEditmode = !rc.isEditmode;rc.disableSubmit()" class="btn btn-success ">Edit</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+</div>
+</section>
+</form>
+</div>

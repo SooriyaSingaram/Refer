@@ -1,0 +1,227 @@
+<div class="content-wrapper">
+    <section class="content-header">
+        <h1>
+            Outlet Setup
+        </h1>
+        <ol class="breadcrumb">
+            <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+            <li><a ui-sref="root.outlet-list">Outlet List</a></li>
+            <li class="active">Own Outlet Setup</li>
+        </ol>
+    </section>
+    <section class="content">
+        <form name="myForm" novalidate ng-submit="submitted=true" autocomplete="off">
+            <div class="box box-default">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6" id="branchname">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Outlet Name <span class="Mandatory_Field">*</span></label>
+                                <input type="text" class="form-control" placeholder="Outlet Name" name="branchname" ng-model="odc.outlet.branchName" ng-disabled="odc.isEditmode" required />
+                                <span class="help-inline" ng-show="submitted && myForm.branchname.$error.required" style="padding-left:1%;color: red;">Outlet Name is Required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" ng-if="odc.isEditmode===true||odc.submitbut===false">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Outlet Id<span class="Mandatory_Field">*</span></label>
+                                <input type="text" class="form-control" placeholder="OutletID" name="branchID" disabled="" value="{{odc.outlet.branchId}}" required />
+                                <span class="help-inline" ng-show="submitted && myForm.branchID.$error.required" style="padding-left:1%;color: red;">Outlet ID is Required</span>
+                            </div>
+                        </div>
+                     </div>
+        
+                    <div class="row">
+                        <div class="col-md-12" id="address">
+                            <div class="form-group">
+                                <label>Address <span class="Mandatory_Field">*</span></label>
+                                <textarea class="form-control" placeholder="Enter the Address" name="address" ng-model="odc.outlet.address" required="" ng-disabled="odc.isEditmode"></textarea>
+                                <span class="help-inline" ng-show="submitted && myForm.address.$error.required" style="padding-left:1%;color: red;">Address is Required</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" id="outletType">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Outlet Type <span class="Mandatory_Field">*</span></label>
+                                <select type="text" class="form-control" ng-model="odc.outlet.outletType.outletType" required="required" name="OutletType" ng-disabled="odc.isEditmode||((odc.outlet.outletType.outletType === 'Ware House'||odc.outlet.outletType.outletType  === 'Centralized Kitchen') && (odc.outlet._id))" ng-change="odc.outletTypeValidation(odc.outlet);odc.checkStorageDetails(odc.outlet.outletType);">
+                           <option value="">Select Type</option>
+                           <option value="Outlet">Outlet</option>
+                           <option value="Ware House">Ware House</option>
+                           <option value="Centralized Kitchen">Centralized Kitchen</option>
+                           <option value="Franchise">Franchise</option>
+                        </select>
+                                <span class="help-inline" ng-show="submitted && myForm.OutletType.$error.required" style="padding-left:1%;color: red;">Outlet Type is Required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="PhNo">
+                            <div class="form-group">
+                                <label style="float: left;width: 100%;">Phone No <span class="Mandatory_Field">*</span></label>
+                                <div class="col-md-3 mobi-padding" id="code">
+                                    <ui-select ng-model="odc.outlet.code" ng-disabled="odc.isEditmode" name="code" title="select" required="required">
+                                        <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="country in odc.countryCodes.Country | filter: $select.search">
+                                            <span>{{country}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="help-inline" ng-show="submitted && myForm.code.$error.required" style="padding-left:1%;color: red;">Country code is Required</span>
+
+                                </div>
+                                <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;" id="PhNo">
+                                    <input type="number" class="form-control" placeholder="Phone No" name="PhNo" ng-minlength="3" ng-maxlength="15" ng-model="odc.outlet.mobileNo" min="0" ng-keypress="odc.onlyNumbers($event)" ng-min="0" ng-disabled="odc.isEditmode" required="required">
+                                    <span class="help-inline" ng-show="submitted && myForm.PhNo.$error.required" style="padding-left:1%;color: red;">Phone Number is Required</span>
+                                    <span ng-show="myForm.PhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                                    <span ng-show="myForm.PhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="odc.outlet.outletType.outletType=='Outlet'||odc.outlet.outletType.outletType=='Franchise'">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Business Hours</label>
+                                    <input type="number" class="form-control" placeholder="Business Hours" ng-model="odc.outlet.outletType.businessHours" min="1" name="businessHours" max="24" ng-disabled="odc.isEditmode">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">No.of Chefs</label>
+                                    <input type="number" class="form-control" ng-model="odc.outlet.outletType.chefs" placeholder="No.of Chefs" name="Chefs" ng-disabled="odc.isEditmode">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">No.of Front line Staff</label>
+                                    <input type="number" class="form-control" ng-model="odc.outlet.outletType.frontLineStaff" placeholder="No.of Front line Staff" name="frontlinestaff" ng-disabled="odc.isEditmode">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Day of non-edible items receipt</label>
+                                    <input type="text" class="form-control" ng-model="odc.outlet.outletType.itemReceipt" placeholder="Day of non-edible items receipt" name="receipt" ng-disabled="odc.isEditmode">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix"></div>
+                    <div ng-if="odc.outlet.outletType.outletType=='Ware House'||odc.outlet.outletType.outletType=='Centralized Kitchen'">
+                        <div class="row" ng-repeat="storageDetail in odc.outlet.outletType.storageDetails">
+                            <div class="col-sm-10 col-xs-9">
+                                <div class="form-group">
+                                    <label>Storage Area  </label>
+                                    <input type='text' class="form-control" ng-model="storageDetail.storageArea" placeholder="Enter Storage Area" ng-disabled="odc.isEditmode">
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-xs-3" style="padding-top: 24px;">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <input type="button" title="Remove" ng-if="$index > 0" ng-click="odc.removeStorageArea(odc.outlet.outletType.storageDetails,$index)" value="-" class="btn btn-danger" ng-disabled="odc.isEditmode">
+                                        <input type="button" title="Add" ng-click="odc.addStorageArea(odc.outlet.outletType.storageDetails)" value="+" class="btn btn-primary" ng-disabled="odc.isEditmode">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" id="bank">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Bank Name <span class="Mandatory_Field">*</span></label>
+                                <input type="text" class="form-control" placeholder="Bank Name" ng-model="odc.outlet.bankName" name="bank" ng-disabled="odc.isEditmode" required="required">
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="account">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Bank Account Number <span class="Mandatory_Field">*</span></label>
+                                <input type="text" class="form-control" placeholder="Bank Account Number" ng-model="odc.outlet.bankAc" name="account" ng-keypress="odc.onlyNumbers($event)" ng-min="0" ng-disabled="odc.isEditmode" required="required">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6" id="contactName">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Emergency Contact Name <span class="Mandatory_Field">*</span></label>
+                                <input type="text" class="form-control" placeholder="Emergency Contact Name" ng-model="odc.outlet.emergencyContactName" name="contactName" ng-disabled="odc.isEditmode" required="required">
+                                <span class="help-inline" ng-show="submitted && myForm.contactName.$error.required" style="padding-left:1%;color: red;">Emergency Contact Name is Required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="ePhNo">
+                            <div class="form-group">
+                                <label style="float: left;width: 100%;">Emergency Contact Number<span class="Mandatory_Field">*</span></label>
+                                <div class="col-md-3 mobi-padding" id="code">
+                                    <ui-select ng-model="odc.outlet.emergencyCode" ng-disabled="odc.isEditmode" name="ecode" title="select" required="required">
+                                        <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="country in odc.countryCodes.Country | filter: $select.search">
+                                            <span>{{country}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="help-inline" ng-show="submitted && myForm.ecode.$error.required" style="padding-left:1%;color: red;">Country code is Required</span>
+                                </div>
+                                <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;">
+                                    <input type="number" class="form-control" placeholder="Phone No" name="ePhNo" min="0" ng-minlength="3" ng-maxlength="15" ng-model="odc.outlet.emergencyMobileNo" ng-keypress="odc.onlyNumbers($event)" ng-min="0" ng-disabled="odc.isEditmode" required="required">
+                                    <span ng-show="myForm.ePhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                                    <span ng-show="myForm.PehNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                      <div class="row">
+                  <div class="col-md-6" id="Outletstatus">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Outlet Status <span class="Mandatory_Field">*</span></label>
+                        <select class="form-control" ng-model="odc.outlet.outletStatus" name="Outletstatus"
+                           ng-disabled="odc.isEditmode||((odc.outlet.outletType.outletType === 'Ware House'||odc.outlet.outletType.outletType  === 'Centralized Kitchen') && (odc.outlet._id))" ng-change="odc.statusValidation(odc.outlet)" required="required">
+                           <option value="">Select Outlet Status</option>
+                           <option value="Active">Active</option>
+                           <option value="Inactive">Inactive</option>
+                        </select>
+                                <span class="help-inline" ng-show="submitted && myForm.Outletstatus.$error.required" style="padding-left:1%;color: red;">Outlet Status is Required</span>
+                       </div>   
+                </div>
+            </div>
+                  <div class="row">
+                        <div class="col-md-6" id="outletType">
+                            <div class="form-group">
+                                <label for="exampleInputEmail1">Lanlord Name<span class="Mandatory_Field">*</span></label>
+                               <input type="text" class="form-control" placeholder="Lanlord Name" name="lName" ng-model="odc.outlet.lanlordName" ng-disabled="odc.isEditmode" required="required">
+                                <span class="help-inline" ng-show="submitted && myForm.lName.$error.required" style="padding-left:1%;color: red;">lanlordName is Required</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6" id="PhNo">
+                            <div class="form-group">
+                                <label style="float: left;width: 100%;">Lanlord Phone No <span class="Mandatory_Field">*</span></label>
+                                <div class="col-md-3 mobi-padding" id="lanlordcode">
+                                    <ui-select ng-model="odc.outlet.lanlordCode" ng-disabled="odc.isEditmode" name="code" title="select" required="required">
+                                        <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                                        <ui-select-choices repeat="country in odc.countryCodes.Country | filter: $select.search">
+                                            <span>{{country}}</span>
+                                        </ui-select-choices>
+                                    </ui-select>
+                                    <span class="help-inline" ng-show="submitted && myForm.lanlordcode.$error.required" style="padding-left:1%;color: red;">Country code is Required</span>
+
+                                </div>
+                                <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;" id="lanPhNo">
+                                    <input type="number" class="form-control" placeholder="Phone No" name="lanPhNo" ng-minlength="3" ng-maxlength="15" ng-model="odc.outlet.lanlordMobileNo" min="0" ng-keypress="odc.onlyNumbers($event)" ng-min="0" ng-disabled="odc.isEditmode" required="required">
+                                    <span class="help-inline" ng-show="submitted && myForm.lanPhNo.$error.required" style="padding-left:1%;color: red;">Phone Number is Required</span>
+                                    <span ng-show="myForm.PhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                                    <span ng-show="myForm.PhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   </div>
+            <div class="box-footer fix_Sub">
+                <div class="col-sm-offset-5" ng-show="odc.isEditmode===false">
+                    <button class="btn btn-success" type="submit" ng-hide="odc.submitbut===false" ng-click="odc.formValidation(myForm.$error.required[0].$name) && odc.addOutlet(odc.outlet);odc.page_Scroll();enablesub()" id='getButtonValue'>Submit</button>
+                    <button class="btn btn-success" ng-if="odc.submitbut===false" type="submit" ng-click="odc.formValidation(myForm.$error.required[0].$name) && odc.updateOultlet(odc.outlet);odc.pageScroll()" id='getButtonValue'>Update</button>
+                    <button ui-sref="root.outlet-list" name="submit" class="btn btn-danger ">Cancel</button>
+                    <input type="button" class="btn btn-warning" ng-click="odc.reset()" value="Reset">
+                </div>
+                <div class="col-sm-offset-5" ng-if="odc.isEditmode===true">
+                    <button  type="button" ng-click="odc.isEditmode = !odc.isEditmode;odc.disableSubmit()" class="btn btn-success ">Edit</button>
+                </div>
+            </div>
+        </form>
+    </section>
+</div>

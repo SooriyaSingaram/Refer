@@ -1,0 +1,237 @@
+<div class="content-wrapper"  ng-init="select()">
+   <section class="content-header">
+      <h1>
+         Supplier Profile Creation
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.supplier_list">Supplier List</a></li>
+         <li class="active">Add Supplier Profile</li>
+      </ol>
+   </section>
+   <form name="myForm"  ng-submit="submitted=true"   novalidate autocomplete="off" >
+      <section class="content">
+         <div class="box box-default">
+            <div class="box-body">
+               <div class="row">
+                  <div class="col-md-6" id="supplierName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Supplier Name<span class="Mandatory_Field">*</span></label>
+                        <input type="text" class="form-control " placeholder="Supplier Name" name="supplierName" ng-model="sdc.supplier.supplierName" ng-disabled="sdc.isEditmode" required />
+                        <span class="help-inline" ng-show="submitted && myForm.supplierName.$error.required" style="padding-left:1%;color: red;">Supplier Name is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" ng-if="sdc.isEditmode===true||sdc.submitbut===false">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Supplier Id</label>
+                        <input type="text" class="form-control" placeholder="Supplier Id"  disabled="" value="{{sdc.supplier.supplierId}}" required />
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="optionsRadios">
+                     <div class="form-group">
+                        <label ng-class="{'radio_req' : myForm.optionsRadios.$invalid, 'radio_valid' : myForm.optionsRadios.$valid}" style="float: left;width: 100%;">GST Registered?*</label>
+                        <div class="col-md-6">
+                           <div class="radio">
+                              <label  >
+                              <input type="radio" ng-model="sdc.supplier.gst" name="optionsRadios" id="yes_radio"  ng-disabled="sdc.isEditmode" required="" ng-value="true"  >
+                              Yes
+                              </label>
+                           </div>
+                        </div>
+                        <div class="col-md-6">
+                           <div class="radio">
+                              <label >
+                              <input type="radio" name="optionsRadios" ng-disabled="sdc.isEditmode" ng-model="sdc.supplier.gst"  id="no_radio"  required="" ng-value="false">
+                              No
+                              </label>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="Gnumber">
+                     <div class="form-group" ng-show="sdc.supplier.gst === true">
+                        <label for="exampleInputEmail1">GST Number<span class="Mandatory_Field">*</span></label>
+                        <input type="text" ng-required="sdc.supplier.gst === true"  class="form-control" placeholder="GST Number" ng-model="sdc.supplier.gstNumber" ng-disabled="sdc.isEditmode"  name="Gnumber" id="textbox_A"  >
+                        <span class="help-inline" ng-show="submitted && myForm.Gnumber.$error.required" style="padding-left:1%;color: red;">GST is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6" id="email">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Email<span class="Mandatory_Field">*</span></label>
+                        <input type="email" class="form-control" placeholder="Email" name="email" ng-model="sdc.supplier.email" ng-disabled="sdc.isEditmode" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" required />
+                        <span class="help-inline" ng-show="submitted && myForm.email.$error.required" style="padding-left:1%;color: red;">Email is Required</span>
+                        <span ng-show="!myForm.email.$error.required && myForm.email.$error.email && myForm.email.$dirty" style="color: red;padding-left: 2%;">Invalid email</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="PhNo">
+                     <div class="form-group">
+                        <label style="float: left;width: 100%;">Phone No<span class="Mandatory_Field">*</span></label>
+                        <div class="col-md-3 mobi-padding">
+                           <ui-select ng-model="sdc.supplier.code" ng-disabled="sdc.isEditmode" name="code" title="select"  required="">
+                              <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                              <ui-select-choices repeat="country in sdc.countryCodes.Country | filter: $select.search">
+                                 <span>{{country}}</span>
+                              </ui-select-choices>
+                           </ui-select>
+                           <span class="help-inline" ng-show="submitted && myForm.code.$error.required" style="padding-left:1%;color: red;">Country Code is Required</span>
+                        </div>
+                        <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;">
+                           <input type="number" class="form-control" placeholder="Phone No"  id="Mobile" min="0"  name="PhNo" ng-model="sdc.supplier.phnNo"  ng-keypress="edc.onlyNumbers($event)"  ng-min="0" ng-disabled="sdc.isEditmode" ng-minlength="3" ng-maxlength="15" required />
+                        </div>
+                        <span ng-show="myForm.PhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                        <span ng-show="myForm.PhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                        <span class="help-inline" ng-show="submitted && myForm.PhNo.$error.required" style="padding-left:1%;color: red;">Phone No is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row">
+                  <div class="col-md-6">
+                     <div class="box-header with-border">
+                        <h3 class="box-title" ><b>Primary Contact</b></h3>
+                     </div>
+                     <div class="form-group" style="padding-top: 12px;">
+                        <label for="exampleInputEmail1">Email</label>
+                        <input type="email" class="form-control" placeholder="Email" name="Pemail" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-model="sdc.supplier.primaryEmail" ng-disabled="sdc.isEditmode"  />
+                        <span ng-show="!myForm.Pemail.$error.required && myForm.Pemail.$error.email && myForm.Pemail.$dirty" style="color: red;padding-left: 2%;">Invalid email</span>
+                     </div>
+                     <div class="form-group">
+                        <label style="float: left;width: 100%;">Phone No</label>
+                        <div class="col-md-3 mobi-padding">
+                           <ui-select ng-model="sdc.supplier.primaryCode" ng-disabled="sdc.isEditmode" title="select">
+                              <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                              <ui-select-choices repeat="country in sdc.countryCodes.Country | filter: $select.search">
+                                 <span>{{country}}</span>
+                              </ui-select-choices>
+                           </ui-select>
+                        </div>
+                        <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;">
+                           <input type="number" class="form-control"  id="Primary" placeholder="Phone No" min="0"  name="PPhNo" ng-minlength="3" ng-model="sdc.supplier.primaryPhnNo"  ng-keypress="edc.onlyNumbers($event)"  ng-min="0"ng-maxlength="15"  />
+                        </div>
+                        <span ng-show="myForm.PPhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                        <span ng-show="myForm.PPhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="box-header with-border">
+                        <h3 class="box-title"><b>Secondary Contact</b></h3>
+                     </div>
+                     <div class="form-group" style="padding-top: 12px;">
+                        <label for="exampleInputEmail1">Email</label>
+                        <input type="email" class="form-control" placeholder="Email" name="Semail" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" ng-model="sdc.supplier.secondaryEmail" ng-disabled="sdc.isEditmode" />
+                        <span ng-show="!myForm.Semail.$error.required && myForm.Semail.$error.email && myForm.Semail.$dirty" style="color: red;padding-left: 2%;">Invalid email</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label style="float: left;width: 100%;">Phone No</label>
+                        <div class="col-md-3 mobi-padding" >
+                           <ui-select ng-model="sdc.supplier.secondaryCode" ng-disabled="sdc.isEditmode" title="select">
+                              <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                              <ui-select-choices repeat="country in sdc.countryCodes.Country | filter: $select.search">
+                                 <span>{{country}}</span>
+                              </ui-select-choices>
+                           </ui-select>
+                        </div>
+                        <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;">
+                           <input type="number" class="form-control" placeholder="Phone No"  min="0"  id="Secondary" name="SPhNo" ng-model="sdc.supplier.secondaryPhnNo"  ng-keypress="edc.onlyNumbers($event)"  ng-min="0"  ng-disabled="sdc.isEditmode" ng-minlength="3" ng-maxlength="15"  />
+                        </div>
+                        <span ng-show="myForm.SPhNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                        <span ng-show="myForm.SPhNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row" id="Saddress">
+                  <div class="col-md-12" style="padding-top:12px">
+                     <div class="form-group">
+                        <label>Supplier Address<span class="Mandatory_Field">*</span></label>
+                        <textarea class="form-control" rows="3" placeholder="Enter the Supplier Address" name="Saddress" ng-model="sdc.supplier.supplierAddress" ng-disabled="sdc.isEditmode" required ></textarea>
+                        <span class="help-inline" ng-show="submitted && myForm.Saddress.$error.required" style="padding-left:1%;color: red;">Suppier Address is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="row" >
+                  <div class="col-md-5 col-xs-9" id="credit">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Credit Period<span class="Mandatory_Field">*</span></label>
+                        <input type="number"  class="form-control" placeholder="Credit" ng-model="sdc.supplier.creditPeriod" ng-disabled="sdc.isEditmode" min="0"  ng-keypress="edc.onlyNumbers($event)"  ng-min="0" name="credit" required="required" >
+                        <span class="help-inline" ng-show="submitted && myForm.credit.$error.required" style="padding-left:1%;color: red;">Credit Period is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-1 col-xs-3" style="padding-top: 22px;">
+                     <h4>days</h4>
+                  </div>
+                  <div class="col-md-5 col-xs-9" id="Dtime">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Expected Delivery Day<span class="Mandatory_Field">*</span></label>
+                        <input type="number"  class="form-control" placeholder="Delivery Time"  ng-model="sdc.supplier.deliveryTime"  ng-keypress="edc.onlyNumbers($event)"   ng-min="0" ng-disabled="sdc.isEditmode" min="0"   name="Dtime" required="">
+                        <span class="help-inline" ng-show="submitted && myForm.Dtime.$error.required" style="padding-left:1%;color: red;">Delivery Day is Required</span> 
+                     </div>
+                  </div>
+                  <div class="col-md-1 col-xs-3" style="padding-top: 22px;">
+                     <h4>days</h4>
+                  </div>
+                  <div class="col-md-5" id="DO">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">D.O After expiry<span class="Mandatory_Field">*</span></label>
+                        <input type="number" class="form-control" ng-model="sdc.supplier.expiryDays"  ng-keypress="edc.onlyNumbers($event)"  ng-min="0" ng-disabled="sdc.isEditmode" placeholder="D.O After expiry " min="0"  name="DO" required="required"  > 
+                        <span class="help-inline" ng-show="submitted && myForm.DO.$error.required" style="padding-left:1%;color: red;">D.O Expiry is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-1" style="padding-top: 22px;">
+                     <h4>days</h4>
+                  </div>
+                  <div class="col-md-6" id="salesName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Sales Man Name<span class="Mandatory_Field">*</span></label>
+                        <input type="text" class="form-control" ng-model="sdc.supplier.salesName" ng-disabled="sdc.isEditmode" placeholder="Sales Name"  name="salesName" required="required"  > 
+                        <span class="help-inline" ng-show="submitted && myForm.salesName.$error.required" style="padding-left:1%;color: red;">Sales Name is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label style="float: left;width: 100%;">Sales Man Phone No<span class="Mandatory_Field">*</span></label>
+                        <div class="col-md-3 mobi-padding" >
+                           <ui-select ng-model="sdc.supplier.salesCode" ng-disabled="sdc.isEditmode" name="salesCode" title="select" required="">
+                              <ui-select-match placeholder="Select">{{$select.selected}}</ui-select-match>
+                              <ui-select-choices repeat="country in sdc.countryCodes.Country | filter: $select.search">
+                                 <span>{{country}}</span>
+                              </ui-select-choices>
+                           </ui-select>
+                           <span class="help-inline" ng-show="submitted && myForm.salesCode.$error.required" style="padding-left:1%;color: red;">Code is Required</span>
+                        </div>
+                        <div class="col-md-9" style="padding-right: 0px;padding-left: 0px;">
+                           <input type="number" class="form-control" placeholder="Phone No"  min="0"  id="Secondary" name="salesPhnNo"  ng-model="sdc.supplier.salesPhnNo" ng-keypress="edc.onlyNumbers($event)"  ng-min="0" ng-disabled="sdc.isEditmode" ng-minlength="3" ng-maxlength="15" required="" />
+                        </div>
+                        <span ng-show="myForm.salesPhnNo.$error.minlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be minimum 3 numbers</span>
+                        <span ng-show="myForm.salesPhnNo.$error.maxlength" class="help-inline" style="padding-left:1%;color: red;">Phone No should be maximum 15 numbers</span>
+                        <span class="help-inline" ng-show="submitted && myForm.salesPhnNo.$error.required" style="padding-left:1%;color: red;">Phone No is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="companyFax">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Company Fax<span class="Mandatory_Field">*</span></label>
+                        <input type="number" class="form-control" ng-model="sdc.supplier.companyFax" ng-disabled="sdc.isEditmode" placeholder="Company Fax" min="0"  name="companyFax" required="required"  > 
+                        <span class="help-inline" ng-show="submitted && myForm.companyFax.$error.required" style="padding-left:1%;color: red;">Company Fax is Required</span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer fix_Sub">
+               <div class="col-sm-offset-5" ng-show="sdc.isEditmode===false">
+                  <button class="btn btn-success" type="submit" ng-hide="sdc.submitbut===false" ng-click="sdc.formValidation(myForm.$error.required[0].$name) &&  sdc.addSupplier(sdc.supplier);enablesub()" >Submit</button>  
+                  <button class="btn btn-success"  ng-if="sdc.submitbut===false" type="submit" ng-click="sdc.formValidation(myForm.$error.required[0].$name) && sdc.updateSupplier(sdc.supplier)" >Update</button>  
+                  <button ui-sref="root.supplier_list" name="submit"  class="btn btn-danger ">Cancel</button>
+                  <input type="button"   ng-click="sdc.reset()" class="btn btn-warning"  value=" Reset ">
+               </div>
+               <div class="col-sm-offset-5" ng-if="sdc.isEditmode===true">
+                  <button type="button" ng-click="sdc.isEditmode = !sdc.isEditmode;sdc.disableSubmit()"  class="btn btn-success ">Edit</button>
+               </div>
+            </div>
+         </div>
+      </section>
+   </form>
+</div>

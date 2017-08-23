@@ -1,0 +1,166 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+    Account Management
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href=""> Account Management</a></li>
+         <li class="active">Account  details</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && bdrc.getdates(bdrc.depositInfo);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Account  details Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="bdrc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="bdrc.downloadPdf('Account Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Outlet Name</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                    <select class="form-control" name="outletId"  ng-model="bdrc.depositInfo.branchId" required="required" />
+                        <option value="">Select Outlet</option>
+                        <option ng-repeat="outlet in bdrc.branchDetails | orderBy:'branchName'" value="{{outlet.branchId}}" ng-if="(bdrc.role === 'KS_RS001')||(bdrc.role === 'KS_RS002')||(bdrc.role === 'KS_RS003')">{{outlet.branchName}}</option>
+                    <option ng-repeat="outlet in bdrc.franchiseInformation | orderBy:'branchName'" value="{{outlet.branchId}}" ng-if="(bdrc.role === 'KS_RS006')">{{outlet.branchName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.outletId.$error.required"  style="padding-left:1%;color: red;">Outlet Name is Required</span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="bdrc.depositInfo.fromDate" name="fromDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  bdrc.depositInfo.fromDate == null ? 'Select Date' : bdrc.depositInfo.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="bdrc.depositInfo.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="bdrc.startDateOnSetTime()" data-before-render="bdrc.startDateBeforeRender(bdrc.depositInfo.toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromDate.$error.required" style="padding-left:1%;color: red;">  From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="bdrc.depositInfo.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  bdrc.depositInfo.toDate == null ? 'Select Date' : bdrc.depositInfo.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="bdrc.depositInfo.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="bdrc.endDateOnSetTime()"  data-before-render="bdrc.endDateBeforeRender(bdrc.depositInfo.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="button"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="bdrc.reset()">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =bdrc.availableLimits[0]" ng-options="limit for limit in bdrc.availableLimits" ng-class="{'active':bdrc.isActiveValue(limit)}" data-ng-change="bdrc.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>Account details</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'branchId'; sortReverse = !sortReverse">
+                                    Outlet Id 
+                                    <span ng-show="sortType == 'branchId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'branchId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                                    Outlet Name
+                                    <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'depositDate'; sortReverse = !sortReverse">
+                                    Deposit Date
+                                    <span ng-show="sortType == 'depositDate' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'depositDate' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'depositAmount'; sortReverse = !sortReverse">
+                                    Deposit Amount
+                                    <span ng-show="sortType == 'depositAmount' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'depositAmount' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'bankName'; sortReverse = !sortReverse">
+                                    Bank Name
+                                    <span ng-show="sortType == 'bankName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'bankName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="depositDetail in bdrc.depositDetails|orderBy:sortType:sortReverse |orderBy:'-depositDate'|itemsPerPage:limit " 
+                                 data-ng-class="{danger:!addSupplier.active}">
+                                 <td>
+                                    <span>{{depositDetail.branchId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{depositDetail.branchName}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{depositDetail.depositDate | date:'yyyy-MM-dd'}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{depositDetail.depositAmount}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{depositDetail.bankName}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

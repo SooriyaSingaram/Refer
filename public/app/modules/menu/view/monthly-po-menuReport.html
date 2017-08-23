@@ -1,0 +1,125 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Monthly PO by Menu
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Menu Engineering Management</a></li>
+         <li class="active">Monthly PO report by Menu</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && mmrc.filterByMonth(mmrc.month);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title"> Monthly PO report by Menu</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="mmrc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="mmrc.downloadPdf('Monthly PO Menu Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Month</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"  ng-model="mmrc.month" name="month" required="required"> 
+                     <div class="dropdown">
+                        <button ng-disabled="mmrc.isEditmode" class="btn btn-primary dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#"  >
+                        {{ mmrc.month  == null ? 'Select Month and Year' : mmrc.month  | date:'MMMM - yyyy' }} <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                           <datetimepicker data-ng-model="mmrc.month" data-ng-required data-datetimepicker-config="{ dropdownSelector: '#dropdown3',  startView:'year', minView:'month'  }"/>
+                           </datetimepicker>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted &&Form.month.$error.required" style="padding-left:1%;color: red;"> 
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="mmrc.reset()">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =mmrc.availableLimits[0]" ng-options="limit for limit in mmrc.availableLimits" ng-class="{'active':mmrc.isActiveValue(limit)}" data-ng-change="mmrc.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>PO report by Menu</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = '_id.menuId'; sortReverse = !sortReverse">
+                                    Menu Id 
+                                    <span ng-show="sortType == '_id.menuId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == '_id.menuId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'menu.itemName'; sortReverse = !sortReverse">
+                                    Menu Name
+                                    <span ng-show="sortType == 'menu.itemName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'menu.itemName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon"  ng-click="sortType = 'menucategory.categoryName'; sortReverse = !sortReverse">
+                                    Menu Category
+                                    <span ng-show="sortType == 'menucategory.categoryName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'menucategory.categoryName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'menu.orderdedQty'; sortReverse = !sortReverse">
+                                    Quantity
+                                    <span ng-show="sortType == 'menu.orderdedQty' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'menu.orderdedQty' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="menu in mmrc.menuReport |orderBy:sortType:sortReverse|itemsPerPage:limit " 
+                                 >
+                                 <td>
+                                    <span>{{menu._id.menuId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{menu.menu.itemName}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{menu.menucategory.categoryName}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{menu.orderdedQty}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

@@ -1,0 +1,169 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Role Setup List
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.configsetting">Configuration Settings</a></li>
+         <li><a ui-sref="root.hrmconfig">HRM Configuration Settings</a></li>
+         <li class="active">Role Setup List</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="row">
+            <!--<div class="col-md-12">
+            <div class="box box-primary">
+               <form name="myForm" id="myForm"  ng-submit="myForm.$valid && rsc.addRoleSetup(rsc.roleSetup);submitted=true" autocomplete="off"  novalidate >
+                  <div class="box-body">
+                           <div class="row form-group">
+                                 <div class="col-sm-3 d-right">
+                                    <label class="">Role Name</label>
+                                 </div>
+                                 <div class="col-sm-6" >
+                                    <input type="text" class="form-control" placeholder="Role Name" name="roleName" ng-pattern="/^[a-zA-Z\s]*$/" ng-model="rsc.roleSetup.roleName" required />
+                                    <span class="help-inline" ng-show="submitted && myForm.roleName.$error.required" style="padding-left:1%;color: red;"></span>
+                                 </div>
+                           </div>
+                           <div class="row form-group">
+                              <div class="form-group">
+                                 <div class="col-sm-3 d-right" >
+                                    <label class="">Role Description</label>
+                                 </div>
+                                 <div class="col-sm-6 ">
+                                    <textarea class="form-control"  placeholder="Role Description" name="roleDescription" ng-model="rsc.roleSetup.roleDescription" required></textarea>
+                                    <span class="help-inline" ng-show="submitted && myForm.roleDescription.$error.required" style="padding-left:1%;color: red;"></span>
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="row form-group">
+                              <div class="form-group">
+                                 <div class="col-sm-3 d-right" >
+                                    <label class="">Role Status</label>
+                                 </div>
+                                 <div class="col-sm-6 ">
+                                    <select type="text" class="form-control " ng-model="rsc.roleSetup.roleStatus" name="roleStatus" required="" >
+                                       <option value=''>Select Role Status </option>
+                                       <option value='Active'>Active</option>
+                                       <option value='Inactive'>Inactive</option>
+                                    </select>
+                                    <span class="help-inline" ng-show="submitted && myForm.roleStatus.$error.required" style="padding-left:1%;color: red;"></span>
+                                 </div>
+                              </div>
+                           </div>
+                
+                    
+                  </div>
+                  <div class="box-footer">
+                     <div class="col-sm-offset-5">
+                        <button type="submit" value="Submit" class="btn btn-success">Save&Submit</button>
+                        <input type="button"  class="btn btn-warning" ng-click="rsc.reset()" value="&nbsp;Reset&nbsp&nbsp">
+                     </div>
+                  </div>
+               </form>-->
+            </div>
+            <div class="panel panel-info"  style="overflow:auto;">
+               <div class="box-header with-border">
+                  <h3 class="box-title">Role Setup List</h3>
+               </div>
+               <div class="allow_cnt" >
+                  <form name="Form">
+                     <div class="box-body">
+                        <label style="padding: 9px;">Show Entries</label>      
+                        <select data-ng-model="limit" ng-init="limit = rsc.availableLimits[0]" ng-options="limit for limit in rsc.availableLimits" ng-class="{'active':rsc.isActiveLimit(limit)}" data-ng-change="rsc.setLimit(limit)" size="1">
+                        </select>                         
+                        <br>
+                        <table class=" grid_tbl">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'roleName'; sortReverse = !sortReverse">
+                                    Role Name 
+                                    <span ng-show="sortType == 'roleName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'roleName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'roleDescription'; sortReverse = !sortReverse">
+                                    Role Description
+                                    <span ng-show="sortType == 'roleDescription' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'roleDescription' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'roleStatus'; sortReverse = !sortReverse">
+                                    Role Status
+                                    <span ng-show="sortType == 'roleStatus' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'roleStatus' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                    Action
+                                    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                              <tr>
+                                 <td>
+                                    <input class="form-control" 
+                                       ng-model="search.roleName" placeholder="Search By Role Name">
+                                 </td>
+                                 <td>
+                                    <input class="form-control" 
+                                       ng-model="search.roleDescription" placeholder="Search By Role Description ">
+                                 </td>
+                                 <td>
+                                    <input class="form-control" 
+                                       ng-model="search.roleStatus" placeholder="Search By Role Status ">
+                                 </td>
+                                 <td></td>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr  dir-paginate="roleSetup in rsc.roleSetups|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " 
+                                 data-ng-class="{danger:!roleSetup.active}">
+                                 <td>
+                                    <span ng-hide="roleSetup.editMode">{{roleSetup.roleName}}</span>
+                                    <input class="form-control" data-ng-model="roleSetup.roleName" ng-pattern="/^[a-zA-Z\s]*$/" name="roleName" ng-show="roleSetup.editMode"  required="" />
+                                    <span class="help-inline" ng-show="submitted && myForm.roleName.$error.required" style="padding-left:1%;color: red;"></span>
+                                 </td>
+                                 <td>
+                                    <span ng-hide="roleSetup.editMode">{{roleSetup.roleDescription}}</span>
+                                    <textarea class="form-control"  placeholder="Role Description" ng-show="roleSetup.editMode" name="roleDescription"  data-ng-model="roleSetup.roleDescription" required=""></textarea>
+                                    <span class="help-inline" ng-show="submitted && myForm.roleDescription.$error.required" style="padding-left:1%;color: red;"></span>
+                                 </td>
+                                 <td>
+                                    <span ng-hide="roleSetup.editMode">{{roleSetup.roleStatus}}</span>
+                                    <select type="text" class="form-control " ng-model="roleSetup.roleStatus" name="roleStatus" ng-show="roleSetup.editMode" required="" >
+                                       <option value=''>Select Role Status </option>
+                                       <option value='Active'>Active</option>
+                                       <option value='Inactive'>Inactive</option>
+                                    </select>
+                                    <span class="help-inline" ng-show="submitted && myForm.roleStatus.$error.required" style="padding-left:1%;color: red;"></span>
+                                 </td>
+                                 <td>
+                                    <!--<a href="" class="a" ng-hide="roleSetup.editMode" ng-click="rsc.deleteRoleSetup(roleSetup._id)"><i class="glyphicon glyphicon-trash" 
+                                       ></i></a>-->
+                                    <a href="" class="b"  title="Edit" ng-hide="roleSetup.editMode" ng-click="roleSetup.editMode = true;rsc.editRoleSetup(roleSetup)"><i class="glyphicon glyphicon-pencil" 
+                                       ></i></a>
+                                    <a href="" class="c" title="Update" ng-show="roleSetup.editMode" ng-click="rsc.updateRoleSetup(roleSetup)"><i class="glyphicon glyphicon-floppy-save"  ></i></a>
+                                    <a href=""  class="d" title="Reset" ng-show="roleSetup.editMode" ng-click="roleSetup.editMode = false;rsc.resetData(roleSetup)"> <i class="glyphicon glyphicon-remove"  ></i></a>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                        <dir-pagination-controls
+                           max-size="5"
+                           direction-links="true"
+                           boundary-links="true" >
+                        </dir-pagination-controls>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>

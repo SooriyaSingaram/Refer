@@ -1,0 +1,107 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Units
+      </h1>
+      <ol class="breadcrumb">
+         <li><a  ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a  ui-sref="root.configsetting">Configuration Settings</a></li>
+         <li><a  ui-sref="root.productconfig">Product Configuration Settings</a></li>
+         <li class="active">Add Units</li>
+      </ol>
+   </section>
+   <form name="Form" id="Form"  ng-submit="Form.$valid && unitLC.addUnit(unitLC.unit);submitted=true" autocomplete="off"  novalidate >
+      <section class="content">
+         <div class="box box-default">
+            <div class="box-body">
+               <div class="row">
+                  <div class="form-group">
+                     <div class="col-sm-3 d-right">
+                        <label style="padding-top: 8px;" class="">Unit</label>
+                     </div>
+                     <div class="col-md-6">
+                        <input type="text" class="form-control"  placeholder="Enter Units" name="Units" ng-model="unitLC.unit.unitName" ng-pattern="/^[a-zA-Z\s]*$/" required/>
+                        <span class="help-inline" ng-show="submitted && Form.Units.$error.required"></span>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button  class="btn btn-success" name="submit" type="submit">Save&Submit</button>
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine">Reset</button>
+               </div>
+            </div>
+         </div>
+      </section>
+   </form>
+   <section class="content">
+      <div class="panel panel-info"  style="overflow:auto;">
+         <div class="box-header with-border">
+            <h3 class="box-title">Unit List</h3>
+         </div>
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>      
+                  <select data-ng-model="limit" ng-init="limit =unitLC.availableLimits[0]" ng-options="limit for limit in unitLC.availableLimits" ng-class="{'active':unitLC.isActiveValue(limit)}" data-ng-change="unitLC.setValue(limit)" size="1">
+                  </select>                        
+                  <br>
+                  <table class=" grid_tbl">
+                     <thead>
+                        <tr>
+
+                           <th>  
+                              <a href="" ng-click="sortType = 'unitName'; sortReverse = !sortReverse">
+                              Unit Name 
+                              <span ng-show="sortType == 'unitName' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'unitName' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                           <th>  
+                              <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                              Actions
+                              <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                              <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                              </a>
+                           </th>
+                        </tr>
+                        <tr>
+                     
+                           <td>
+                              <input class="form-control" 
+                                 ng-model="search.unitName"   placeholder="Search By Unit Name"  >
+                           </td>
+                           <td></td>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        <tr  dir-paginate="unit in unitLC.units|orderBy:sortType:sortReverse | filter:query|filter:search|itemsPerPage:limit " 
+                           data-ng-class="{danger:!unit.active}">
+                       
+                           <td>
+                              <span ng-hide="unit.editMode">{{unit.unitName}}</span>
+                              <input class="form-control" ng-model="unit.unitName" ng-show="unit.editMode" ng-pattern="/^[a-zA-Z\s]*$/"  required />
+                           </td>
+                           <td>
+                              <a href="" class="a" data-ng-hide="unit.editMode" ng-click="unitLC.deleteUnit(unit._id,unit.unitId)" title="Delete"><i class="glyphicon glyphicon-trash" 
+                                 ></i></a>
+                              <a href="" class="b" data-ng-hide="unit.editMode"  ng-click="unit.editMode = true;unitLC.editUnit(unit)" title="Edit"><i class="glyphicon glyphicon-pencil" 
+                                 ></i></a>
+                              <a href="" class="c" data-ng-show="unit.editMode" ng-click=" unitLC.updateUnit(unit)" title="Update"><i class="glyphicon glyphicon-floppy-save"  ></i></a>
+                              <a href=""  class="d" data-ng-show="unit.editMode" ng-click="unit.editMode = false;unitLC.reset(unit)" title="Reset"> <i class="glyphicon glyphicon-remove"  ></i></a>
+                           </td>
+                        </tr>
+                     </tbody>
+                  </table>
+                  <dir-pagination-controls
+                     max-size="5"
+                     direction-links="true"
+                     boundary-links="true" >
+                  </dir-pagination-controls>
+               </div>
+            </form>
+         </div>
+      </div>
+   </section>
+</div>

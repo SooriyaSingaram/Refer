@@ -1,0 +1,209 @@
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         Add Menu
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.menu-list">Menu List</a></li>
+         <li class="active">Add Menu </li>
+      </ol>
+   </section>
+   <section class="content">
+      <!-- SELECT2 EXAMPLE -->
+      <div class="box box-default">
+         <form name="myForm"  ng-submit="submitted=true"   novalidate  autocomplete="off" >
+            <div class="box-header with-border">
+               <h3 class="box-title">Add Menu</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+               <div class="col-md-6" id="ItemName">
+                  <div class="form-group">
+                        <label for="exampleInputEmail1">Item Name<span class="Mandatory_Field">*</label>
+                        <input type="text" class="form-control"  ng-disabled="mdc.isEditmode"  placeholder="Item Name"   ng-model="mdc.menu.itemName"  name="ItemName"  required="required"  >
+                        <span class="help-inline" ng-show="submitted && myForm.ItemName.$error.required" style="padding-left:1%;color: red;">Item Name is Required</span>
+                     </div>
+               </div>
+               <div class="col-md-6" ng-if="mdc.isEditmode===true||mdc.submitbut===false">
+                  <div class="form-group">
+                     <label for="exampleInputEmail1">Menu Id
+                     </label>
+                     <input type="text" class="form-control"  placeholder="Menu ID" name="id" ng-model="mdc.menu.menuId"  disabled="disabled">
+                  </div>
+               </div>
+            </div>
+               <div class="row">
+                   <div class="col-md-6" id="ATP">
+                      <div class="form-group">
+                        <label>Category<span class="Mandatory_Field">*</label>
+                        <select class="form-control select2"   ng-disabled="mdc.isEditmode" ng-model="mdc.menu.menucategoryId"  name="menucategory" required="">
+                           <option value="">Select Category</option>
+                           <option ng-repeat="addcategory in mdc.menucategory" value="{{addcategory.categoryId}}">{{addcategory.categoryName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.menucategory.$error.required" style="padding-left:1%;color: red;">Task Category is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="servingSize">
+                     <div class="form-group" >
+                        <label>Serving Size<span class="Mandatory_Field">*</label>
+                        <input type="text" class="form-control"  ng-disabled="mdc.isEditmode"  placeholder="Serving Size" ng-model="mdc.menu.servingSize" ng-keypress="mdc.onlyNumbers($event)"   ng-min="0" name="servingSize"   required="required"  >
+                        <span class="help-inline" ng-show="submitted && myForm.servingSize.$error.required" style="padding-left:1%;color: red;">Serving Size is Required</span>
+                     </div>
+                  </div>
+               </div>
+                <div class="row">
+                     <div class="col-md-12">
+                        <div class="form-group">
+                           <label>Recipe</label>
+                           <textarea class="form-control" ng-disabled="mdc.isEditmode" rows="3" placeholder="Enter the Recipe" name="Recipe" ng-model="mdc.menu.recipe"  ></textarea>
+                           <span class="help-inline" ng-show="submitted && myForm.Recipe.$error.required" style="padding-left:1%;color: red;">Recipe is Required</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+               <div class="col-md-4" id="unitId">
+                  <div class="form-group">
+                     <label for="exampleInputEmail1">Default Unit<span class="Mandatory_Field">*</label>
+                     <select class="form-control" ng-model="mdc.menu.unitId" required="required" name="unitId"  ng-disabled="mdc.isEditmode" ng-if="!mdc.menu._id" ng-change="mdc.getUnitName(mdc.menu);">
+                        <option value="">Select Default Unit</option>
+                        <option ng-repeat="addunit in mdc.units" value={{addunit.unitId}}>{{addunit.unitName}}</option>
+                     </select>
+                     <select class="form-control" ng-model="mdc.menu.unitId" required="required" name="unitId"  ng-disabled="mdc.isEditmode" ng-if="mdc.menu._id" ng-change="mdc.getUnitName(mdc.menu);mdc.dependedMenuDetail(mdc.menu.productId)">
+                        <option value=""> Select Default Unit</option>
+                        <option ng-repeat="addunit in mdc.units" value={{addunit.unitId}}>{{addunit.unitName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && myForm.unitId.$error.required" style="padding-left:1%;color: red;">Default Unit is Required</span>
+                  </div>
+               </div>
+            </div>
+               <div class="box-body row">
+                  <div class="box-header with-border">
+                     <h4 class="box-title" >Ingredients<span class="Mandatory_Field">*
+                     </h4>
+                  </div>
+                  <div  class="col-sm-offset-3">
+                     <table class="table table-bordered table-hover table-condensed grid_data" >
+                        <tr style="font-weight: bold">
+                           <td style="width:35%">Ingredients</td>
+                           <td style="width:35%">Qty(units)</td>
+                           <td style="width:35%">Price</td>
+                           <td style="width:35%" >Action</td>
+                        </tr>
+                        <tr ng:repeat="ingredient in mdc.menu.ingredients">
+                           <td>
+                              <select class="form-control select"  ng-disabled="mdc.isEditmode" ng-model="ingredient.productId" required="required" name="name"  ng-change="mdc.updateUnitsForIngredient(ingredient)" >
+                                 <option value="">Select Ingredient</option>
+                                 <option ng-repeat="product in mdc.products" ng-if="!mdc.isProductAlreadySelected(product.productId, ingredient)" value="{{product.productId}}">{{product.productName}}</option>
+                              </select>
+                           </td>
+                           <td>
+                              <input type="number" class="form-control"  ng-disabled="mdc.isEditmode" ng:model="ingredient.qty" name="qty" min=0 required="required" style="width: 45%;display: inline;" ng-change="mdc.calculateIngredientPrice(ingredient);" >
+                              <select class="form-control" ng:model="ingredient.unitId" required="required" name="qty" style="width: 45%;display: inline;" ng-change="mdc.calculateIngredientPrice(ingredient);"  ng-disabled="mdc.isEditmode">
+                              <option value=" ">Select</option>
+                              <option ng-repeat="unit in ingredient.units" value="{{unit.unitId}}">{{unit.unitName}}</option>
+                           </td>
+                           <td>
+                              <span>{{ ingredient.price}}</span>
+                           </td>
+                           <td>
+                              <button class="glyphicon glyphicon-trash" type="button" ng-disabled="mdc.isEditmode"  style="padding: 7px; color:red" ng-click="mdc.removeIngredient(mdc.menu.ingredients,$index)">
+                              </button>
+                           </td>
+                        </tr>
+                        <tr>
+                           <td></td>
+                           <td><b class="total" >Total:</b></td>
+                           <td> <b >{{mdc.price}}</b>
+                           <td></td>
+                           </td>
+                        </tr>
+                     </table>
+                     <button type="button" ng:click="mdc.addIngredient(mdc.menu.ingredients)"  ng-disabled="mdc.isEditmode" class="btn btn-success">Add Item</button>
+                  </div>
+               </div>
+               <!--<div class="box-body">-->
+                  <div class="row ">
+                     <div class="col-md-3">
+                        <div class="form-group">
+                           <label for="exampleInputFile">Photos</label>
+                           <input type='file' class="form-control" ng-disabled="mdc.isEditmode" ng-model-instant id="image" multiple   />                   
+                           <ul style="list-style: none;">
+                              <li style="display: inline;" class="image_list"  ng-repeat="step in mdc.menu.photos">
+                              <button href="#" ng-click="mdc.downloadPDF(step)">hlo</button>
+<a id='dwnldLnk' download='document.pdf' style="display:none;" /> 
+    
+  
+                                <!--  <img class="thumb" ng-src="{{step}}" width="300" height="150" /> -->
+                              </li>
+                           </ul>
+                        </div>
+                     </div>
+                     </div>
+                     <div class="row ">
+                     <div class="col-md-3" id="LC">
+                     <div class="form-group" >
+                        <label>Labour Cost<span class="Mandatory_Field">*</label>
+                       <select class="form-control" ng-model="mdc.menu.labourCostId" required="required" name="labourCostId"  ng-disabled="mdc.isEditmode">
+                        <option value=""> Select Labour Cost</option>
+                        <option ng-repeat="addlabour in mdc.labourcosts" value={{addlabour.labourCostId}}>{{addlabour.totalLabourCost}}</option>
+                     </select>
+                     </div>
+                  </div>
+                  <div class="col-md-3" id="OHP">
+                     <div class="form-group" >
+                        <label>Over Heads Price<span class="Mandatory_Field">*</label>
+                       <select class="form-control" ng-model="mdc.menu.overHeadPriceId" required="required" name="overHeadPriceId"  ng-disabled="mdc.isEditmode">
+                        <option value=""> Select Over Heads Price</option>
+                        <option ng-repeat="addoverhead in mdc.overheadprice" value={{addoverhead.overHeadPriceId}}>{{addoverhead.totaloverheadPrice}}</option>
+                     </select>
+                     </div>
+                  </div>
+                     <div class="col-md-3" id="ATP">
+                     <div class="form-group" >
+                        <label>Avg.Time to prepare(in Mins)<span class="Mandatory_Field">*</label>
+                        <input type="number" class="form-control"  ng-disabled="mdc.isEditmode"  placeholder="Avg.Time to prepare(in Mins)" ng-change="mdc.costpricecalculation(mdc.menu.avgTime,mdc.menu.overHeadPriceId,mdc.menu.labourCostId)"; ng-model="mdc.menu.avgTime" ng-keypress="mdc.onlyNumbers($event)"  ng-min="0"  name="ATP"  required="required"  ng-maxlength="15" min=0>
+                        <span class="help-inline" ng-show="submitted && myForm.ATP.$error.required" style="padding-left:1%;color: red;">Avg.Time to prepare is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-3">
+                  <div class="form-group">
+                     <label>Cost Price($)<span class="Mandatory_Field">*</label>
+                     <input type="number"   class="form-control"  placeholder="cost Price" ng-model="mdc.menu.costPrice"  name="costPrice"  disabled="" ng-keypress="mdc.onlyNumbers($event)"   ng-min="0"   required="required">
+                     <span class="help-inline" ng-show="submitted && myForm.costPrice.$error.required" style="padding-left:1%;color: red;">cost Price is Required</span>
+                  </div>
+               </div>
+                  <!--</div>-->
+               <!--</div>-->
+               <!--<div class="row">-->
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Outlet Price<span class="Mandatory_Field">*</label>
+                     <input type="number"   class="form-control"  ng-disabled="mdc.isEditmode" placeholder="outletPrice" ng-model="mdc.menu.outletPrice" ng-blur="mdc.validatingprice(mdc.menu.outletPrice)" ng-keypress="mdc.onlyNumbers($event)"   ng-min="0"   name="outletPrice"    ng-required="required">
+                     <span class="help-inline" ng-show="submitted && myForm.outletPrice.$error.required" style="padding-left:1%;color: red;">Selling Price is Required</span>
+                  </div>
+               </div>
+               <div class="col-md-6">
+                  <div class="form-group">
+                     <label>Selling Price($)<span class="Mandatory_Field">*</label>
+                     <input type="number"   class="form-control" ng-disabled="mdc.isEditmode" placeholder="Selling Price" ng-model="mdc.menu.sellingPrice" ng-blur="mdc.validatingprice(mdc.menu.sellingPrice)" name="SellingPrice"  required="required">
+                     <span class="help-inline" ng-show="submitted && myForm.SellingPrice.$error.required" style="padding-left:1%;color: red;">Selling Price is Required</span>
+                  </div>
+               </div>
+               </div>
+               <div class="box-footer fix_Sub">
+                  <div class="col-sm-offset-5" ng-show="mdc.isEditmode===false">
+                     <button class="btn btn-success" type="submit" ng-hide="mdc.submitbut===false" ng-click="mdc.formValidation(myForm.$error.required[0].$name) && mdc.addMenu(mdc.menu)" >Submit</button>  
+                     <button class="btn btn-success"  ng-if="mdc.submitbut===false" type="submit" ng-click="mdc.formValidation(myForm.$error.required[0].$name) && mdc.updateMenu(mdc.menu);" >Update</button>  
+                     <button ui-sref="root.menu-list" name="submit"  class="btn btn-danger ">Cancel</button>
+                     <input type="button"  ng-click="mdc.reset()"   class="btn btn-warning"  value=" Reset ">
+                  </div>
+                  <div class="col-sm-offset-5" ng-if="mdc.isEditmode===true">
+                     <button type="button" ng-click="mdc.isEditmode = !mdc.isEditmode;mdc.disablesubmit()"  class="btn btn-success ">Edit</button>
+                  </div>
+               </div>
+            </div>
+         </form>
+      </div>
+   </section>
+</div>

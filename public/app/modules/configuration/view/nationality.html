@@ -1,0 +1,106 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Nationality Settings
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.configsetting">Configuration Settings</a></li>
+         <li><a ui-sref="root.hrmconfig">HRM Configuration Settings</a></li>
+         <li class="active">Nationality Settings</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="box box-primary">
+               <form name="myForm" id="myForm"  ng-submit="myForm.$valid && hrm.addDetails(hrm.configData);submitted=true" autocomplete="off"  novalidate >
+                  <div class="box-body">
+                     <div class="row">
+                        <div class="form-group">
+                           <div class="col-sm-3 d-right">
+                              <label style="padding-top: 8px;" class="">Nationality Name</label>
+                           </div>
+                           <div class="col-sm-6 ">
+                                 <input type="text" class="form-control" placeholder="Nationality Name" ng-pattern="/^[a-zA-Z\s]*$/" name="Name" ng-model="hrm.configData.nationalityName" required />
+                                 <span class="help-inline" ng-show="submitted && myForm.Name.$error.required" style="padding-left:1%;color: red;">Nationality Name is Required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="box-footer">
+                     <div class="col-sm-offset-5">
+                        <button type="submit" value="Submit" class="btn btn-success">Save&Submit</button>
+                        <input type="button"  class="btn btn-warning" ng-click="hrm.reset()" value="&nbsp;Reset&nbsp&nbsp">
+                     </div>
+                  </div>
+               </form>
+            </div>
+            <div class="panel panel-info"  style="overflow:auto;">
+               <div class="box-header with-border">
+                  <h3 class="box-title">Nationality List</h3>
+               </div>
+               <div class="allow_cnt" >
+                  <form name="myForm">
+                     <div class="box-body">
+                        <label style="padding: 9px;">Show Entries</label>      
+                        <select data-ng-model="limit" ng-init="limit = hrm.availableLimits[0]" ng-options="limit for limit in  hrm.availableLimits" ng-class="{'active':isActiveLimit(limit)}" data-ng-change="setLimit(limit)" size="1">
+                        </select>                         
+                        <br>
+                        <table class=" grid_tbl">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'nationalityName'; sortReverse = !sortReverse">
+                                    Nationality Name 
+                                    <span ng-show="sortType == 'nationalityName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'nationalityName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                    Action
+                                    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                              <tr>
+                                 <td>
+                                    <input class="form-control" 
+                                       ng-model="search.nationalityName" placeholder="Search By Nationality Name ">
+                                 </td>
+                                 <td></td>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr  dir-paginate="nationality in hrm.nationalities|orderBy:sortType:sortReverse | filter:{isActive:true}|filter:search|itemsPerPage:limit " 
+                                 data-ng-class="{danger:!nationality.active}">
+                                 <td>
+                                    <span ng-hide="nationality.editMode">{{nationality.nationalityName}}</span>
+                                    <input class="form-control" data-ng-model="nationality.nationalityName" ng-pattern="/^[a-zA-Z\s]*$/" ng-show="nationality.editMode"  data-ng-required />
+                                 </td>
+                                 <td>
+                                    <a href="" class="a" ng-hide="nationality.editMode" ng-click="hrm.removeData($index,nationality)"><i class="glyphicon glyphicon-trash" 
+                                       ></i></a>
+                                    <a href="" class="b"  ng-hide="nationality.editMode" title="Edit" ng-click="nationality.editMode = true;"><i class="glyphicon glyphicon-pencil" 
+                                       ></i></a>
+                                    <a href="" class="c" ng-show="nationality.editMode" title="Update" ng-click="hrm.addDetails(nationality)"><i class="glyphicon glyphicon-floppy-save"  ></i></a>
+                                    <a href=""  class="d" ng-show="nationality.editMode"  title="Remove" ng-click="nationality.editMode = false;hrm.setConfigType()"> <i class="glyphicon glyphicon-remove"  ></i></a>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                        <dir-pagination-controls
+                           max-size="5"
+                           direction-links="true"
+                           boundary-links="true" >
+                        </dir-pagination-controls>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>

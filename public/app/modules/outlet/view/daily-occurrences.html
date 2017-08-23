@@ -1,0 +1,130 @@
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         Daily occurrences 
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i> </a></li>
+         <li><a ui-sref="root.daily-occurrences-list">Daily occurrences List</a></li>
+         <li class="active">Daily occurrences </li>
+      </ol>
+   </section>
+   <hr style="border-top: 1px solid rgba(224, 212, 212, 0.52);margin-bottom: 0px;">
+   <form name="myForm" ng-submit="submitted=true" novalidate  autocomplete="off">
+      <section class="content">
+         <div>
+            <div class="box box-default">
+               <div class="box-body">
+                  <div class="row">
+                  <div class="col-md-6" id="branchName" ng-if="doc.auth.role ==='KS_RS001'">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Branch Name<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control"   ng-model="doc.dailyOccurrence.outletId"  name="outletName"   required="">
+                              <option value="">Select Outlet</option>
+                              <option ng-repeat="outlet in doc.outlet" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchName.$error.required" style="padding-left:1%;color: red;">Branch Name is Required</span>
+                        </div> 
+
+                     </div>
+                     <div class="col-md-6" id="branchName" ng-if="doc.auth.role ==='KS_RS006'">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Branch Name<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control"   ng-model="doc.dailyOccurrence.outletId"  name="outletName"   required="">
+                              <option value="">Select Outlet</option>
+                              <option  ng-repeat="outlet in doc.franchiseBranch"  value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchName.$error.required" style="padding-left:1%;color: red;">Branch Name is Required</span>
+                        </div> 
+
+                     </div>
+                     <div class="col-md-6" id="branchName" ng-if="(doc.auth.role !== 'KS_RS001') && (doc.auth.role !== 'KS_RS006')">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Branch Name<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control"   ng-model="doc.dailyOccurrence.outletId"  name="outletName"   required="" disabled="disabled">
+                              <option>Select Branch Name</option>
+                              <option  ng-repeat="outlet in doc.outlet"  value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                              <option  ng-repeat="outlet in doc.franchiseBranch"  value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.branchName.$error.required" style="padding-left:1%;color: red;">Branch Name is Required</span>
+                        </div>
+</div>
+                     
+                     <div class="col-md-6" id="outletId">
+                        <div class="form-group">
+                           <label>Outlet Id</label>
+                           <input type="text" class="form-control" name="outletId"  ng-model="doc.dailyOccurrence.outletId" disabled="" >
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6" id="complaintName">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Complaint Type<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control"  ng-model="doc.dailyOccurrence.complaintId"  name="complaintName" ng-disabled="doc.isEditmode"  required="">
+                              <option value="">Select Complaint</option>
+                              <option ng-repeat="complaint in doc.complaints" value="{{complaint.complaintId}}">{{complaint.complaintName}}</option>
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.complaintName.$error.required" style="padding-left:1%;color: red;">Complaint Name is Required
+                           </span>
+                        </div>
+                     </div>
+                     <div class="col-md-6" id="reportDate">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Report Date<span class="Mandatory_Field">*</span>
+                           </label>
+                           <input type="hidden" required  ng-model="doc.dailyOccurrence.reportDate" name="reportDate"> 
+                           <div class="dropdown">
+                              <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" id="{{'dropdown' + $index}}" role="button" data-toggle="dropdown" data-target="#"  ng-disabled="doc.isEditmode" >
+                              {{ doc.dailyOccurrence.reportDate  == null ? 'Select Date' :doc.dailyOccurrence.reportDate  | date:'yyyy-MM-dd' }} <span class="caret"></span></button>
+                              <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                                 <datetimepicker data-ng-model="doc.dailyOccurrence.reportDate " data-ng-required data-datetimepicker-config="{ dropdownSelector: '#dropdown2',  startView:'day', minView:'day'  }"/>
+                              </ul>
+                           </div>
+                           <span class="help-inline" ng-show="submitted && myForm.reportDate.$error.required" style="padding-left:1%;color: red;">Report  Date is Required
+                           </span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="row">
+                     <div class="col-md-6" id="priorityLevel">
+                        <div class="form-group">
+                           <label for="exampleInputEmail1">Priority Level<span class="Mandatory_Field">*</span></label>
+                           <select class="form-control"  ng-model="doc.dailyOccurrence.priorityLevel"  name="priorityLevel" ng-disabled="doc.isEditmode"  required="">
+                              <option value="">Select Priority Level</option>
+                              <option value="High Level">High Level</option>
+                              <option value="Medium Level">Medium Level</option>
+                              <option value="Low Level">Low Level</option>
+
+                           </select>
+                           <span class="help-inline" ng-show="submitted && myForm.priorityLevel.$error.required" style="padding-left:1%;color: red;">Priority Level is Required
+                           </span>
+                        </div>
+                     </div>                  </div>
+                  <div class="row">
+                     <div class="col-md-12" id="description">
+                        <div class="form-group">
+                           <label>Description</label>
+                           <textarea class="form-control" rows="3" placeholder="Enter the Description" name="description" required ng-model="doc.dailyOccurrence.description" ng-disabled="doc.isEditmode"></textarea>
+                           <span class="help-inline" ng-show="submitted && myForm.description.$error.required" style="padding-left:1%;color: red;">Description is Required</span>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="box-footer ">
+                     <div class="col-sm-offset-5" ng-show="doc.isEditmode===false">
+                        <button class="btn btn-success" type="submit" ng-hide="doc.submitbut===false" ng-click="doc.formValidation(myForm.$error.required[0].$name) && doc.addDailyOccurrence(doc.dailyOccurrence)" >Submit</button>
+                        <button class="btn btn-success" ng-if="doc.submitbut===false" type="submit" ng-click="doc.formValidation(myForm.$error.required[0].$name) && doc.updateDailyOccurrence(doc.dailyOccurrence)" id='getButtonValue'>Update</button>
+                        <button ui-sref="root.daily-occurrences-list" name="submit" class="btn btn-danger ">Cancel</button>
+                        <input type="button" class="btn btn-warning" ng-click="doc.reset()" value="Reset">
+                     </div>
+                     <div class="col-sm-offset-5" ng-if="doc.isEditmode===true">
+                        <button  type="button" ng-click="doc.isEditmode = !doc.isEditmode;doc.disableSubmit()" class="btn btn-success ">Edit</button>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+</div>
+</section>
+</form>
+</div>

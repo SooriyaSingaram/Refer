@@ -1,0 +1,106 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Residential Status Settings
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.configsetting">Configuration Settings</a></li>
+         <li><a ui-sref="root.hrmconfig">HRM Configuration Settings</a></li>
+         <li class="active">Residential Status Setting</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="row">
+         <div class="col-md-12">
+            <div class="box box-primary">
+               <form name="myForm" id="myForm"  ng-submit="myForm.$valid && hrm.addDetails(hrm.configData);submitted=true" autocomplete="off"  novalidate >
+                  <div class="box-body">
+                     <div class="row">
+                        <div class="form-group">
+                           <div class="col-sm-3 d-right">
+                              <label style="padding-top: 8px;" class="">Residential Status</label>
+                           </div>
+                           <div class="col-sm-6 ">
+                              <input type="text" class="form-control" placeholder="Residential Status" ng-pattern="/^[a-zA-Z\s]*$/" name="residentialName" ng-model="hrm.configData.residentialName" required />
+                              <span class="help-inline" ng-show="submitted && myForm.residentialName.$error.required" style="padding-left:1%;color: red;">Residential Status is Required</span>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                  <div class="box-footer">
+                     <div class="col-sm-offset-5">
+                        <button class="btn btn-success" name="submit" type="submit">Save&Submit</button>  
+                        <input type="button"  class="btn btn-warning" ng-click="hrm.reset()" value="&nbsp;Reset&nbsp&nbsp">
+                     </div>
+                  </div>
+               </form>
+            </div>
+            <div class="panel panel-info"  style="overflow:auto;">
+               <div class="box-header with-border">
+                  <h3 class="box-title">Residential Status List</h3>
+               </div>
+               <div class="allow_cnt" >
+                  <form name="myForm">
+                     <div class="box-body">
+                        <label style="padding: 9px;">Show Entries</label>      
+                        <select data-ng-model="limit" ng-init="limit = hrm.availableLimits[0]" ng-options="limit for limit in  hrm.availableLimits" ng-class="{'active':isActiveLimit(limit)}" data-ng-change="setLimit(limit)" size="1">
+                        </select>                         
+                        <br>
+                        <table class="grid_tbl">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'residentialName'; sortReverse = !sortReverse">
+                                    Residential Status
+                                    <span ng-show="sortType == 'residentialName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'residentialName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>  
+                                    <a href="" ng-click="sortType = 'name'; sortReverse = !sortReverse">
+                                    Action
+                                    <span ng-show="sortType == 'name' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'name' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                              <tr>
+                                 <td>
+                                    <input class="form-control" 
+                                       ng-model="search.residentialName" placeholder="Search By Residential Name">
+                                 </td>
+                                 <td></td>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr  dir-paginate="residential in hrm.residentials|orderBy:sortType:sortReverse| filter:{isActive:true} | filter:query|filter:search|itemsPerPage:limit " 
+                                 data-ng-class="{danger:!residential.active}">
+                                 <td>
+                                    <span data-ng-hide="residential.editMode">{{residential.residentialName}}</span>
+                                    <input class="form-control" data-ng-model="residential.residentialName" ng-pattern="/^[a-zA-Z\s]*$/" data-ng-show="residential.editMode"  data-ng-required />
+                                 </td>
+                                 <td>
+                                    <a href="" class="a" ng-hide="residential.editMode" ng-click="hrm.removeData($index,residential)"><i class="glyphicon glyphicon-trash" 
+                                       ></i></a>
+                                    <a href="" class="b" title="Edit" data-ng-hide="residential.editMode" data-ng-click="residential.editMode = true;"><i class="glyphicon glyphicon-pencil" 
+                                       ></i></a>
+                                    <a href="" class="c" title="Update" data-ng-show="residential.editMode" ng-click="hrm.addDetails(residential)"><i class="glyphicon glyphicon-floppy-save"  ></i></a>
+                                    <a href=""  class="d" title="Delete" data-ng-show="residential.editMode" data-ng-click="residential.editMode = false;hrm.setConfigType()"> <i class="glyphicon glyphicon-remove"  ></i></a>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                        <dir-pagination-controls
+                           max-size="5"
+                           direction-links="true"
+                           boundary-links="true" >
+                        </dir-pagination-controls>
+                     </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>

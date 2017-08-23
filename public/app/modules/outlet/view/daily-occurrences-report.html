@@ -1,0 +1,178 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Daily occurrences Report
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Outlet Management</a></li>
+         <li class="active">Daily occurrences report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && drc.filterByDetails(drc.dailyOccurrence);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Daily occurrences report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="drc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="drc.downloadPdf('Daily Occurrences Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Outlet Name</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control"   ng-model="drc.dailyOccurrence.outletId"  name="outletName"   
+                     required="required">
+                        <option value="">Select Outlet</option>
+                        <option ng-repeat="outlet in drc.branchInformation" value="{{outlet.branchId}}">{{outlet.branchName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.outletName.$error.required" style="padding-left:1%;color: red;">Outlet Name is Required</span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Complaint Type</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control"  ng-model="drc.dailyOccurrence.complaintId"  name="complaintName" ng-disabled="drc.isEditmode"  required="">
+                        <option value="">Select Complaint</option>
+                        <option ng-repeat="complaint in drc.complaints" value="{{complaint.complaintId}}">{{complaint.complaintName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.complaintName.$error.required" style="padding-left:1%;color: red;">Complaint Name is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="drc.dailyOccurrence.fromDate" name="formDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  drc.dailyOccurrence.fromDate == null ? 'Select Date' : drc.dailyOccurrence.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="drc.dailyOccurrence.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="drc.startDateOnSetTime()" data-before-render="drc.startDateBeforeRender(drc.dailyOccurrence.toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromDate.$error.required" style="padding-left:1%;color: red;">  From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="drc.dailyOccurrence.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  drc.dailyOccurrence.toDate == null ? 'Select Date' : drc.dailyOccurrence.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="drc.dailyOccurrence.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="drc.endDateOnSetTime()"  data-before-render="drc.endDateBeforeRender(drc.dailyOccurrence.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="drc.reset()">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =drc.availableLimits[0]" ng-options="limit for limit in drc.availableLimits" ng-class="{'active':drc.isActiveValue(limit)}" data-ng-change="drc.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>Daily occurrences Details</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                                 <th>
+                                    <a class="hand-icon" ng-click="sortType = 'outletId'; sortReverse = !sortReverse">
+                                    Outlet Id
+                                    <span ng-show="sortType == 'outletId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'outletId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th >
+                                    <a class="hand-icon" ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                                    Outlet Name
+                                    <span ng-show="sortType == 'branchName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>
+                                    <a class="hand-icon" ng-click="sortType = 'reportDate'; sortReverse = !sortReverse">
+                                    Reported Date
+                                    <span ng-show="sortType == 'reportDate' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'reportDate' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>
+                                    <a class="hand-icon" ng-click="sortType = 'complaint_collection.complaintName'; sortReverse = !sortReverse">
+                                    Type Of Complaints
+                                    <span ng-show="sortType == 'complaint_collection.complaintName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'complaint_collection.complaintName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th>
+                                    <a class="hand-icon" ng-click="sortType = 'employees_collection.employeeName'; sortReverse = !sortReverse">
+                                    Reported By 
+                                    <span ng-show="sortType == 'employees_collection.employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'employees_collection.employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="dailyOccurrence in drc.dailyOccurrences|orderBy:sortType:sortReverse | orderBy : '-reportDate'|itemsPerPage:limit " data-ng-class="{danger:!employee.active}">
+                                 <td>
+                                    {{dailyOccurrence.outletId}}
+                                 </td>
+                                 <td>
+                                    {{dailyOccurrence.branchName}}
+                                 </td>
+                                 <td >
+                                    {{dailyOccurrence.reportDate | date:'yyyy-MM-dd'}}
+                                 </td>
+                                 <td ng-show="drc.fChooser_dailyOccurrence.complaints">
+                                    {{dailyOccurrence.complaint_collection.complaintName}}
+                                 </td>
+                                 <td ng-show="drc.fChooser_dailyOccurrence.reported_by">
+                                    {{dailyOccurrence.employees_collection.employeeName}}
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

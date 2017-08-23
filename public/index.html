@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Komalas</title>
+      <!-- bower:css -->
+      <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+      <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap.css">
+      <link rel="stylesheet" href="app/bower_components/bootstrap/dist/css/bootstrap-theme.css" rel="stylesheet">
+      <link rel="stylesheet" href="app/bower_components/angular-ui-notification/dist/angular-ui-notification.css">
+      <link rel="stylesheet" href="app/bower_components/angular-ui-select/dist/select.css">
+      <link rel="stylesheet" href="app/bower_components/font-awesome/css/font-awesome.css">
+      <!-- endinject -->
+      <!-- inject:css -->
+      <link rel="stylesheet" href="src/scripts/theme-lib/css/Admin.min.css">
+      <link rel="stylesheet" href="src/scripts/theme-lib/css/skins/_all-skins.min.css">
+      <link rel="stylesheet" href="build/bower/style.css">
+      <link rel="stylesheet" type="text/css" href="app/bower_components/angular-bootstrap-datetimepicker/src/css/datetimepicker.css">
+      <!-- favicon -->
+      <link rel="icon" type="image/png" sizes="32x32" href="build/mages/minilogo.png">
+      <link rel="icon" type="image/png" sizes="96x96" href="build/images/minilogo.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="build/images/minilogo.png">
+      <!-- endinject -->
+      <!-- bower:js -->
+      <script src="app/bower_components/angular/angular.js"></script>
+      <script src="app/bower_components/moment/min/moment.min.js"></script>
+      <script src="app/bower_components/lodash/dist/lodash.js"></script>
+      <script src="app/bower_components/angular-ui-notification/dist/angular-ui-notification.js"></script>
+      <script src="app/bower_components/angular-bootstrap/ui-bootstrap.min.js"></script>
+      <script src="app/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+      <script src="app/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+      <script src="app/bower_components/angular-ui-select/dist/select.js"></script>
+      <script src="app/bower_components/jquery/dist/jquery.js"></script>
+      <script src="app/bower_components/bootstrap/dist/js/bootstrap.js"></script>
+      <script src="app/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.js"></script>
+      <script src="app/bower_components/angular-bootstrap-datetimepicker/src/js/datetimepicker.templates.js"></script>  
+      <!-- endinject -->
+      <!-- inject:js -->
+      <script src="src/scripts/theme-lib/js/app.min.js"></script>
+      <script src="src/scripts/theme-lib/js/demo.js"></script>
+      <script src="utilities/main.js"></script>
+      <script src="utilities/dirPagination.js"></script>
+      <script src="utilities/dataservice.js"></script>
+      <script src="utilities/alert.js"></script>
+      <script  src="utilities/loader.js"></script>
+      <script  src="utilities/interceptor.js"></script>
+      <script src="utilities/commonService.js"></script>
+      <!--<script src="utilities/numberValidation.js"></script>-->
+      <script src="app/app.js"></script>
+      <!--login deatils-->
+      <script src="app/modules/login/service/auth-service.js"></script>
+      <script src="app/modules/login/controller/home-controller.js"></script>
+      <script src="app/modules/login/controller/login-controller.js"></script>
+      <!--configuration-->
+      <script src="app/modules/configuration/configuration.js"></script>
+      <script src="app/modules/configuration/controller/configuration-controller.js"></script>
+      <script src="app/modules/configuration/controller/complaint-type-controller.js"></script>
+      <script src="app/modules/configuration/controller/role-setup-controller.js"></script>
+      <script src="app/modules/configuration/controller/menu-category-controller.js"></script>
+      <script src="app/modules/configuration/controller/labourcost-controller.js"></script>
+      <script src="app/modules/configuration/controller/over-head-price-controller.js"></script>
+      <script src="app/modules/configuration/controller/category-controller.js"></script>
+      <script src="app/modules/configuration/controller/subcategory-controller.js"></script>
+      <script src="app/modules/configuration/controller/unit-controller.js"></script>
+      <!--hrm managemnet-->
+      <script src="app/modules/hrm/hrm.js"></script>
+      <script src="app/modules/hrm/controller/employee-detail-controller.js"></script>
+      <script src="app/modules/hrm/controller/employee-list-controller.js"></script>
+      <script src="app/modules/hrm/controller/passwordmodal-controller.js"></script>
+      <!--outlet management-->
+      <script src="app/modules/outlet/outlet.js"></script>
+      <script src="app/modules/outlet/controller/daily-occurrence-controller.js"></script>
+      <script src="app/modules/outlet/controller/daily-occurrences-list-controller.js"></script>
+      <script src="app/modules/outlet/controller/request-detail-controller.js"></script>
+      <script src="app/modules/outlet/controller/request-list-controller.js"></script> 
+      <script src="app/modules/outlet/controller/outlet-detail-controller.js"></script>
+      <script src="app/modules/outlet/controller/outlet-list-controller.js"></script>
+      <script src="app/modules/outlet/controller/franchise-branch-list-controller.js"></script>
+      <script src="app/modules/outlet/controller/franchise-branch-detail-controller.js"></script>
+      <!--menu engineering management-->
+      <script src="app/modules/menu/menu.js"></script>
+      <script src="app/modules/menu/controller/menu-detail-controller.js"></script>
+      <script src="app/modules/menu/controller/menu-list-controller.js"></script>
+       <script src="app/modules/menu/controller/menu-report-controller.js"></script>
+      <!--product management-->
+      <script src="app/modules/product/product.js"></script>
+      <script src="app/modules/product/controller/product-detail-controller.js"></script>
+      <script src="app/modules/product/controller/product-list-controller.js"></script>
+      <script src="app/modules/product/controller/product-report-controller.js"></script>
+      <!--supplier management-->
+      <script src="app/modules/supplier/supplier.js"></script>
+      <script src="app/modules/supplier/controller/supplier-detail-controller.js"></script>
+      <script src="app/modules/supplier/controller/supplier-list-controller.js"></script>
+      <script src="app/modules/supplier/controller/supplier-report-controller.js"></script>
+      <!--purchase order-->
+      <script src="app/modules/purchase-order/purchase-order.js"></script>
+      <script src="app/modules/purchase-order/controller/purchase-order-list.js"></script>
+      <script src="app/modules/purchase-order/controller/purchase-order-detail-controller.js"></script>
+     <script src="app/modules/purchase-order/controller/purchase-order-report-controller.js"></script>
+      <!--invoice management-->
+      <script src="app/modules/invoice/invoice.js"></script>
+      <script src="app/modules/invoice/controller/invoice-detail-controller.js"></script>
+      <script src="app/modules/invoice/controller/invoice-list-controller.js"></script>
+
+      <!--sales-->
+      <script src="app/modules/sales/sales.js"></script>
+      <!--Inventory Setting-->
+      <script src="app/modules/inventory-settings/inventory.js"></script>
+      <script src="app/modules/inventory-settings/controller/inventory-list-controller.js"></script>
+      <script src="app/modules/inventory-settings/controller/inventory-detail-controller.js"></script>
+      <script src="app/modules/inventory-report/controller/product-supplied-report-controller.js"></script>
+      <script src="app/modules/inventory-report/controller/menu-supplied-report-controller.js"></script>
+      <script src="app/modules/inventory-report/controller/received-report-controller.js"></script>
+      <!--Bank Deposit Details management-->
+      <script src="app/modules/bank-deposit/bank-deposit.js"></script>
+      <script src="app/modules/bank-deposit/controller/bank-deposit-controller.js"></script>
+      <script src="app/modules/bank-deposit/controller/bank-deposit-list-controller.js"></script>
+      <!--JS PDF for PDF rendering-->
+      <script src="app/bower_components/jspdf/dist/jspdf.min.js"></script>
+      <script src="app/bower_components/jspdf-autotable/dist/jspdf.plugin.autotable.js"></script>
+      <!-- endinject -->
+   </head>
+   <body class="hold-transition skin-blue sidebar-mini sidebar-collapse" ng-app="app" >
+
+      <div class="wrapper">
+         <!--views-->
+         <div ui-view="header" class="main-header"></div>
+         <div ui-view="left" class="main-sidebar a-scrol"></div>
+         <div ui-view="login"></div>
+         <div ui-view="content" style="height: calc(100% - 100px);overflow-y:scroll;"></div>
+         <div ui-view="footer"  class="main-footer"></div>
+      </div>
+      <div id="loaderDiv" loader>
+         <img src="build/images/ajax-loader.gif" class="ajax-loader"/>
+      </div>
+   </body>
+
+</html>

@@ -1,0 +1,30 @@
+ {{>header}}
+ <tbody>
+  <p style="padding:5px 20px">Dear {{EmployeeName}},</p>
+ <p style="padding:5px 20px">{{SubjectContent}}</p>
+
+ <table style="background-color:#F9F9F9; margin:30px 10%; width:80%;border-collapse:collapse" border="0" align="left" cellspacing="0" cellpadding="0" >
+     <thead>
+         <tr style="background-color:#f2f2f2;">
+            <th style="border:solid 1px #ccc; padding:6px 15px; width:110px;text-align:left;background-color: #f9f9f9;">
+Outlet Id</th>
+            <th style="border:solid 1px #ccc; padding:6px 15px; width:110px;text-align:left;background-color: #f9f9f9;">Outlet Name</th>
+            <th style="border:solid 1px #ccc; padding:6px 15px; width:110px;text-align:left;background-color: #f9f9f9;">Type Of Complaints</th> 
+            <th style="border:solid 1px #ccc; padding:6px 15px; width:110px;text-align:left;background-color: #f9f9f9;">Reported By</th> 
+         </tr>
+     </thead>
+<tbody>
+{{#each rows}}
+
+    <tr  style="background-color:#f2f2f2;">
+            <td style="border-right:solid 1px #ccc;border-left: solid 1px #ccc;border-bottom:solid 1px #ccc; padding:6px 15px; width:110px;background-color:#fff;">{{outletId}}</td>
+           <td style="border-right:solid 1px #ccc;border-left: solid 1px #ccc;border-bottom:solid 1px #ccc; padding:6px 15px; width:110px;background-color:#fff;">{{branchName}}</td>
+            <td style="border-right:solid 1px #ccc;border-left: solid 1px #ccc;border-bottom:solid 1px #ccc; padding:6px 15px; width:110px;background-color:#fff;">{{complaintType}}</td>
+            <td style="border-right:solid 1px #ccc;border-left: solid 1px #ccc;border-bottom:solid 1px #ccc; padding:6px 15px; width:110px;background-color:#fff;">{{reportedBy}}</td>
+    </tr>
+{{/each}}
+
+</tbody>
+</table>
+ </tbody>
+ {{>footer}}

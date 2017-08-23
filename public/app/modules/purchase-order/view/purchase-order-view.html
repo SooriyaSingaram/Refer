@@ -1,0 +1,211 @@
+<div class="content-wrapper" >
+   <section class="content-header">
+      <h1>
+         Updating Received item
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a ui-sref="root.purchase-order-list">Purchase Order List</a></li>
+         <li class="active">Update PO</li>
+      </ol>
+   </section>
+   <section class="content">
+      <!-- SELECT2 EXAMPLE -->
+      <div class="box box-default">
+         <form name="myForm"  ng-submit="submitted=true"   novalidate  autocomplete="off" >
+            <div class="box-header with-border">
+               <h3 class="box-title">Updating Received item</h3>
+                           <div class="" style="float:right;padding-right:2%">
+                              <button class="btn btn-danger" ng-click="poc.cancelPO(poc.purchaseOrder)" ng-show="poc.purchaseOrder.status=='Ordered'">Cancel Po</button>
+                  </div>
+            </div>
+
+            <div class="box-body">
+               <div class="row">
+                  <div class="col-md-6" id="branchName" ng-if="poc.loginUser[0].roleName === poc.role[0].roleName">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Branch Name</label>
+                        <select class="form-control" ng-model="poc.purchaseOrder.branchId" ng-disabled="poc.purchaseOrder._id" required="required" name="branchName" placeholder="select Branch">
+                           <option>Select Branch Name</option>
+                           <option  ng-repeat="branch in poc.outletDetail"  value="{{branch.branchId}}" >{{branch.branchName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.branchName.$error.required" style="padding-left:1%;color: red;">Branch Name is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="branchName" ng-if="poc.loginUser[0].roleName != poc.role[0].roleName ">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Branch Name</label>
+                        <select class="form-control" ng-model="poc.purchaseOrder.branchId" disabled="disabled" required="required" name="branchName" placeholder="select Branch">
+                           <option>Select Branch Name</option>
+                           <option  ng-repeat="branch in poc.outletDetail"  value="{{branch.branchId}}">{{branch.branchName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.branchName.$error.required" style="padding-left:1%;color: red;">Branch Name is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" id="PONumber" >
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">PO Number</label>
+                        <input type="text" class="form-control"  disabled=""   placeholder="PO Number"   ng-model="poc.purchaseOrder.purchaseOrderId"  name="PONumber"  required="required"  >
+                        <span class="help-inline" ng-show="submitted && myForm.PONumber.$error.required" style="padding-left:1%;color: red;">PO Number is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="box-body row" ng-show="poc.purchaseOrder.menuItem == true ">
+                  <div class="box-header with-border">
+                     <h4 class="box-title" >Menu Details
+                     </h4>
+                  </div>
+                  <div  class="col-sm-12">
+                     <table class="table table-bordered table-hover table-condensed" >
+                        <tr style="font-weight: bold">
+                           <td >Menu Item Name</td>
+                           <td >Menu Item Id</td>
+                           <td >Ordered Qty</td>
+                           <td>Unit Price</td>
+                           <td>Total Price</td>
+                           <td >Supplied Qty</td>
+                           <td>Received Qty</td>
+                           <td >Status</td>
+                        </tr>
+                        <tr ng:repeat="menu in poc.purchaseOrder.menuDetail">
+                           <td>
+                              <select class="form-control select" disabled="disabled" ng-model="menu.itemId" ng-change="poc.validateMenuItem(menu.itemId,menu)" ng-required="poc.purchaseOrder.menuItem == true" name="name"  >
+                                 <option value="">Select Menu</option>
+                                 <option ng-repeat="menu in poc.menus" value="{{menu.menuId}}">{{menu.itemName}}</option>
+                              </select>
+                           </td>
+                           <td>
+                              <select class="form-control select item_detail"  ng-model="menu.itemId" disabled="disabled"  name="name"  style="-webkit-appearance: none;">
+                                 <option ng-repeat="menu in poc.menus" value="{{menu.menuId}}">{{menu.menuId}}</option>
+                              </select>
+                           </td>
+                           <td>
+                              <input type="number" class="form-control"   disabled="disabled" ng:model="menu.qty" name="qty" min=0 ng-required="poc.purchaseOrder.menuItem == true" style="width: 45%;display: inline;"  >
+                              <b>
+                                 <select class=" item_detail" ng:model="menu.itemId"  style="width: 45%;display: inline;border: none;-webkit-appearance: none;background: none"  disabled="">
+                                    <option ng-repeat="menu in poc.menus" value="{{menu.menuId}}">{{menu.units_collection.unitName}}</option>
+                                 </select>
+                              </b>
+                           </td>
+                           <td>
+                              <input class="form-control select item_detail"  ng-model="menu.unitPrice" disabled="disabled"  name="name"  style="-webkit-appearance: none;">
+                                 
+                           </td>
+                           <td>
+                              {{menu.unitPrice * menu.qty}}
+                           </td>
+
+                          
+                           <td  >
+                              <input type="number" ng-blur="poc.checkQty(menu,menu.qty,menu.suppliedQty)"  class="form-control" ng-disabled="poc.hideSuppliedField"  ng:model="menu.suppliedQty" name="qty" min=0  style="width: 45%;display: inline;"  >
+                              <b>
+                                 <select class=" item_detail" ng:model="menu.itemId"  style="width: 45%;display: inline;border: none;-webkit-appearance: none;background: none"  disabled="">
+                                    <option ng-repeat="menu in poc.menus" value="{{menu.menuId}}">{{menu.units_collection.unitName}}</option>
+                                 </select>
+                              </b>
+                           </td>
+                           <td>{{menu.receivedQty}}</td>
+                           <td >
+                              <select class="form-control select item_detail" disabled  ng-model="menu.status"  name="name">
+                                <option  value="Supplied">Supplied</option>
+                                 <option  value="Partially Supplied">Partially Supplied</option>
+                                 <option  value="Partially Received">Partially Received</option>
+                               <option  value="Received">Received</option>
+                              </select>
+                           </td>                                 
+                           
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="box-body row" ng-show="(poc.purchaseOrder.menuItem == false) ||  (poc.purchaseOrder.requestProductTo == 'Ware House')">
+                  <div class="box-header with-border">
+                     <h4 class="box-title" >Product Details
+                     </h4>
+                  </div>
+                  <div  class="col-sm-12">
+                     <table class="table table-bordered table-hover table-condensed" >
+                        <tr style="font-weight: bold">
+                           <td >Product Name</td>
+                           <td >Product Id</td>
+                           <td >Ordered Qty</td>
+                           <td >New Order Qty</td>
+                           <td>Unit Price</td>
+                           <td>Total Price</td>
+                           <!--<td >Already Supplied Qty</td>-->
+                           <td >Supplied Qty</td>
+                           <td>Received Qty</td>
+                           <td >Status</td>
+                        </tr>
+                        <tr ng:repeat="product in poc.purchaseOrder.productDetail">
+                           <td>
+                              <select class="form-control select"   ng-model="product.productId" ng-change="poc.validateProductDetail(product.productId,product)" ng-required="poc.purchaseOrder.menuItem == false" name="name" disabled="">
+                                 <option value="">Select Product</option>
+                                 <option ng-repeat="product in poc.products" value="{{product.productId}}">{{product.productName}}</option>
+                              </select>
+                           </td>
+                           <td >
+                              <select class="form-control select item_detail"  disabled ng-model="product.productId" disabled="disabled"  name="name"  style="-webkit-appearance: none;">
+                                 <option ng-repeat="product in poc.products" value="{{product.productId}}">{{product.productId}}</option>
+                              </select>
+                           </td>
+                           <td>
+                              <input type="number" class="form-control"   ng:model="product.orderedQty" name="qty" min=0 ng-required="poc.purchaseOrder.menuItem == false" style="width:45%;display: inline;" disabled=""  >
+                              <b>
+                                 <select class=" item_detail" ng:model="product.productId"  style="width: 45%;display: inline;border: none;-webkit-appearance: none;background: none"  disabled="">
+                                    <option ng-repeat="product in poc.products" value="{{product.productId}}">{{product.unitdetails.unitName}}</option>
+                                 </select>
+                              </b>
+                           </td>
+                           <td>
+                              <input type="number" class="form-control"   ng:model="product.newOrderQty" name="qty" min=0 ng-required="poc.purchaseOrder.menuItem == false" style="width: 45%;display: inline;" disabled="">
+                              <b>
+                                 <select class=" item_detail" ng:model="product.productId"  style="width: 45%;display: inline;border: none;-webkit-appearance: none;background: none"  disabled="">
+                                    <option ng-repeat="product in poc.products" value="{{product.productId}}">{{product.unitdetails.unitName}}</option>
+                                 </select>
+                              </b>
+                           </td>
+                           <td><input type="number" class="form-control"  disabled="" ng:model="product.unitPrice" name="qty" min=0  style="width: 45%;display: inline;"  ></td>
+                           <td>{{product.unitPrice * product.newOrderQty }}</td>
+                           <!--<td >
+                             <p ng-show="product.status == 'Partially Supplied'">{{product.suppliedQty}}</p>
+                            <p ng-show="product.status == 'Supplied'"> {{product.newOrderQty - product.suppliedQty}}</p>
+                           </td>-->
+                           
+                           <td>
+                              <input type="number" class="form-control"  ng-blur="poc.checkQty(product,product.newOrderQty,product.suppliedQty)"  ng-disabled="poc.hideSuppliedField"  ng:model="product.suppliedQty" name="qty" min=0  style="width: 45%;display: inline;"  >
+                              <b>
+                                 <select class=" item_detail" ng:model="menu.itemId"  style="width: 45%;display: inline;border: none;-webkit-appearance: none;background: none"  disabled="">
+                                    <option ng-repeat="product in poc.products" value="{{product.productId}}">{{product.unitdetails.unitName}}</option>
+                                 </select>
+                              </b>
+                           </td>
+                           <td>{{product.receivedQty}}</td>
+                            <td >
+                              <select class="form-control select item_detail" disabled ng-model="product.status"  name="name">
+                                <option  value="Supplied">Supplied</option>
+                                 <option  value="Partially Supplied">Partially Supplied</option>
+                                 <option  value="Partially Received">Partially Received</option>
+                                 
+                               <option  value="Received">Received</option>
+                              </select>
+                           </td>                                 
+              
+                        </tr>
+                     </table>
+                          </div>
+               </div>
+               <div class="box-footer ">
+                  <div class="col-sm-offset-5">
+                       
+                     <button class="btn btn-success" ng-disabled="!myForm.$dirty" type="submit" ng-click="poc.formValidation(myForm.$error.required[0].$name) && poc.updatePurchaseOrder(poc.purchaseOrder)" >Update</button>  
+                     <button ui-sref="root.purchase-order-list" name="submit"  class="btn btn-danger ">Cancel</button>
+                     <!--<input type="button"  ng-click="poc.reset()"   class="btn btn-warning"  value=" Reset ">-->
+                  </div>
+                
+               </div>
+            </div>
+         </form>
+      </div>
+   </section>
+</div>

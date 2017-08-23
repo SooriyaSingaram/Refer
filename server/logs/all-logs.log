@@ -1,0 +1,29 @@
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-01T13:11:20.875Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-02T04:58:15.636Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-02T06:25:18.415Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-02T06:25:21.701Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-02T11:14:06.792Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-02T11:14:33.596Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-02T12:22:51.534Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Komalas_new_demo","timestamp":"2017-02-02T12:30:51.736Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-02T12:31:22.720Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-02T12:31:25.357Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-03T04:44:27.926Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-03T06:07:49.078Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-03T06:07:52.688Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-03T06:10:40.171Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-03T06:10:44.351Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-02-03T06:12:13.817Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-03T06:12:16.553Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-02-24T06:54:04.650Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-03-06T05:46:23.012Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-03-06T05:52:27.253Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-03-09T10:32:16.009Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-03-09T11:28:09.976Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-03-10T11:02:17.062Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-03-10T11:12:17.236Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-03-17T07:56:58.341Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-03-17T08:00:12.731Z"}
+{"level":"info","message":"Mongoose default connection open to mongodb://localhost:27017/Ks","timestamp":"2017-03-17T08:00:16.039Z"}
+{"level":"info","message":"Mongoose default connection error: Error: connection timeout","timestamp":"2017-03-17T09:09:15.624Z"}
+{"level":"info","message":"Mongoose default connection disconnected","timestamp":"2017-03-17T12:28:09.365Z"}

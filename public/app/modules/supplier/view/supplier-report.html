@@ -1,0 +1,137 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Supplier Report
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Supplier Management</a></li>
+         <li class="active">Supplier Report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && src.getFilterData(src.supplierFilterReport);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Supplier Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="src.print('print-div')">Print</button>  
+                  <button   type="button" ng-click="src.downloadPdf()" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Supplier Name</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control" ng-model="src.supplierFilterReport.supplierId"  name="supplierId"   required="">
+                        <option value="">Select Supplier</option>
+                        <option ng-repeat="supplier in src.suppliers" value="{{supplier.supplierId}}">{{supplier.supplierName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && myForm.supplierId.$error.required" style="padding-left:1%;color: red;">Supplier Name is Required</span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">Month</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="src.supplierFilterReport.date" name="date" required="required"> 
+                     <div class="dropdown">
+                        <button ng-disabled="scr.isEditmode" class="btn btn-primary dropdown-toggle" id="dropdown3" role="button" data-toggle="dropdown" data-target="#"  >
+                        {{ src.supplierFilterReport.date  == null ? 'Select Month and Year' : src.supplierFilterReport.date  | date:'MMMM - yyyy' }} <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu" aria-labelledby="dLabel">
+                           <datetimepicker data-ng-model="src.supplierFilterReport.date" data-ng-required data-datetimepicker-config="{ dropdownSelector: '#dropdown3',  startView:'year', minView:'month'  }"/>
+                           ></datetimepicker>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.date.$error.required" style="padding-left:1%;color: red;">
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="src.reset()">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info" style="overflow:auto;">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =src.availableLimits[0]" ng-options="limit for limit in src.availableLimits" ng-class="{'active':src.isActiveValue(limit)}" data-ng-change="src.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div" >
+                     <div>
+                        <h3>Supplier Report</h3>
+                        <table class="grid_tbl" id="pdfgrid">
+                           <thead>
+                              <tr>
+                                 <th>  
+                                    <a class="hand-icon" ng-click="sortType = 'purchaseOrderId'; sortReverse = !sortReverse">
+                                    PO Number
+                                    <span ng-show="sortType == 'purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = '_id.supplierId'; sortReverse = !sortReverse">
+                                    Supplier Name
+                                    <span ng-show="sortType == '_id.supplierId' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == '_id.supplierId' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'paidAmount'; sortReverse = !sortReverse">
+                                    Paid Amount
+                                    <span ng-show="sortType == 'paidAmount' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'paidAmount' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                                 <th> 
+                                    <a class="hand-icon" ng-click="sortType = 'paidAmount'; sortReverse = !sortReverse">
+                                    Balance
+                                    <span ng-show="sortType == 'paidAmount' && !sortReverse" class="fa fa-caret-down"></span>
+                                    <span ng-show="sortType == 'paidAmount' && sortReverse" class="fa fa-caret-up"></span>
+                                    </a>
+                                 </th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              <tr dir-paginate="supplier in src.supplierReport|orderBy:sortType:sortReverse|itemsPerPage:limit " 
+                                 >
+                                 <td>
+                                    <span>{{supplier._id.purchaseOrderId}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{supplier.supplier.supplierName}}</span>
+                                 </td>
+                                 <td>
+                                    <span>{{supplier.paidAmount}}</span>
+                                 </td>
+                                 <td >
+                                    <span>{{supplier._id.subTotal - supplier.paidAmount}}</span>
+                                 </td>
+                              </tr>
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

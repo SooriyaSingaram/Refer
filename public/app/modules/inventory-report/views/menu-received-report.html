@@ -1,0 +1,175 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Receive/Supply Goods and Inventory Update
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href=""> Receive/Supply Goods and Inventory Update</a></li>
+         <li class="active">Menu Received Report</li>
+      </ol>
+   </section>
+   <section class="content">
+      <form name="Form" id="Form"  ng-submit="Form.$valid && rdmc.filterByMenuReportDetails(rdmc.receivedDetail);submitted=true" autocomplete="off"  novalidate >
+         <div class="box box-default">
+            <div class="box-header with-border">
+               <h3 class="box-title">Menu Received  Report</h3>
+               <div class="pull-right">
+                  <button class="btn btn-primary"   type="button" ng-click="rdmc.print('print-div')">Print</button>  
+                  <button   type="button" ng-click=" rdmc.downloadPdf('Received Menu Details')" class="btn btn-primary "> PDF</button>
+               </div>
+            </div>
+            <div class="box-body">
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">ReceivedBy</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <select class="form-control" ng-model="rdmc.receivedDetail.receivedId"  name="receivedByName" required="required">
+                        <option value="">Select ReceivedBy</option>
+                        <option ng-repeat="employee in rdmc.employees | orderBy:'employeeName'" value={{employee.employeeId}} >{{employee.employeeName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && Form.receivedByName.$error.required" style="padding-left:1%;color: red;">Received Name is Required</span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class="">From Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden"   ng-model="rdmc.receivedDetail.fromDate" name="fromDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                        {{  rdmc.receivedDetail.fromDate == null ? 'Select Date' : rdmc.receivedDetail.fromDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="rdmc.receivedDetail.fromDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="rdmc.startDateOnSetTime()" data-before-render="rdmc.startDateBeforeRender(rdmc.receivedDetail.toDate,$dates)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.fromDate.$error.required" style="padding-left:1%;color: red;">From Date is Required
+                     </span>
+                  </div>
+               </div>
+               <div class="row form-group">
+                  <div class="col-sm-3 d-right">
+                     <label style="padding-top: 8px;" class=""> To Date</label>
+                  </div>
+                  <div class="col-sm-6 ">
+                     <input type="hidden" required  ng-model="rdmc.receivedDetail.toDate" name="toDate" required="required"> 
+                     <div class="dropdown">
+                        <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#">
+                        {{  rdmc.receivedDetail.toDate == null ? 'Select Date' : rdmc.receivedDetail.toDate | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                        <ul class="dropdown-menu" role="menu">
+                           <datetimepicker data-ng-required data-ng-model="rdmc.receivedDetail.toDate" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                              data-on-set-time="rdmc.endDateOnSetTime()"  data-before-render="rdmc.endDateBeforeRender(rdmc.receivedDetail.fromDate,$view, $dates, $leftDate, $upDate, $rightDate)"/>
+                        </ul>
+                     </div>
+                     <span class="help-inline" ng-show="submitted && Form.toDate.$error.required" style="padding-left:1%;color: red;">To Date is Required
+                     </span>
+                  </div>
+               </div>
+            </div>
+            <div class="box-footer">
+               <div class="col-sm-offset-5">
+                  <button class="btn btn-success" name="submit"  type="submit">Submit</button>  
+                  <button type="reset"  class="btn btn-warning" ng-disabled="Form.$pristine" ng-click="rdmc.reset(rdmc.receivedDetail)">Reset</button>
+               </div>
+            </div>
+         </div>
+      </form>
+      <div class="panel panel-info">
+         <div class="allow_cnt" >
+            <form name="myForm">
+               <div class="box-body">
+                  <label style="padding: 9px;">Show Entries</label>
+                  <select data-ng-model="limit" ng-init="limit =rdmc.availableLimits[0]" ng-options="limit for limit in rdmc.availableLimits" ng-class="{'active':rdmc.isActiveValue(limit)}" data-ng-change="rdmc.setValue(limit)" size="1">      
+                  </select>                         
+                  <br>
+                  <div id="print-div">
+                     <h3>Menu Received Report details</h3>
+                     <table class="grid_tbl" id="pdfgrid">
+                        <thead>
+                           <tr>
+                              <th>  
+                                 <a  class="hand-icon"  ng-click="sortType = '_id.purchaseOrderId'; sortReverse = !sortReverse">
+                                 PO Number
+                                 <span ng-show="sortType == '_id.purchaseOrderId' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == '_id.purchaseOrderId' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>  
+                                 <a  class="hand-icon"  ng-click="sortType = 'branchName'; sortReverse = !sortReverse">
+                          BranchName
+                                 <span ng-show="sortType == 'branchNamed' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'branchName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>  
+                                 <a class="hand-icon"  ng-click="sortType = 'product.productName'; sortReverse = !sortReverse">
+                                 Menu Name
+                                 <span ng-show="sortType == 'product.productName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'product.productName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th> 
+                                 <a class="hand-icon"  ng-click="sortType = '_id.receivedDetails.receivedDate'; sortReverse = !sortReverse">
+                                 Received Date
+                                 <span ng-show="sortType == '_id.receivedDetails.receivedDate' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == '_id.receivedDetails.receivedDate' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th>
+                                 <a class="hand-icon"  ng-click="sortType = 'employee.employeeName'; sortReverse = !sortReverse">
+                                 Received By
+                                 <span ng-show="sortType == 'employee.employeeName' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == 'employee.employeeName' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                              <th> 
+                                 <a class="hand-icon"  ng-click="sortType = '_id.receivedDetails.receivedQty'; sortReverse = !sortReverse">
+                                 Received Qty
+                                 <span ng-show="sortType == '_id.receivedDetails.receivedQty' && !sortReverse" class="fa fa-caret-down"></span>
+                                 <span ng-show="sortType == '_id.receivedDetails.receivedQty' && sortReverse" class="fa fa-caret-up"></span>
+                                 </a>
+                              </th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr dir-paginate="receivedDetail in rdmc.reportDetails|orderBy:sortType:sortReverse |itemsPerPage:limit " 
+                              data-ng-class="{danger:!addSupplier.active}">
+                              <td>
+                                 <span>{{receivedDetail._id.purchaseOrderId}}</span>
+                              </td>
+                                   <td>
+                                 <span>{{receivedDetail.branchName}}</span>
+                              </td>
+                              <td>
+                                 <span>{{receivedDetail.menu.itemName}}</span>
+                              </td>
+                              <td>
+                                 <span>{{receivedDetail._id.receivedDetails.receivedDate | date:'yyyy-MM-dd'}}</span>
+                              </td>
+                              <td >
+                                 <span>{{receivedDetail.employee.employeeName}}</span>
+                              </td>
+                              <td >
+                                 <span>{{receivedDetail._id.receivedDetails.receivedQty}}</span>
+                                 
+                                         <span>{{receivedDetail.units.unitName}}</span>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                  </div>
+               </div>
+               <dir-pagination-controls
+                  max-size="5"
+                  direction-links="true"
+                  boundary-links="true" >
+               </dir-pagination-controls>
+            </form>
+         </div>
+      </div>
+</div>
+</section>
+</div>

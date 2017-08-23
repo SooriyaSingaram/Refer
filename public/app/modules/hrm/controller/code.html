@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+ 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>GoThere.SG API Test</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<!--         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+ -->    <script type="text/javascript" src="http://gothere.sg/jsapi?sensor=false"></script>
+</head>
+<body ng-app="app">
+ 
+<div id="container">
+        <form>
+                <input type="text" name="address" id="address" value="658071" />
+                <input type="submit" name="button" value="Find" />
+        </form>
+       
+        <textarea style="width: 100%; height: 500px;"></textarea>
+</div>
+ 
+</body>
+</html>
+ 
+ 
+<script language="javascript" type="text/javascript">
+
+var app = angular.module('app', []);
+        app.factory('SimpleGithubUser', function($http) {
+
+    var apiUrl = 'https://api.github.com/';
+
+    // instantiate our initial object
+    var SimpleGithubUser = function(username) {
+        this.username = username;
+        this.profile = null;
+    };
+
+    // define the getProfile method which will fetch data
+    // from GH API and *returns* a promise
+    SimpleGithubUser.prototype.getProfile = function() {
+
+        // Generally, javascript callbacks, like here the $http.get callback,
+        // change the value of the "this" variable inside it
+        // so we need to keep a reference to the current instance "this" :
+        var self = this;
+
+        return $http.get(apiUrl + 'users/' + this.username).then(function(response) {
+
+            // when we get the results we store the data in user.profile
+            self.profile = response.data
+
+            // promises success should always return something in order to allow chaining
+            return response;
+
+        });
+    };
+    return SimpleGithubUser;
+})
+<!--
+// $(document).ready(function() {
+//         $("form").submit(function() {
+//                 var address = $("#address").val();
+               
+//                 $.ajax({
+//                         url:            'http://gothere.sg/maps/geo',
+//                         dataType:       'jsonp',
+//                         data:           {
+//                                 'output'        : 'json',
+//                                 'q'                     : address,
+//                                 'client'        : '',
+//                                 'sensor'        : false
+//                         },
+//                         type:   'GET',
+//                         success: function(data) {
+//                                 var field = $("textarea");
+//                                 var myString = "";
+                               
+//                                 var status = data.Status;
+//                                 myString += "Status.code: " + status.code + "\n";
+//                                 myString += "Status.request: " + status.request + "\n";
+//                                 myString += "Status.name: " + status.name + "\n";
+                               
+//                                 if (status.code == 200) {                                      
+//                                         for (var i = 0; i < data.Placemark.length; i++) {
+//                                                 var placemark = data.Placemark[i];
+//                                                 var status = data.Status[i];
+                                               
+//                                                 myString += "============================\n";
+//                                                 myString += "Placemark.id: " + placemark.id + "\n";
+//                                                 myString += "Placemark.address: " + placemark.address + "\n";
+//                                                 myString += "Placemark.AddressDetails.Country.CountryName: " + placemark.AddressDetails.Country.CountryName + "\n";
+//                                                 myString += "Placemark.AddressDetails.Country.AddressLine: " + placemark.AddressDetails.Country.AddressLine + "\n";
+//                                                 myString += "Placemark.AddressDetails.Country.Thoroughfare.ThoroughfareName: " + placemark.AddressDetails.Country.Thoroughfare.ThoroughfareName + "\n";
+//                                                 myString += "Placemark.AddressDetails.Country.CountryNameCode: " + placemark.AddressDetails.Country.CountryNameCode + "\n";
+//                                                 myString += "Placemark.AddressDetails.Accuracy: " + placemark.AddressDetails.Accuracy + "\n";
+//                                                 myString += "Placemark.Point.coordinates: [" + placemark.Point.coordinates[0] + ", " + placemark.Point.coordinates[1] + ", " + placemark.Point.coordinates[2] + "]\n";
+//                                                 myString += "============================\n";
+//                                         }
+                                       
+//                                         field.val(myString);
+//                                 } else if (status.code == 603) {
+//                                         field.val("No Record Found");
+//                                 }
+ 
+//                         },
+//                         statusCode: {
+//                                 404: function() {
+//                                         alert('Page not found');
+//                                 }
+//                         },
+//                 });
+               
+//                 return false;
+//         });
+// });
+// -->
+</script>

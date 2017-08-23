@@ -1,0 +1,19 @@
+Hi {{username}},<br/>
+
+Please find your credencials here,<br/>
+ Your User Name : {{email}}<br/>
+ Your Password  :{{password}}<br/>
+ <table border="1" style="border-collapse: separate;border-spacing: 1px 0;">
+<tbody>
+{{#each gridrow}}
+    <tr>
+        {{#each this}}
+            <td style="padding: 10px 70px;">{{this}}</td>
+        {{/each}}
+    </tr>
+{{/each}}
+</tbody>
+</table>
+<br/>
+ Thanks & Regards,<br/>
+ Ayampenyet Team

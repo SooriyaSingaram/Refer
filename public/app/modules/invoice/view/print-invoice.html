@@ -1,0 +1,125 @@
+<style>
+   table {
+   border-collapse: collapse;
+   width: 100%;
+   }
+   th, td {
+   text-align: left;
+   padding: 8px;
+   }
+   tr:nth-child(even){background-color: #f2f2f2}
+</style>
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Invoice Management
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Accounting</a></li>
+         <li><a ui-sref="root.invoice_list">Invoice List</a></li>
+         <li class="active">Invoice Details</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="box box-default">
+         <div class="box-header with-border">
+            <h3 class="box-title">Invoice Details</h3>
+            <div class="pull-right">
+               <div class="pull-right">
+                  <button class="btn btn-primary" type="button" ng-click="idc.print('print-div')">Print</button>  
+               </div>
+            </div>
+         </div>
+         <div class="box-body"  id="print-div">
+            <div class="col-md-12">
+               <br><br>
+               <table class="grid_tbl">
+                  <tr>
+                     <td style="width:25%"><strong>Invoice Number</strong></td>
+                     <td>{{idc.invoice.invoiceNo}}</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Branch</strong></td>
+                     <td>{{idc.invoice.branchName}}</td>
+                  </tr>
+                  <tr ng-if="idc.invoice.supplierId!=null">
+                     <td><strong>Supplier</strong></td>
+                     <td>{{idc.invoice.supplierName}}</td>
+                  </tr>
+                  <tr>
+                     <td><strong>Invoice Amount($)</strong></td>
+                     <td>{{idc.invoice.subTotal}}</td>
+                  </tr>
+                  <tr id="receipt"></tr>
+               </table>
+               <br><br><br>
+               <div class="col-md-12">
+                  <div class="form-group">
+                     <h3>Payment Details </h3>
+                     <table class="table table-bordered table-hover table-condensed grid_tbl" >
+                        <tr>
+                           <th>Date</th>
+                           <th>Paid Amount</th>
+                           <th>Balance</th>
+                        </tr>
+                        <tr ng-repeat="payment in idc.invoice.payments">
+                           <td>{{payment.date | date:"dd/MM/yyyy"}}</td>
+                           <td>{{payment.paidAmount}}</td>
+                           <td>{{payment.balance}}</td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <br><br><br>       
+               <div class="col-md-12" ng-if="!idc.detail">
+                  <div class="form-group">
+                     <h3>Product Details </h3>
+                     <table class="table table-bordered table-hover table-condensed grid_tbl">
+                        <tr>
+                           <th>ProductName</th>
+                           <th>Qty</th>
+                           <th>Price</th>
+                           <th>Total</th>
+                        </tr>
+                        <tr ng-repeat="products in idc.invoice.productDetails">
+                           <td>{{products.productName}}</td>
+                           <td>{{products.qty}} {{products.unitName}}</td>
+                           <td>{{products.unitPrice}}</td>
+                           <td>{{products.total}}</td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="col-md-12" ng-if="idc.detail">
+                  <div class="form-group">
+                     <h3>Menu Details</h3>
+                     <table class="table table-bordered table-hover table-condensed grid_tbl">
+                        <tr>
+                           <th>MenuName</th>
+                           <th>Qty</th>
+                           <th>Price</th>
+                           <th>Total</th>
+                        </tr>
+                        <tr ng-repeat="menu in idc.invoice.menuDetails">
+                           <td>{{menu.menuName}}</td>
+                           <td>{{menu.qty}} {{menu.unitName}}</td>
+                           <td>{{menu.unitPrice}}</td>
+                           <td>{{menu.total}}</td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <div style="padding-left:70%">
+                     <p>Sub Total:{{idc.invoice.totalAmount}}</p>
+                     <p ng-if="idc.invoice.gst!=null">GST:{{idc.invoice.gst | number:2}}</p>
+                     <p ng-if="idc.invoice.supplier">GrandTotal:{{idc.invoice.totalAmount + idc.invoice.gst}}</p>
+                     <p ng-if="!idc.invoice.supplier">GrandTotal:{{idc.invoice.totalAmount}}</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </section>
+</div>

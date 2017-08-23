@@ -1,0 +1,138 @@
+<aside class="main-sidebar">
+   <section class="sidebar">
+      <ul class="sidebar-menu">
+         <li class="active treeview">
+            <a ui-sref="root.dashboard">
+            <i class="fa fa-dashboard"></i> <span>Dashboard</span> 
+            </a>
+         </li>
+         <li class="treeview" ng-if="hc.authorizeData.indexOf('Product Management') >= 0">
+            <a href="">
+            <i class="fa fa-shopping-cart"></i> 
+            <span>Product Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ng-if="hc.authorizeData.indexOf('Product List') >= 0"><a ui-sref="root.product-list">Product List</a></li>
+               <!--<li ng-if="hc.authorizeData.indexOf('Expiry Report') >= 0"><a ui-sref="root.expiry-report">Expiry Report</a></li>-->
+               <li ng-if="hc.authorizeData.indexOf('Monthly PO product Report') >= 0"><a ui-sref="root.monthly-purchase-report">Monthly PO product Report</a></li>
+               <li ng-if="hc.authorizeData.indexOf('Top sold product report') >= 0"><a ui-sref="root.topsold-product-report">Top sold product report</a></li>
+            </ul>
+         </li>
+         <li class="treeview" ng-if="hc.authorizeData.indexOf('Supplier Management') >= 0">
+            <a href="">
+            <i class="fa fa-glass"></i> 
+            <span>Supplier Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ><a ui-sref="root.supplier_list">Supplier List</a></li>
+               <li><a ui-sref="root.supplier-report">Supplier Report</a></li>
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('Outlet Management') >= 0">
+            <a ui-sref="root.outlet-list">
+            <i class="fa fa-random"></i> 
+            <span>Outlet Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li><a ui-sref="root.outlet-list">Outlet List</a></li>
+               <li><a ui-sref="root.franchise-branch-list">Franchise Branch List</a></li>
+               <li><a ui-sref="root.emergency-contact-list">Emergency Contact List</a></li>
+               <li><a ui-sref="root.daily-occurrences-list">Daily occurrences List</a></li>
+               <li ng-if="hc.authorizeData.indexOf('Request List') >= 0"><a ui-sref="root.request-list">Request List</a></li>
+               <li><a ui-sref="root.daily-occurrences-report">Daily occurrences Report</a></li>
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('Inventory') >= 0">
+            <a ui-sref="root.outlet-list">
+            <i class="fa fa-cubes"></i> 
+            <span>Inventory</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ng-if="hc.authorizeData.indexOf('Inventory Settings') >= 0"><a ui-sref="root.inventorylist">Inventory Settings</a></li>
+               <li >
+                  <a class="hand-icon">Supplied Report</a>
+                  <ul class="treeview-menu">
+                     <li >
+                        <a ui-sref="root.product-suppliedReport">product Supplied Report </a>
+                     </li>
+                     <li >
+                        <a ui-sref="root.menu-suppliedReport">Menu Supplied Report </a>
+                     </li>
+                  </ul>
+               </li>
+               <li>
+                  <a class="hand-icon">Received Report</a>
+                  <ul class="treeview-menu">
+                     <li >
+                        <a  ui-sref="root.receivedReport">product Received Report </a>
+                     </li>
+                     <li >
+                        <a  ui-sref="root.menuReceivedReport">Menu Received Report </a>
+                     </li>
+                  </ul>
+               </li>
+               <li ng-if="hc.authorizeData.indexOf('Purchase Order List') >= 0">
+                  <a ui-sref="root.purchase-order-list">Purchase Order List</a>
+               </li>
+               <li> <a ui-sref="root.purchase-performance-report">Performance PO Report</a></li>
+               <li> <a ui-sref="root.purchaseOrder-payment-report">PO Payment Report</a></li>
+               <li> <a ui-sref="root.selling-report">Selling Report</a></li>
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('User Management') >= 0">
+            <a href="">
+            <i class="fa fa-user"></i> 
+            <span>User Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ng-if="hc.authorizeData.indexOf('Employee List') >= 0"><a ui-sref="root.employee-list">User List</a></li>
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('Invoice') >= 0">
+            <a href="">
+            <i class="fa fa-dollar"></i> 
+            <span>Invoice</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ng-if="hc.authorizeData.indexOf('Invoice List') >= 0"><a ui-sref="root.invoice_list">Invoice List</a></li>
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('Menu Engineering') >= 0">
+            <a href="">
+            <i class="fa fa-tasks"></i> 
+            <span>Menu Engineering</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ng-if="hc.authorizeData.indexOf('Menu List') >= 0"><a ui-sref="root.menu-list">Menu List </a></li>
+               <li ng-if="hc.authorizeData.indexOf('Menu Profit Report') >= 0"><a ui-sref="root.menu-report">Menu Profit Report</a></li>
+               <!--<li ng-if="hc.authorizeData.indexOf('Monthly PO Menu Report') >= 0"><a ui-sref="root.monthly-menu-report">Monthly PO Menu Report</a></li>
+                  <li ng-if="hc.authorizeData.indexOf('Top sold Menu Report') >= 0"><a ui-sref="root.topsold-menu-report">Top sold Menu Report</a></li>-->
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('Bank Deposit Details Management') >= 0">
+            <a href="">
+            <i class="fa fa-fw fa-bank" style="padding-right:5px;"></i>
+            <span>Account Management</span>
+            <i class="fa fa-angle-left pull-right"></i>
+            </a>
+            <ul class="treeview-menu">
+               <li ng-if="hc.authorizeData.indexOf('BankDeposit list') >= 0"><a ui-sref="root.bankDeposit-list">Account Management list </a></li>
+               <li ng-if="hc.authorizeData.indexOf('BankDeposit Report') >= 0"><a ui-sref="root.bankDeposit-report">Account Management Report</a></li>
+            </ul>
+         </li>
+         <li ng-if="hc.authorizeData.indexOf('Configuration Settings') >= 0">
+            <a ui-sref="root.configsetting">
+            <i class="fa fa-cogs"></i> 
+            <span>Configuration Settings</span>
+            </a>
+         </li>
+      </ul>
+   </section>
+</aside>

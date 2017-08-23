@@ -1,0 +1,179 @@
+<div class="content-wrapper">
+   <section class="content-header">
+      <h1>
+         Invoice Management
+      </h1>
+      <ol class="breadcrumb">
+         <li><a ui-sref="root.dashboard"><i class="fa fa-dashboard"></i></a></li>
+         <li><a href="">Accounting</a></li>
+         <li><a ui-sref="root.invoice_list">Invoice List</a></li>
+         <li class="active">Add Invoice</li>
+      </ol>
+   </section>
+   <section class="content">
+      <div class="box box-default">
+         <div class="box-body">
+            <form name="myForm" novalidate ng-submit="submitted=true" autocomplete="off">
+               <div class="col-md-12">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">PO Number</label>
+                        <input type="text" class="form-control"  placeholder="Enter PO Number" name="poNumber" ng-model="idc.invoice.invoiceNo" required="required" disabled="disabled">
+                        <span class="help-inline" ng-show="submitted && myForm.poNumber.$error.required" style="padding-left:1%;color: red;">PO Number is Required</span>
+                     </div>
+                  </div>
+                  <!--<div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Invoice Number</label>
+                        <input type="text" class="form-control"  placeholder="Enter Invoice Number" ng-disabled="idc.isEditmode" name="Inumber" ng-model="idc.invoice.invoiceNo" required="required">
+                        <span class="help-inline" ng-show="submitted && myForm.Inumber.$error.required" style="padding-left:1%;color: red;">Invoice Number is Required</span>
+                        <span ng-show="!myForm.Inumber.$error.required && myForm.Oname.$error.pattern && myForm.Oname.$dirty" style="padding-left:1%;color: red;">Invalid Invoice Number</span>
+                     </div>
+                  </div>-->
+               </div>
+               <div class="col-md-12">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Branch</label>
+                        <select class="form-control" ng-model="idc.invoice.branchId"   placeholder="Branch" name="Branch" required="required" disabled="disabled"/>
+                           <option value="">Select Outlet Name</option>
+                           <option ng-repeat="outlet in idc.outlets" value={{outlet.branchId}}>{{outlet.branchName}}</option>
+                           <option ng-repeat="franchisebranch in idc.franchisebranchs" value={{franchisebranch.branchId}}>{{franchisebranch.branchName}}</option>
+                        </select>
+                        <span class="help-inline" ng-show="submitted && myForm.Branch.$error.required" style="padding-left:1%;color: red;">Branch is Required</span>
+                     </div>
+                  </div>
+                  <div class="col-md-6" ng-if="idc.invoice.supplierId!=null">
+                     <label for="exampleInputEmail1">Supplier</label>
+                     <select class="form-control" ng-model="idc.invoice.supplierId"  placeholder="Supplier" name="Supplier" ng-required="idc.poDetails.requestProductTo === 'Supplier'" disabled="disabled"/>
+                        <option value="">Select Supplier Name</option>
+                        <option ng-repeat="supplier in idc.suppliers" value={{supplier.supplierId}} >{{supplier.supplierName}}</option>
+                     </select>
+                     <span class="help-inline" ng-show="submitted && myForm.Supplier.$error.required" style="padding-left:1%;color: red;">Supplier is Required</span>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputEmail1">Invoice Amount($)</label>
+                        <input type="text" class="form-control" placeholder="GrandTotal" name="Amount" ng-model="idc.invoice.subTotal" valid-number required="required" disabled="disabled"/>
+                        <span class="help-inline" ng-show="submitted && myForm.Amount.$error.required" style="padding-left:1%;color: red;">Amount is Required</span>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <div class="col-md-6">
+                     <div class="form-group">
+                        <label for="exampleInputFile">Upload Receipt</label>
+                        <input type='file' class="form-control" ng-disabled="idc.isEditmode" name="fileupload"   ng-model-instant id="receipt" multiple />
+                        <span class="help-inline" ng-show="submitted && myForm.fileupload.$error.required" style="padding-left:1%;color: red;">Please select the Files</span>                  
+                        <ul style="list-style: none;">
+                           <li style="display: inline;" class="image_list" ng-repeat="step in idc.invoice.receipt">
+                              <img class="thumb" ng-src="{{step}}" width="300" height="150" />
+                           </li>
+                        </ul>
+                     </div>
+                  </div>
+               </div>
+               <div class="col-md-12" >
+                  <div class="form-group">
+                     <h3>Payment Details </h3>
+                     <table class="table table-bordered table-hover table-condensed" >
+                        <thead>
+                           <tr style="font-weight: bold">
+                              <td>Date</td>
+                              <td>Paid Amount</td>
+                              <td>Balance</td>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           <tr ng:repeat="payment in idc.invoice.payments">
+                              <td>
+                                 <input type="hidden"   ng-model="payment.date" name="date" required="required"> 
+                                 <div class="dropdown">
+                                    <button datepickerLocaldate class="btn btn-primary dropdown-toggle" id="dropdown2" role="button" data-toggle="dropdown" data-target="#" >
+                                    {{  payment.date == null ? 'Select Date' : payment.date | date:'yyyy-MM-dd'}}  <span class="caret"></span></button>
+                                    <ul class="dropdown-menu" role="menu">
+                                       <datetimepicker data-ng-required data-ng-model="payment.date" data-datetimepicker-config="{ dropdownSelector: '#dropdown1',  startView:'day', minView:'day'  }" 
+                                          data-on-set-time="erc.startDateOnSetTime()" data-before-render="erc.startDateBeforeRender(erc.product.toDate,$dates)"/>
+                                    </ul>
+                                 </div>
+                              </td>
+                              <td> 
+                                 <input class="form-control" ng:model="payment.paidAmount" ng-disabled="idc.isEditmode" ng-change="idc.paymentCalculation(idc.invoice.subTotal, idc.invoice.payments)"
+                                    name="pay"  required="required" />
+                                 <span class="help-inline" ng-show="submitted && myForm.pay.$error.required" style="padding-left:1%;color: red;">pay is Required</span>
+                              </td>
+                              <td>
+                                 <span >{{payment.balance}}</span>
+                              </td>
+                           </tr>
+                        </tbody>
+                     </table>
+                     <button type="button" ng:click="idc.addPayment(idc.invoice.payments)" ng-if="idc.invoice._id" ng-disabled="idc.isEditmode" class="btn btn-success">Make Payment</button>
+                  </div>
+               </div>
+               <div class="col-md-12" ng-if="!idc.detail">
+                  <div class="form-group">
+                     <h3>Product Details </h3>
+                     <table class="table table-bordered table-hover table-condensed">
+                        <tr>
+                           <th>ProductName</th>
+                           <th>Qty</th>
+                           <th>Price</th>
+                           <th>Total</th>
+                        </tr>
+                        <tr ng-repeat="products in idc.invoice.productDetails">
+                           <td>{{products.productName}}</td>
+                           <td>{{products.qty}} {{products.unitName}}</td>
+                           <td>{{products.unitPrice}}</td>
+                           <td>{{products.total}}</td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="col-md-12" ng-if="idc.detail">
+                  <div class="form-group">
+                     <h3>Menu Details</h3>
+                     <table class="table table-bordered table-hover table-condensed">
+                        <tr>
+                           <th>MenuName</th>
+                           <th>Qty</th>
+                           <th>Price</th>
+                           <th>Total</th>
+                        </tr>
+                        <tr ng-repeat="menu in idc.invoice.menuDetails">
+                           <td>{{menu.menuName}}</td>
+                           <td>{{menu.qty}} {{menu.unitName}}</td>
+                           <td>{{menu.unitPrice}}</td>
+                           <td>{{menu.total}}</td>
+                        </tr>
+                     </table>
+                  </div>
+               </div>
+               <div class="col-md-12">
+                  <div style="padding-left:70%">
+                     <p>Sub Total:{{idc.invoice.totalAmount | number:2}}</p>
+                     <p ng-if="idc.invoice.gst!=null">GST:{{idc.invoice.gst | number:2}}</p>
+                     <p ng-if="idc.invoice.supplier">GrandTotal:{{idc.invoice.totalAmount + idc.invoice.gst | number:2}}</p>
+                     <p ng-if="!idc.invoice.supplier">GrandTotal:{{idc.invoice.totalAmount | number:2}}</p>
+                  </div>
+               </div>
+               <div class="box-footer fix_Sub">
+                  <div class="col-sm-offset-5" ng-show="idc.isEditmode===false">
+                     <button class="btn btn-success" type="submit" ng-if="!idc.invoice._id" ng-click="idc.formValidation(myForm.$error.required[0].$name) && idc.addInvoice(idc.invoice);enablesub()" >Submit</button>  
+                     <button class="btn btn-success" ng-if="idc.invoice._id" type="submit" ng-click="idc.formValidation(myForm.$error.required[0].$name) && idc.updateInvoice(idc.invoice)" >Update</button>  
+                     <button ui-sref="root.invoice_list" name="submit"  class="btn btn-danger ">Cancel</button>
+                     <input type="button" ng-click="idc.reset()" class="btn btn-warning"  value=" Reset ">
+                  </div>
+                  <div class="col-sm-offset-5" ng-if="idc.isEditmode===true">
+                     <button type="button" ng-click="idc.isEditmode = !idc.isEditmode;idc.disableSubmit()"  class="btn btn-success ">Edit</button>
+                  </div>
+               </div>
+         </div>
+         </form>
+      </div>
+</div>
+</div>
+</section>
+</div>
